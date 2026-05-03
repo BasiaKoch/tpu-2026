@@ -1,4 +1,4 @@
-export TPU_NAME=boris
+export TPU_NAME=boris-2
 export PROJECT_ID=tpu-2026
 export ZONE=us-east5-a
 export ACCELERATOR_TYPE=v6e-1
