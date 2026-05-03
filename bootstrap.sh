@@ -44,7 +44,10 @@ fi
 
 # shellcheck disable=SC1091
 source "$VENV/bin/activate"
-pip install --upgrade pip setuptools wheel
+# setuptools 81+ drops pkg_resources, which tensorboard still uses — cap it
+# here so the upgrade step doesn't briefly install a broken version before
+# requirements.txt gets a chance to pin the right one.
+pip install --upgrade pip 'setuptools<81' wheel
 
 echo "==> Installing pinned deps from requirements.txt"
 # requirements.txt includes libtpu — without it, jax silently falls back to CPU

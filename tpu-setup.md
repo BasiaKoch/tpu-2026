@@ -168,6 +168,32 @@ get the venv with `tunix`/`jax`/`flax` available.
 
 Open the printed `http://127.0.0.1:8888/lab?token=...` URL in your laptop's browser.
 
+## TensorBoard
+
+Run TensorBoard in a separate SSH session on the TPU (not from a notebook
+cell — the inline `%tensorboard` magic needs `jupyter-server-proxy` to
+work over the SSH tunnel and is more trouble than it's worth):
+
+```bash
+source ~/venvs/tunix/bin/activate
+tensorboard --logdir /tmp/content/tmp/tensorboard/grpo --port=6006 --host=127.0.0.1
+```
+
+Then add a port-forward for 6006 alongside the Jupyter one. Easiest is a
+single tunnel forwarding both ports — kill the 8888-only tunnel first:
+
+```bash
+gcloud alpha compute tpus tpu-vm ssh $TPU_NAME --project=$PROJECT_ID --zone=$ZONE \
+  --tunnel-through-iap -- -L 8888:localhost:8888 -L 6006:localhost:6006 -N
+```
+
+Open <http://localhost:6006> in your laptop browser.
+
+Note: `tensorboard` is pinned in `requirements.txt` (TF 2.21 dropped its
+hard dep, so it has to be installed explicitly), and `setuptools` is held
+at `<81` because `tensorboard 2.20` still imports `pkg_resources`, which
+setuptools 81 removed.
+
 ## Pushing changes back from the TPU VM
 
 The remote is HTTPS, so pushes need credentials. Setup:
