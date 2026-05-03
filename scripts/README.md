@@ -78,6 +78,7 @@ correctness reward in W&B as the real success metric.
 | `rewards.py`      | The four reward functions and the regexes that parse outputs. |
 | `model.py`        | Download Gemma weights, build the JAX mesh, wrap with LoRA, load tokenizer. |
 | `evaluate.py`     | Standalone evaluation: accuracy / partial accuracy / format accuracy. |
+| `chat.py`         | Interactive REPL that loads a checkpoint and lets you prompt the trained policy. |
 | `train.py`        | Main entry point: assembles the RL cluster and runs `GRPOLearner.train`. |
 | `run_tmux.sh`     | Launches `train.py` inside a detached `tmux` session so closing your shell does not kill it. |
 
@@ -225,7 +226,53 @@ python evaluate.py --preset greedy
 Greedy decoding gives a deterministic number you can compare against. Use
 `--preset standard` for a sampling-based estimate.
 
-## 10. Common pitfalls
+## 10. Interactive chat with a trained checkpoint
+
+Once a run has produced checkpoints, `chat.py` loads the base model, restores
+the LoRA adapter from a chosen step, builds a sampler, and gives you a REPL.
+
+```bash
+cd ~/tpu-2026/scripts
+source ~/venvs/tunix/bin/activate
+python chat.py                          # default: step 3364, standard preset, GSM8K template on
+python chat.py --step 3000 --preset greedy
+python chat.py --no-template            # plain prompting, no GSM8K wrapping
+python chat.py --no-restore             # base model only — useful as a sanity baseline
+```
+
+Flags:
+
+| Flag             | Default                                    | Purpose                                         |
+|------------------|--------------------------------------------|-------------------------------------------------|
+| `--ckpt-dir`     | `~/tpu-2026/ckpts_backup/actor`            | Directory of per-step checkpoint subfolders.    |
+| `--step N`       | `3364`                                     | Which checkpoint to restore. `0` = latest.      |
+| `--preset`       | `standard`                                 | One of `greedy` / `standard` / `liberal` (see `config.py`). |
+| `--temperature`  | preset value                               | Override just temperature.                      |
+| `--max-tokens`   | `TOTAL_GENERATION_STEPS`                   | Cap on completion length.                       |
+| `--no-template`  | off                                        | Skip the GSM8K SYSTEM_PROMPT/TEMPLATE wrapping. |
+| `--no-restore`   | off                                        | Use the base model only — no LoRA adapter.      |
+
+REPL commands (type at the `>` prompt):
+
+| Command          | Effect                                              |
+|------------------|-----------------------------------------------------|
+| `/preset NAME`   | Switch sampling preset on the fly.                  |
+| `/temp X`        | Override temperature.                               |
+| `/raw`           | Toggle GSM8K template wrapping.                     |
+| `/step N`        | Hot-swap to a different checkpoint without exit.    |
+| `/quit` (or empty line, Ctrl-D) | Exit.                                |
+
+Notes:
+- First generation triggers a JIT compile (~30–60 s). After that, prompts
+  are fast.
+- This policy was trained tightly on the GSM8K template, so it will tend to
+  emit `<reasoning>...</reasoning><answer>N</answer>` no matter what you ask.
+  Use `--no-template` for free-form prompting, but expect quality to drop on
+  anything other than grade-school math word problems.
+- For deterministic / reproducible answers (e.g. when grading), use
+  `--preset greedy`. The other presets sample.
+
+## 11. Common pitfalls
 
 - **Closing the shell** — covered above. Use `tmux`.
 - **`/tmp` cleared on reboot** — checkpoints disappear. Move them, or change
