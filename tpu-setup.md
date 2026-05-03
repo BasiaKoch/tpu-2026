@@ -63,12 +63,18 @@ Manager, and wires up `~/.bashrc`. The rest of this section explains what
 the script does and why; if you just want a working VM, run the script.
 
 Ubuntu 22.04 on these TPU VMs ships with `python3.10` and `python3.11` only —
-the tunix stack needs `python3.12`. The deadsnakes PPA is already configured,
-so `apt` can install it directly.
+the tunix stack needs `python3.12`. The deadsnakes PPA is preconfigured in
+`/etc/apt/sources.list.d/`, but `ppa.launchpadcontent.net:443` is **not
+reachable** from the internal-IP TPU subnet (Cloud NAT egress times out), so
+`apt-get install python3.12` fails with `Could not connect to
+ppa.launchpadcontent.net:443`. We use [`uv`](https://github.com/astral-sh/uv)
+to fetch a prebuilt CPython from GitHub instead — no sudo, no PPA.
 
 ```bash
-sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
-python3.12 -m venv ~/venvs/tunix
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
+uv python install 3.12
+"$(uv python find 3.12)" -m venv ~/venvs/tunix
 source ~/venvs/tunix/bin/activate
 pip install --upgrade pip setuptools wheel
 ```
