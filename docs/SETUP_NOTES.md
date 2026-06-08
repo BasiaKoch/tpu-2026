@@ -32,6 +32,7 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Patched `scripts/run_tmux.sh` after stale path failure. | Updated script to derive `REPO` from its own location, default `VENV` to `$HOME/venvs/tunix`, and source `~/.env` inside tmux before training. | Rerun `./scripts/run_tmux.sh` validation. |
 | 2026-06-08 | | TPU VM | Reran patched `./scripts/run_tmux.sh`. | Path/venv/env loading worked: script used `/home/ext_felsomoye_gmail_com/tpu-2026`, logged into W&B/HF, and reached `train.py`. It then failed at `wandb.init` with `permission denied`. | Resolve W&B project/entity permissions before full baseline launch. |
 | 2026-06-08 | | TPU VM | Added `WANDB_ENTITY=felsomoye-university-of-cambridge` and `WANDB_PROJECT=tunix` to `~/.env`, then reran W&B and `run_tmux.sh` validation. | Passed: W&B init/finish test succeeded, `run_tmux.sh` created a W&B run and started model/training setup. Session was intentionally stopped before a full baseline run. | Ready to launch the official baseline once run metadata is prepared. |
+| 2026-06-08 | | TPU VM | Launched official baseline attempt `2026-06-08_baseline_seed42` from commit `2143844`. | Failed before training steps: TFDS failed constructing GSM8K from `./data/train` with `FieldDescriptor.label` AttributeError. W&B run `qvhm72qe` was created. | Resolve stale/incompatible TFDS cache or data path before relaunching baseline. |
 
 ## Smoke Test Checklist
 
@@ -133,3 +134,13 @@ Record environment setup, deviations from the course instructions, and fixes dis
 **Fix:** Resolved for this TPU account. Added `WANDB_ENTITY=felsomoye-university-of-cambridge` and `WANDB_PROJECT=tunix` to `~/.env`; a W&B init/finish test succeeded and `run_tmux.sh` created a W&B run successfully.
 
 **Impact:** Original validation run produced no model or experiment results. The W&B permission blocker is now resolved; the later `run_tmux.sh` validation was intentionally stopped before a full baseline run.
+
+### 2026-06-08 - Official baseline attempt failed on TFDS cache
+
+**Symptom:** Official baseline attempt `2026-06-08_baseline_seed42` launched with `./scripts/run_tmux.sh`, created W&B run `qvhm72qe`, downloaded the Gemma model, then failed before training steps while constructing GSM8K from `./data/train` with `AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label`.
+
+**Cause:** This matches the earlier stale/incompatible TFDS cache failure seen during smoke testing. The full run used the configured relative data path `./data/train` from inside `scripts/`, where `evaluate.py` had already created TFDS cache directories.
+
+**Fix:** Pending. Use a clean/fresh data directory or remove the stale TFDS cache before relaunching the baseline. Treat W&B run `qvhm72qe` as failed/invalid for experiment evidence.
+
+**Impact:** No GRPO training steps completed and no checkpoint from this attempt should be reported. The failure is environment/data-cache related, not a model/reward/config result.
