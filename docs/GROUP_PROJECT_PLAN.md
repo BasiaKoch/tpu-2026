@@ -51,7 +51,7 @@ Regardless of role, **everyone** must read and understand (needed for I.2 and th
 
 - [ ] Confirm all teammates have GitHub collaborator access; each pushes a tiny test branch
       to prove write access.
-- [ ] Create working branch `baseline-reproduction`.
+- [ ] Create working branch `baseline-fls`.
 - [ ] Add tracking files: `RUNS.md`, `TEAM_PLAN.md`, `SETUP_NOTES.md`, `EXPERIMENTS.md`,
       `BASELINE_PATCHES.md` (templates in §6).
 - [ ] Add folders: `runs/`, `analysis/`, `report_assets/` (layout in §5).
@@ -76,14 +76,14 @@ git clone https://github.com/<you>/tpu-2026.git && cd tpu-2026
 git remote add upstream https://github.com/borisbolliet/tpu-2026.git && git fetch upstream
 
 # Working branch
-git checkout -b baseline-reproduction
-git push -u origin baseline-reproduction
+git checkout -b baseline-fls
+git push -u origin baseline-fls
 ```
 
 Branching strategy:
 ```text
 main                     # stays stable
-baseline-reproduction
+baseline-fls
 reward-variant
 kl-control-variant
 analysis-plots
@@ -168,8 +168,8 @@ from both the GitLab repo and the report.
 ```markdown
 | Run | Commit | Branch | Config | Seed | Steps | Wall-clock | Checkpoint | Eval split | Eval acc | Log link | Status | Notes |
 |---|---|---|---|---:|---:|---:|---|---|---:|---|---|---|
-| base_eval_seed42 | | baseline-reproduction | default | 42 | n/a | | n/a | GSM8K test | | | planned | base model only |
-| baseline_seed42 | | baseline-reproduction | default | 42 | | | | GSM8K test | | | planned | default GRPO |
+| base_eval_seed42 | | baseline-fls | default | 42 | n/a | | n/a | GSM8K test | | | planned | base model only |
+| baseline_seed42 | | baseline-fls | default | 42 | | | | GSM8K test | | | planned | default GRPO |
 | reward_length_penalty_seed42 | | reward-variant | | 42 | | | | GSM8K test | | | planned | reward shaping |
 | kl_beta_low_seed42 | | kl-control-variant | | 42 | | | | GSM8K test | | | planned | KL-control test |
 ```
@@ -232,7 +232,7 @@ git commit -m "Add metadata for $RUN_NAME" && git push
 
 ### 8.1 First login & sanity
 Follow the course setup guide exactly; verify `pwd`, `ls`, `python --version`,
-`git --version`. Clone the repo on the TPU, checkout `baseline-reproduction`, run setup
+`git --version`. Clone the repo on the TPU, checkout `baseline-fls`, run setup
 per `tpu-setup.md`, and **log every deviation in `SETUP_NOTES.md`**.
 
 ### 8.2 tmux discipline
@@ -260,7 +260,7 @@ Document any setup patch discovered here. Only after this passes, launch the ful
 ## 9. I.1 — Reproduce the baseline (10 marks)
 
 ### Pre-run checklist
-- [ ] On `baseline-reproduction`, `git status` clean, **default** `scripts/config.py` restored
+- [ ] On `baseline-fls`, `git status` clean, **default** `scripts/config.py` restored
 - [ ] W&B project configured, run name agreed, seed fixed
 - [ ] Everyone knows this is the *official* baseline run
 
