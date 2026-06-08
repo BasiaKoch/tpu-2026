@@ -27,6 +27,8 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Reran one-step training smoke with TensorBoard-only metrics and fresh debug data/cache dirs. | Passed: one GRPO training step completed, TensorBoard event file written, and Orbax actor checkpoint step `1` written. | Fix W&B key before full tracked runs. |
 | 2026-06-08 | | TPU VM | Ran one-example evaluation smoke with reduced generation length. | Passed: evaluation script path completed on one GSM8K example. Accuracy numbers are smoke-only and not reportable. | Use full evaluation config only after baseline training. |
 | 2026-06-08 | | TPU VM | Verified updated W&B API key and reran saved smoke suite from `tests/smoke-tests/run_smoke_tests.py`. | Passed: W&B login verified, env/dataset/model/train/eval smoke stages completed. | Full baseline can use W&B, but keep smoke metrics separate from reportable results. |
+| 2026-06-08 | | TPU VM | Ran `./scripts/run_tmux.sh` as-is. | Failed inside tmux: script tried to `cd` into `/home/boris_bolliet_cmbagent_community/tpu-2026/scripts`, which does not exist on this VM. | Update `run_tmux.sh` paths before using it for a full baseline run. |
+| 2026-06-08 | | TPU VM | Ran `python evaluate.py` as-is from `scripts/` with venv and `.env` loaded. | Passed: default 64-example evaluation completed with `correct=33/64`, `acc=51.56%`, `partial=53.12%`, `format=6.25%`. | Treat this as a script validation result until base-vs-LoRA evaluation semantics are confirmed. |
 
 ## Smoke Test Checklist
 
@@ -108,3 +110,13 @@ Record environment setup, deviations from the course instructions, and fixes dis
 **Fix:** Use fresh debug data/cache directories for smoke tests, or remove stale debug TFDS cache directories under `/tmp/content/debug_smoke_test_do_not_report` before rerunning. Full runs should use the normal configured data directory from a clean state.
 
 **Impact:** Debug-only cache issue. It did not change model code, training logic, reward logic, or reported experiment results.
+
+### 2026-06-08 - `run_tmux.sh` uses stale hard-coded paths
+
+**Symptom:** Running `./scripts/run_tmux.sh` printed that it started tmux session `tunix`, but the session output showed `bash: line 1: cd: /home/boris_bolliet_cmbagent_community/tpu-2026/scripts: No such file or directory`.
+
+**Cause:** `scripts/run_tmux.sh` contains hard-coded `REPO` and `VENV` paths for a different home directory/user.
+
+**Fix:** Pending. Update `scripts/run_tmux.sh` to use this VM's checkout/venv paths, or derive them from `$HOME` / the script location before launching any full baseline run.
+
+**Impact:** Full training did not start. No model or experiment results were produced by `run_tmux.sh`.
