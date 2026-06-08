@@ -1,1 +1,8 @@
-./scripts/run_tmux.sh
+Launcher:
+scripts/run_tmux.sh
+
+Tmux command:
+tmux new-session -d -s tunix "bash -lc 'cd /home/ext_felsomoye_gmail_com/tpu-2026/scripts && source /home/ext_felsomoye_gmail_com/venvs/tunix/bin/activate && [ -f ~/.env ] && set -a && source ~/.env && set +a && python -u train.py 2>&1 | tee -a /home/ext_felsomoye_gmail_com/tpu-2026/scripts/train.log; echo; echo \"--- process exited ($?) ---\"; exec bash'"
+
+Training entry point:
+python -u train.py

@@ -1,4 +1,6 @@
-On branch baseline-fls
-Your branch is up to date with 'origin/baseline-fls'.
+Branch: baseline-fls
 
-nothing to commit, working tree clean
+Git status at time this run ledger was created:
+ M docs/BASELINE_PATCHES.md
+ M docs/RUNS.md
+ M docs/SETUP_NOTES.md

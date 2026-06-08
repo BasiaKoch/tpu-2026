@@ -1,0 +1,11 @@
+Checkpoint directory:
+/tmp/content/ckpts/
+
+Intermediate checkpoint directory:
+/tmp/content/intermediate_ckpt/
+
+Save interval:
+500 steps
+
+Max checkpoints to keep:
+4
