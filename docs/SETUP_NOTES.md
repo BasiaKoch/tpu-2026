@@ -29,6 +29,8 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Verified updated W&B API key and reran saved smoke suite from `tests/smoke-tests/run_smoke_tests.py`. | Passed: W&B login verified, env/dataset/model/train/eval smoke stages completed. | Full baseline can use W&B, but keep smoke metrics separate from reportable results. |
 | 2026-06-08 | | TPU VM | Ran `./scripts/run_tmux.sh` as-is. | Failed inside tmux: script tried to `cd` into `/home/boris_bolliet_cmbagent_community/tpu-2026/scripts`, which does not exist on this VM. | Update `run_tmux.sh` paths before using it for a full baseline run. |
 | 2026-06-08 | | TPU VM | Ran `python evaluate.py` as-is from `scripts/` with venv and `.env` loaded. | Passed: default 64-example evaluation completed with `correct=33/64`, `acc=51.56%`, `partial=53.12%`, `format=6.25%`. | Treat this as a script validation result until base-vs-LoRA evaluation semantics are confirmed. |
+| 2026-06-08 | | TPU VM | Patched `scripts/run_tmux.sh` after stale path failure. | Updated script to derive `REPO` from its own location, default `VENV` to `$HOME/venvs/tunix`, and source `~/.env` inside tmux before training. | Rerun `./scripts/run_tmux.sh` validation. |
+| 2026-06-08 | | TPU VM | Reran patched `./scripts/run_tmux.sh`. | Path/venv/env loading worked: script used `/home/ext_felsomoye_gmail_com/tpu-2026`, logged into W&B/HF, and reached `train.py`. It then failed at `wandb.init` with `permission denied`. | Resolve W&B project/entity permissions before full baseline launch. |
 
 ## Smoke Test Checklist
 
@@ -117,6 +119,16 @@ Record environment setup, deviations from the course instructions, and fixes dis
 
 **Cause:** `scripts/run_tmux.sh` contains hard-coded `REPO` and `VENV` paths for a different home directory/user.
 
-**Fix:** Pending. Update `scripts/run_tmux.sh` to use this VM's checkout/venv paths, or derive them from `$HOME` / the script location before launching any full baseline run.
+**Fix:** Resolved in `scripts/run_tmux.sh`. The script now derives `REPO` from its own location, defaults `VENV` to `$HOME/venvs/tunix`, and sources `~/.env` inside the tmux-launched shell before calling `train.py`.
 
-**Impact:** Full training did not start. No model or experiment results were produced by `run_tmux.sh`.
+**Impact:** Original failed launch produced no model or experiment results. The path issue is fixed and validation reached `train.py`; launch is now blocked by W&B project/entity permissions.
+
+### 2026-06-08 - W&B init permission denied during `run_tmux.sh` validation
+
+**Symptom:** After patching `scripts/run_tmux.sh`, the script successfully started tmux, sourced the venv and `~/.env`, logged into W&B and Hugging Face, then failed in `train.py::maybe_init_wandb()` with `wandb.errors.errors.CommError: permission denied`.
+
+**Cause:** W&B authentication works, but the configured `WANDB_ENTITY` / `WANDB_PROJECT` combination in `scripts/config.py` is not writable by the current W&B account. The account shown by W&B is `felsomoye` under entity `felsomoye-university-of-cambridge`, while the config default entity is `milindsarkaryt-iiser-mohali` unless overridden by environment.
+
+**Fix:** Pending. Set `WANDB_ENTITY` / `WANDB_PROJECT` in `~/.env` to a project/entity the current W&B account can write to, or get access to the configured team entity before launching the full baseline.
+
+**Impact:** Full baseline training did not start. No model or experiment results were produced by this validation run.
