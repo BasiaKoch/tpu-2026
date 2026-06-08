@@ -6,7 +6,7 @@ Record any changes needed to make the as-shipped baseline run. Keep this file fo
 
 | Date | Commit | File(s) | Problem | Patch | Impact on experiment |
 |---|---|---|---|---|---|
-| 2026-06-08 | pending | `scripts/data` TFDS cache / configured data path | Official baseline failed before training with TFDS `FieldDescriptor.label` error from `./data/train`, including after cache cleanup. | Cache cleanup was insufficient; pending code/config-level data loading fix or dependency pin. | Must be documented as baseline plumbing; behavioural impact depends on final fix. |
+| 2026-06-08 | pending | `scripts/data` TFDS cache / configured data path | Official baseline failed before training with TFDS `FieldDescriptor.label` error from `./data/train`, including after cache cleanup. | Cache cleanup and protobuf env-only workaround were insufficient; pending dependency pin or code/config-level data loading fix. | Must be documented as baseline plumbing; behavioural impact depends on final fix. |
 
 ## Rules
 
@@ -38,8 +38,8 @@ Record any changes needed to make the as-shipped baseline run. Keep this file fo
 
 **Files changed:** None. Generated local TFDS cache directories under `scripts/data/train` and `scripts/data/test` were removed and rebuilt.
 
-**Patch summary:** Cache cleanup alone was insufficient. A code/config-level data loading fix or dependency pin is still pending.
+**Patch summary:** Cache cleanup and `PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python` were insufficient. `tfds.data_source` also cannot use `TFRECORD` for random access, so a dependency pin or code/config-level data loading fix is still pending.
 
 **Behavioural impact:** Pending. The final fix should preserve the same GSM8K source and split to remain environment/plumbing-only.
 
-**Verification:** Cache cleanup verification was insufficient: tiny dataset load passed, but full `train.py` relaunch failed again with the same TFDS error. Pending a stronger verification via successful baseline startup.
+**Verification:** Cache cleanup verification was insufficient: tiny dataset load passed, but full `train.py` relaunch failed again. The protobuf env-only tiny-load test also failed with the same `FieldDescriptor.label` error. Pending a stronger verification via successful baseline startup.

@@ -35,6 +35,7 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Launched official baseline attempt `2026-06-08_baseline_seed42` from commit `2143844`. | Failed before training steps: TFDS failed constructing GSM8K from `./data/train` with `FieldDescriptor.label` AttributeError. W&B run `qvhm72qe` was created. | Resolve stale/incompatible TFDS cache or data path before relaunching baseline. |
 | 2026-06-08 | | TPU VM | Cleared generated TFDS cache under `scripts/data/train` and `scripts/data/test`, then reran tiny dataset load using baseline paths. | Passed: TFDS rebuilt GSM8K cleanly, tiny train/test load returned lengths `train=1`, `val=0`, `test=1`, sample answer `13`. | Relaunch baseline from clean branch. |
 | 2026-06-08 | | TPU VM | Relaunched official baseline after TFDS cache cleanup. | Failed again before training steps with same TFDS `FieldDescriptor.label` error from `./data/train`; W&B run `kcwsje77` was created. | Need a code/config-level data loading fix or dependency pin; cache deletion alone is insufficient. |
+| 2026-06-08 | | TPU VM | Tested env-only protobuf workaround `PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python` on tiny TFDS load. | Failed: same `FieldDescriptor.label` error still occurs on existing `./data/train`; TFDS `TFRECORD` format is unsupported by `tfds.data_source`. | Need dependency pin or code/data-loading patch rather than env-only protobuf switch. |
 
 ## Smoke Test Checklist
 
@@ -146,3 +147,13 @@ Record environment setup, deviations from the course instructions, and fixes dis
 **Fix:** Not resolved. Removing `scripts/data/train` and `scripts/data/test` allowed a tiny dataset load to rebuild once, but the full `train.py` relaunch failed again with the same TFDS/protobuf error. Treat W&B runs `qvhm72qe` and `kcwsje77` as failed/invalid for experiment evidence.
 
 **Impact:** No GRPO training steps completed and no checkpoint from either failed attempt should be reported. The issue remains an environment/data-loading blocker, not a model/reward/config result.
+
+### 2026-06-08 - Protobuf env-only workaround did not fix TFDS
+
+**Symptom:** Running the tiny TFDS load with `PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python` still failed on `./data/train` with `AttributeError: 'FieldDescriptor' object has no attribute 'label`.
+
+**Cause:** The installed stack is `tensorflow_datasets==4.9.9` and `protobuf==7.34.1`; the failure appears to be a package compatibility issue or TFDS metadata read issue, not only the compiled protobuf implementation.
+
+**Fix:** Pending. A dependency pin/downgrade or a code-level data-loading patch is needed. Probing `tfds.data_source` with `FileFormat.TFRECORD` failed because random access data source requires `FileFormat.ARRAY_RECORD`.
+
+**Impact:** Env-only protobuf setting is not sufficient to preserve the default TFDS baseline path. No training results were produced by this test.
