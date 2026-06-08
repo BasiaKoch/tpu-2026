@@ -26,13 +26,14 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Reran model-load smoke test after Gemma access was granted. | Passed: Hugging Face snapshot download/cache, base model load, LoRA wrapper, and tokenizer load all succeeded on TPU. | Continue with training smoke. |
 | 2026-06-08 | | TPU VM | Reran one-step training smoke with TensorBoard-only metrics and fresh debug data/cache dirs. | Passed: one GRPO training step completed, TensorBoard event file written, and Orbax actor checkpoint step `1` written. | Fix W&B key before full tracked runs. |
 | 2026-06-08 | | TPU VM | Ran one-example evaluation smoke with reduced generation length. | Passed: evaluation script path completed on one GSM8K example. Accuracy numbers are smoke-only and not reportable. | Use full evaluation config only after baseline training. |
+| 2026-06-08 | | TPU VM | Verified updated W&B API key and reran saved smoke suite from `tests/smoke-tests/run_smoke_tests.py`. | Passed: W&B login verified, env/dataset/model/train/eval smoke stages completed. | Full baseline can use W&B, but keep smoke metrics separate from reportable results. |
 
 ## Smoke Test Checklist
 
 - [x] Model loads.
 - [x] Dataset loads.
 - [x] A few training steps run without error.
-- [x] W&B or local logging works. Local TensorBoard logging works; W&B remains blocked by invalid `WANDB_API_KEY`.
+- [x] W&B or local logging works. W&B login now verifies successfully; smoke training still uses local TensorBoard-only metrics by design.
 - [x] Checkpoint path is valid and writable.
 - [x] Evaluation script runs.
 
@@ -94,9 +95,9 @@ Record environment setup, deviations from the course instructions, and fixes dis
 
 **Cause:** `WANDB_API_KEY` is present in `~/.env`, but it is not a valid W&B API key length. `train.login_services()` calls `load_dotenv()` and then logs into W&B whenever `WANDB_API_KEY` is set.
 
-**Fix:** Pending. Replace `WANDB_API_KEY` with a valid key from W&B, or leave it unset for smoke tests and rely on local TensorBoard/checkpoint logging.
+**Fix:** Resolved. Replaced `WANDB_API_KEY` with a valid W&B key; `wandb.login(..., verify=True)` succeeded for account `felsomoye` under entity `felsomoye-university-of-cambridge`.
 
-**Impact:** External W&B logging is not validated yet. This does not affect model weights or training logic, but full tracked runs should not start until W&B is fixed or the team agrees to use local logging only.
+**Impact:** Resolved environment issue. Full tracked runs can use W&B, but smoke-test metrics remain non-reportable.
 
 ### 2026-06-08 - Reused debug TFDS cache failed during training smoke
 
