@@ -36,6 +36,8 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Cleared generated TFDS cache under `scripts/data/train` and `scripts/data/test`, then reran tiny dataset load using baseline paths. | Passed: TFDS rebuilt GSM8K cleanly, tiny train/test load returned lengths `train=1`, `val=0`, `test=1`, sample answer `13`. | Relaunch baseline from clean branch. |
 | 2026-06-08 | | TPU VM | Relaunched official baseline after TFDS cache cleanup. | Failed again before training steps with same TFDS `FieldDescriptor.label` error from `./data/train`; W&B run `kcwsje77` was created. | Need a code/config-level data loading fix or dependency pin; cache deletion alone is insufficient. |
 | 2026-06-08 | | TPU VM | Tested env-only protobuf workaround `PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python` on tiny TFDS load. | Failed: same `FieldDescriptor.label` error still occurs on existing `./data/train`; TFDS `TFRECORD` format is unsupported by `tfds.data_source`. | Need dependency pin or code/data-loading patch rather than env-only protobuf switch. |
+| 2026-06-08 | | TPU VM | Downgraded protobuf in venv from `7.34.1` to `6.31.1`, then reran tiny TFDS load using baseline paths. | Passed: TFDS/GSM8K load succeeded with `tensorflow-datasets==4.9.9` and `protobuf==6.31.1`; requirements pin updated. | Validate `run_tmux.sh` startup, then relaunch baseline. |
+| 2026-06-08 | | TPU VM | Ran `./scripts/run_tmux.sh` after protobuf pin as a startup validation. | Passed TFDS and entered GRPO training: W&B run `a6wiqxdb`, datasets `train=3364` and `val=374`. Session was intentionally stopped because the protobuf/docs changes were not committed yet. | Commit/push the protobuf pin, then relaunch a clean official baseline from the pushed branch. |
 
 ## Smoke Test Checklist
 
@@ -154,6 +156,6 @@ Record environment setup, deviations from the course instructions, and fixes dis
 
 **Cause:** The installed stack is `tensorflow_datasets==4.9.9` and `protobuf==7.34.1`; the failure appears to be a package compatibility issue or TFDS metadata read issue, not only the compiled protobuf implementation.
 
-**Fix:** Pending. A dependency pin/downgrade or a code-level data-loading patch is needed. Probing `tfds.data_source` with `FileFormat.TFRECORD` failed because random access data source requires `FileFormat.ARRAY_RECORD`.
+**Fix:** Resolved for relaunch by downgrading/pinning `protobuf==6.31.1` in the venv and `requirements.txt`. Tiny TFDS/GSM8K load from the baseline paths now passes with `tensorflow-datasets==4.9.9`.
 
-**Impact:** Env-only protobuf setting is not sufficient to preserve the default TFDS baseline path. No training results were produced by this test.
+**Impact:** Dependency plumbing patch only. The default TFDS data source, GSM8K dataset, model, reward, and training configuration are unchanged.
