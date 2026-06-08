@@ -31,6 +31,7 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Ran `python evaluate.py` as-is from `scripts/` with venv and `.env` loaded. | Passed: default 64-example evaluation completed with `correct=33/64`, `acc=51.56%`, `partial=53.12%`, `format=6.25%`. | Treat this as a script validation result until base-vs-LoRA evaluation semantics are confirmed. |
 | 2026-06-08 | | TPU VM | Patched `scripts/run_tmux.sh` after stale path failure. | Updated script to derive `REPO` from its own location, default `VENV` to `$HOME/venvs/tunix`, and source `~/.env` inside tmux before training. | Rerun `./scripts/run_tmux.sh` validation. |
 | 2026-06-08 | | TPU VM | Reran patched `./scripts/run_tmux.sh`. | Path/venv/env loading worked: script used `/home/ext_felsomoye_gmail_com/tpu-2026`, logged into W&B/HF, and reached `train.py`. It then failed at `wandb.init` with `permission denied`. | Resolve W&B project/entity permissions before full baseline launch. |
+| 2026-06-08 | | TPU VM | Added `WANDB_ENTITY=felsomoye-university-of-cambridge` and `WANDB_PROJECT=tunix` to `~/.env`, then reran W&B and `run_tmux.sh` validation. | Passed: W&B init/finish test succeeded, `run_tmux.sh` created a W&B run and started model/training setup. Session was intentionally stopped before a full baseline run. | Ready to launch the official baseline once run metadata is prepared. |
 
 ## Smoke Test Checklist
 
@@ -129,6 +130,6 @@ Record environment setup, deviations from the course instructions, and fixes dis
 
 **Cause:** W&B authentication works, but the configured `WANDB_ENTITY` / `WANDB_PROJECT` combination in `scripts/config.py` is not writable by the current W&B account. The account shown by W&B is `felsomoye` under entity `felsomoye-university-of-cambridge`, while the config default entity is `milindsarkaryt-iiser-mohali` unless overridden by environment.
 
-**Fix:** Pending. Set `WANDB_ENTITY` / `WANDB_PROJECT` in `~/.env` to a project/entity the current W&B account can write to, or get access to the configured team entity before launching the full baseline.
+**Fix:** Resolved for this TPU account. Added `WANDB_ENTITY=felsomoye-university-of-cambridge` and `WANDB_PROJECT=tunix` to `~/.env`; a W&B init/finish test succeeded and `run_tmux.sh` created a W&B run successfully.
 
-**Impact:** Full baseline training did not start. No model or experiment results were produced by this validation run.
+**Impact:** Original validation run produced no model or experiment results. The W&B permission blocker is now resolved; the later `run_tmux.sh` validation was intentionally stopped before a full baseline run.
