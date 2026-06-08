@@ -6,7 +6,7 @@ Record any changes needed to make the as-shipped baseline run. Keep this file fo
 
 | Date | Commit | File(s) | Problem | Patch | Impact on experiment |
 |---|---|---|---|---|---|
-| 2026-06-08 | n/a | `scripts/data` TFDS cache / configured data path | Official baseline failed before training with TFDS `FieldDescriptor.label` error from `./data/train`. | Removed generated TFDS cache directories `scripts/data/train` and `scripts/data/test`; verified clean rebuild with tiny dataset load. | Environment/data-cache only; no code/model/reward/config behaviour changed. |
+| 2026-06-08 | pending | `scripts/data` TFDS cache / configured data path | Official baseline failed before training with TFDS `FieldDescriptor.label` error from `./data/train`, including after cache cleanup. | Cache cleanup was insufficient; pending code/config-level data loading fix or dependency pin. | Must be documented as baseline plumbing; behavioural impact depends on final fix. |
 
 ## Rules
 
@@ -38,8 +38,8 @@ Record any changes needed to make the as-shipped baseline run. Keep this file fo
 
 **Files changed:** None. Generated local TFDS cache directories under `scripts/data/train` and `scripts/data/test` were removed and rebuilt.
 
-**Patch summary:** Removed stale generated TFDS cache under the configured relative data path. No tracked source files were changed for the cache cleanup.
+**Patch summary:** Cache cleanup alone was insufficient. A code/config-level data loading fix or dependency pin is still pending.
 
-**Behavioural impact:** Environment/data-cache only. The same GSM8K TFDS source and configured train/test paths are used.
+**Behavioural impact:** Pending. The final fix should preserve the same GSM8K source and split to remain environment/plumbing-only.
 
-**Verification:** Tiny dataset load from `scripts/` using `./data/train` and `./data/test` passed after cache cleanup: `train=1`, `val=0`, `test=1`, sample answer `13`.
+**Verification:** Cache cleanup verification was insufficient: tiny dataset load passed, but full `train.py` relaunch failed again with the same TFDS error. Pending a stronger verification via successful baseline startup.

@@ -34,6 +34,7 @@ Record environment setup, deviations from the course instructions, and fixes dis
 | 2026-06-08 | | TPU VM | Added `WANDB_ENTITY=felsomoye-university-of-cambridge` and `WANDB_PROJECT=tunix` to `~/.env`, then reran W&B and `run_tmux.sh` validation. | Passed: W&B init/finish test succeeded, `run_tmux.sh` created a W&B run and started model/training setup. Session was intentionally stopped before a full baseline run. | Ready to launch the official baseline once run metadata is prepared. |
 | 2026-06-08 | | TPU VM | Launched official baseline attempt `2026-06-08_baseline_seed42` from commit `2143844`. | Failed before training steps: TFDS failed constructing GSM8K from `./data/train` with `FieldDescriptor.label` AttributeError. W&B run `qvhm72qe` was created. | Resolve stale/incompatible TFDS cache or data path before relaunching baseline. |
 | 2026-06-08 | | TPU VM | Cleared generated TFDS cache under `scripts/data/train` and `scripts/data/test`, then reran tiny dataset load using baseline paths. | Passed: TFDS rebuilt GSM8K cleanly, tiny train/test load returned lengths `train=1`, `val=0`, `test=1`, sample answer `13`. | Relaunch baseline from clean branch. |
+| 2026-06-08 | | TPU VM | Relaunched official baseline after TFDS cache cleanup. | Failed again before training steps with same TFDS `FieldDescriptor.label` error from `./data/train`; W&B run `kcwsje77` was created. | Need a code/config-level data loading fix or dependency pin; cache deletion alone is insufficient. |
 
 ## Smoke Test Checklist
 
@@ -142,6 +143,6 @@ Record environment setup, deviations from the course instructions, and fixes dis
 
 **Cause:** This matches the earlier stale/incompatible TFDS cache failure seen during smoke testing. The full run used the configured relative data path `./data/train` from inside `scripts/`, where `evaluate.py` had already created TFDS cache directories.
 
-**Fix:** Resolved for relaunch. Removed generated TFDS cache directories `scripts/data/train` and `scripts/data/test`; reran a tiny dataset load using `./data/train` and `./data/test` from `scripts/`, and TFDS rebuilt GSM8K successfully. Treat W&B run `qvhm72qe` as failed/invalid for experiment evidence.
+**Fix:** Not resolved. Removing `scripts/data/train` and `scripts/data/test` allowed a tiny dataset load to rebuild once, but the full `train.py` relaunch failed again with the same TFDS/protobuf error. Treat W&B runs `qvhm72qe` and `kcwsje77` as failed/invalid for experiment evidence.
 
-**Impact:** No GRPO training steps completed and no checkpoint from the failed attempt should be reported. The fix is environment/data-cache cleanup only and does not change model, reward, or training configuration.
+**Impact:** No GRPO training steps completed and no checkpoint from either failed attempt should be reported. The issue remains an environment/data-loading blocker, not a model/reward/config result.
