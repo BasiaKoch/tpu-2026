@@ -14,10 +14,12 @@ Tunix's RLCluster uses Orbax and will pick up the latest step in CKPT_DIR.
 import argparse
 import os
 
+from dotenv import load_dotenv
+load_dotenv(os.path.expanduser("~/.env"))
+
 import nest_asyncio
 import optax
 import wandb
-from dotenv import load_dotenv
 from orbax import checkpoint as ocp
 from tunix.rl import rl_cluster as rl_cluster_lib
 from tunix.rl.grpo.grpo_learner import GRPOConfig, GRPOLearner
@@ -62,7 +64,6 @@ from rewards import REWARD_FNS
 
 
 def login_services():
-    load_dotenv()
     nest_asyncio.apply()  # tunix uses async; jupyter-style nesting helps in tmux too
     if os.environ.get("WANDB_API_KEY"):
         wandb.login(key=os.environ["WANDB_API_KEY"])

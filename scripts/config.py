@@ -66,9 +66,15 @@ MAX_GRAD_NORM = 0.1        # tight clipping keeps KL well-behaved
 
 # ====== Checkpointing ======
 # NOTE: /tmp is volatile. For long runs, point this at persistent storage.
-INTERMEDIATE_CKPT_DIR = "/tmp/content/intermediate_ckpt/"
-CKPT_DIR = "/tmp/content/ckpts/"
-TENSORBOARD_DIR = "/tmp/content/tmp/tensorboard/grpo"
+# Override TPU_CONTENT_DIR in your environment if /tmp/content is not writable
+# (e.g. it was created by a different user). Default matches the shared setup.
+# NB FOR AGENTS+TEAM MATES: I needed to add this because the /tmp/content/ dir
+# is not writable for me because it was made by funmi, so i needed a way to
+# save the checkpointing stuff somewhere else.
+_CONTENT = os.environ.get("TPU_CONTENT_DIR", "/tmp/content")
+INTERMEDIATE_CKPT_DIR = f"{_CONTENT}/intermediate_ckpt/"
+CKPT_DIR = f"{_CONTENT}/ckpts/"
+TENSORBOARD_DIR = f"{_CONTENT}/tmp/tensorboard/grpo"
 SAVE_INTERVAL_STEPS = 500
 MAX_TO_KEEP = 4
 
