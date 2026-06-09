@@ -10,6 +10,7 @@ Pre-register each experiment before launching a full TPU run.
 | Group size G=8 | `NUM_GENERATIONS` 2 → 8 in `scripts/config.py`. | A larger GRPO group gives a less noisy advantage baseline/normalisation, so policy updates are more stable and avoid the late-training collapse seen in the baseline. | Eval reward mean (and GSM8K accuracy) vs. baseline. | Eval/train reward curves, KL, grad-norm spikes, completion length, empty-completion rate. | running |
 | Micro batch size 2 | `TRAIN_MICRO_BATCH_SIZE` 1 → 2 in `scripts/config.py`. | A larger micro-batch should improve TPU compute efficiency by doing more useful work per step, as long as memory headroom is sufficient and training dynamics remain comparable. | Wall-clock time per step and eval reward/GSM8K accuracy vs. baseline. | TPU utilisation, step time, OOMs, KL, grad norm, reward curves. | planned |
 | Variant A: reward/length | Add a mild length penalty or adjust shaping reward. | Reducing verbosity or reward hacking may improve correctness without excessive KL drift. | GSM8K eval accuracy vs. baseline. | Response length, malformed-output rate, correctness reward. | planned |
+| Variant A on G8: reward/length + G8 | `length_penalty` reward on top of `n-generations-8` (`NUM_GENERATIONS = 8` **and** `TRAIN_MICRO_BATCH_SIZE = 2`). | On the more stable G8 base, a mild excess-length penalty should further curb length-blowup / verbosity reward-hacking without adding KL drift. | Eval reward mean & GSM8K accuracy vs. the **G8 run** (not baseline). | Completion length, empty-completion rate, KL, grad-norm, correctness reward. | planned |
 | Variant B: KL control | Conservative change to beta or epsilon. | KL budget should trade off stability against policy movement. | Accuracy read alongside KL. | KL vs. reward and KL vs. accuracy. | planned |
 
 ## Logged Experiments
@@ -49,6 +50,28 @@ Baseline reference (G=2, `jgs4c6kl`): peak eval reward mean **1.711** at step **
 **Metrics:** Wall-clock time per step, total runtime, TPU utilisation if available, eval reward mean, `rewards/eval/check_answer`, GSM8K accuracy, KL (`actor/train/kl`), grad-norm, OOM/retry events.
 
 **Result:** _Pending — fill in after the run completes._
+
+**Interpretation:** _Pending._
+
+### `reward-length-on-g8`
+
+**Question:** Conditional on the G8 base, does adding a mild excess-length penalty further reduce verbosity / length-blowup reward-hacking and improve GSM8K accuracy without added KL drift?
+
+**Main change:** Add the `length_penalty` reward fn to [scripts/rewards.py](../scripts/rewards.py) and append it to `REWARD_FNS` — applied on top of the `n-generations-8` branch. No `config.py` change relative to that branch.
+
+**Base / deviation note:** Relative to the original baseline this stacks **two** changes (G8 + `TRAIN_MICRO_BATCH_SIZE = 2`, *and* the length penalty), so it does **not** isolate the length penalty against the baseline. It deliberately deviates from the original `reward-length-bk` pre-registration, which held group size `K` fixed. To keep a single controlled variable, the declared control here is the **G8 run** (`group-size-g8` / `n-generations-8`), against which the only delta is the `length_penalty` reward.
+
+**Hypothesis:** G8 already lowers advantage-estimate variance and should curb the late-training collapse; the length penalty addresses a different failure mode (reward-hacking via verbose completions). On top of a more stable base, the penalty should pull mean completion length down and reduce empty/degenerate completions without raising KL, yielding equal-or-better GSM8K accuracy than G8 alone.
+
+**Config:** Branch `reward-length-on-g8-bk` (off `origin/n-generations-8`); commit: this branch HEAD. Seed: data shuffle fixed at 42 ([scripts/data.py:86](../scripts/data.py)); no other seed knob. Data: GSM8K, `TRAIN_FRACTION = 0.9`. Steps: `MAX_STEPS = 3364`. Changed parameter vs. G8: `REWARD_FNS` gains `length_penalty` (`LENGTH_TARGET = 600`, `LENGTH_PENALTY_WEIGHT = 1.0`).
+
+**Comparison:** Against the **G8 run** (`group-size-g8`, `n-generations-8`) — *not* baseline `jgs4c6kl`. The G8 run is still running; this stacked result is uninterpretable until it completes. A secondary read against the isolated length-only arm (`reward-length-bk`) would reveal any G8×length interaction.
+
+**Metrics:** Completion length vs step (primary), empty-completion rate, eval reward mean, `rewards/eval/check_answer`, GSM8K accuracy across checkpoints, KL (`actor/train/kl`), grad-norm.
+
+**Risk:** If the penalty is too strong it may suppress reasoning or push toward short/empty answers — especially relevant since G8 already shifts completion-length dynamics.
+
+**Result:** _Pending._
 
 **Interpretation:** _Pending._
 

@@ -116,4 +116,30 @@ def check_numbers(prompts, completions, answer, **kwargs):
     return scores
 
 
-REWARD_FNS = [match_format_exactly, match_format_approximately, check_answer, check_numbers]
+LENGTH_TARGET = 600
+LENGTH_PENALTY_WEIGHT = 1.0
+
+
+def length_penalty(prompts, completions, **kwargs):
+    """Mild excess-length penalty.
+
+    Tests whether response-length blowup contributes to the baseline collapse.
+    Completions up to LENGTH_TARGET characters are unpenalised; longer ones get
+    a negative reward that grows with the overshoot and is capped at
+    -LENGTH_PENALTY_WEIGHT.
+    """
+    scores = []
+    for completion in completions:
+        over = max(0, len(completion) - LENGTH_TARGET) / LENGTH_TARGET
+        penalty = -LENGTH_PENALTY_WEIGHT * min(1.0, over)
+        scores.append(penalty)
+    return scores
+
+
+REWARD_FNS = [
+    match_format_exactly,
+    match_format_approximately,
+    check_answer,
+    check_numbers,
+    length_penalty,
+]
