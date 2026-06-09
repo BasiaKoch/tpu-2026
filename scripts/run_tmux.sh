@@ -10,8 +10,8 @@
 set -euo pipefail
 
 SESSION=tunix
-REPO=/home/boris_bolliet_cmbagent_community/tpu-2026
-VENV=/home/boris_bolliet_cmbagent_community/venvs/tunix
+REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+VENV=${VENV:-$HOME/venvs/tunix}
 WANDB_RUN_ID="${WANDB_RUN_ID:-bnh9ttlt}"   # the run that was interrupted
 
 if tmux has-session -t "$SESSION" 2>/dev/null; then
@@ -19,9 +19,9 @@ if tmux has-session -t "$SESSION" 2>/dev/null; then
   exec tmux attach -t "$SESSION"
 fi
 
-INNER="cd $REPO/scripts && source $VENV/bin/activate && python -u train.py"
+INNER="cd $REPO/scripts && source $VENV/bin/activate && [ -f ~/.env ] && set -a && source ~/.env && set +a && python -u train.py"
 if [[ "${1:-}" == "resume" ]]; then
-  INNER="cd $REPO/scripts && source $VENV/bin/activate && WANDB_RUN_ID=$WANDB_RUN_ID python -u train.py --wandb-run-id $WANDB_RUN_ID"
+  INNER="cd $REPO/scripts && source $VENV/bin/activate && [ -f ~/.env ] && set -a && source ~/.env && set +a && WANDB_RUN_ID=$WANDB_RUN_ID python -u train.py --wandb-run-id $WANDB_RUN_ID"
 fi
 
 # Run under bash (not dash) so `source` works, and keep the shell alive on

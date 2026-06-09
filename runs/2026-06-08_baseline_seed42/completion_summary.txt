@@ -1,0 +1,19 @@
+Baseline training completed successfully.
+
+Run: baseline_seed42
+Commit: 7e696c428687bc083604690f5f51009da6abb6d9
+Start: 2026-06-08T18:17:09Z
+End: 2026-06-08T22:58:47Z
+Wall-clock: 4h 41m 38s
+Final step: 3364
+Exit code: 0
+Final checkpoint: /tmp/content/ckpts/actor/3364
+Preserved local checkpoint copy: /home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/baseline_seed42/actor/3364
+Train log: scripts/train.log
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl
+W&B checkpoint artifact: felsomoye-university-of-cambridge/tunix/baseline_seed42_checkpoint:latest
+W&B artifact upload run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/bah3rczo
+Final log marker: Training finished.
+Evaluation: complete
+Base eval: correct=33/64, acc=51.56%, partial=53.12%, format=6.25%
+LoRA eval: correct=2/64, acc=3.12%, partial=6.25%, format=12.50%

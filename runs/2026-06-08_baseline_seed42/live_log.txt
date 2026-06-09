@@ -1,0 +1,9 @@
+Live stdout/stderr log:
+../../scripts/train.log
+
+Current live log observed at ledger creation:
+mtime: 2026-06-08 21:18:49.076570160 +0000
+size_bytes: 19267017
+
+Follow with:
+tail -f scripts/train.log

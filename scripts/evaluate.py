@@ -9,8 +9,10 @@ Run as:
     python evaluate.py
 """
 import argparse
+import os
 
 from tqdm.auto import tqdm
+from tunix.sft.checkpoint_manager import CheckpointManager
 from tunix.generate import sampler as sampler_lib
 
 from config import (
@@ -29,6 +31,22 @@ from config import (
 from data import SYSTEM_PROMPT, TEMPLATE, build_train_val_test
 from model import build_mesh, download_weights, load_base_model, get_lora_model, load_tokenizer, model_config_for
 from rewards import match_format, match_numbers
+
+
+DEFAULT_CKPT_ROOT = os.path.expanduser("~/tpu-2026/checkpoints/baseline_seed42/actor")
+DEFAULT_STEP = 3364
+
+
+def restore_lora(lora_model, ckpt_root: str, step: int | None) -> int:
+    mgr = CheckpointManager(root_directory=ckpt_root)
+    n, _ = mgr.maybe_restore(model=lora_model, step=step, restore_only_lora_params=True)
+    if n == 0:
+        raise RuntimeError(
+            f"No checkpoint found under {ckpt_root}. "
+            f"Pass --ckpt-dir or check the preserved checkpoint path."
+        )
+    print(f"Restored LoRA params from step {n}")
+    return n
 
 
 def generate(question, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.95, seed=None):
@@ -90,6 +108,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--preset", default="greedy", choices=list(GENERATION_CONFIGS))
     ap.add_argument("--source", default=DATA_SOURCE, choices=["tfds", "kaggle"])
+    ap.add_argument("--ckpt-dir", default=DEFAULT_CKPT_ROOT,
+                    help=f"Directory containing per-step checkpoint subdirs. Default: {DEFAULT_CKPT_ROOT}")
+    ap.add_argument("--step", type=int, default=DEFAULT_STEP,
+                    help=f"Checkpoint step to load. Default: {DEFAULT_STEP}. Pass 0 for latest.")
+    ap.add_argument("--no-restore", action="store_true",
+                    help="Evaluate the base LoRA wrapper without restoring trained adapter weights.")
     args = ap.parse_args()
 
     mesh = build_mesh()
@@ -97,6 +121,12 @@ def main():
     base, cfg = load_base_model(local_path, mesh)
     lora = get_lora_model(base, mesh)
     tokenizer, eos_tokens = load_tokenizer(eos_tokens)
+
+    if args.no_restore:
+        print("Skipping checkpoint restore; evaluating base model / zero-init LoRA adapter.")
+    else:
+        step = None if args.step == 0 else args.step
+        restore_lora(lora, args.ckpt_dir, step)
 
     _, _, test_ds = build_train_val_test(
         NUM_BATCHES, NUM_TEST_BATCHES, TRAIN_MICRO_BATCH_SIZE, TRAIN_FRACTION,

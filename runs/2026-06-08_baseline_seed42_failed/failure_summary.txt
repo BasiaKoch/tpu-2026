@@ -1,0 +1,14 @@
+Official baseline attempt failed before training steps began.
+
+Command:
+./scripts/run_tmux.sh
+
+W&B run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/qvhm72qe
+
+Failure:
+RuntimeError from tensorflow_datasets while constructing GSM8K at ./data/train:
+AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+
+Context:
+The failure occurred after W&B/HF login and model download, during build_train_val_test() in scripts/train.py. This appears consistent with the previously observed stale/incompatible TFDS cache issue. No GRPO training steps completed and no checkpoint from this run should be treated as valid.
