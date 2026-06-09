@@ -1,0 +1,21 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["scripts", "wandb_scripts"]
+
+[tool.ruff.lint]
+select = [
+  "B",
+  "E",
+  "F",
+  "I",
+  "UP",
+  "W",
+]
+ignore = [
+  # Numeric parsing and external-service scripts intentionally degrade gracefully.
+  "B904",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "data", "model", "rewards"]

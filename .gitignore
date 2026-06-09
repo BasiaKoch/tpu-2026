@@ -8,7 +8,9 @@ service-account*.json
 
 # venv / build
 venvs/
+venv/
 .venv/
+.uv-cache/
 __pycache__/
 *.pyc
 *.pyo
