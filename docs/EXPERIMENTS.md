@@ -63,7 +63,14 @@ Baseline reference (G=2, `jgs4c6kl`): peak eval reward mean **1.711** at step **
 
 **Hypothesis:** G8 already lowers advantage-estimate variance and should curb the late-training collapse; the length penalty addresses a different failure mode (reward-hacking via verbose completions). On top of a more stable base, the penalty should pull mean completion length down and reduce empty/degenerate completions without raising KL, yielding equal-or-better GSM8K accuracy than G8 alone.
 
-**Config:** Branch `reward-length-on-g8-bk` (off `origin/n-generations-8`); commit: this branch HEAD. Seed: data shuffle fixed at 42 ([scripts/data.py:86](../scripts/data.py)); no other seed knob. Data: GSM8K, `TRAIN_FRACTION = 0.9`. Steps: `MAX_STEPS = 3364`. Changed parameter vs. G8: `REWARD_FNS` gains `length_penalty` (`LENGTH_TARGET = 600`, `LENGTH_PENALTY_WEIGHT = 1.0`).
+**Config:** Branch `reward-length-on-g8-bk` (off `origin/n-generations-8`); commit: this branch HEAD. Data: GSM8K, `TRAIN_FRACTION = 0.9`. Steps: `MAX_STEPS = 3364`. Changed parameter vs. G8: `REWARD_FNS` gains `length_penalty` (`LENGTH_TARGET = 600`, `LENGTH_PENALTY_WEIGHT = 1.0`).
+
+**Determinism / effective seeds (verified against tunix + qwix source):** three randomness sources, all deterministic and identical to the G8 control:
+- Data shuffle — `seed=42`, explicit in [scripts/data.py:86](../scripts/data.py).
+- Rollout sampling — `RolloutConfig.seed` is left unset, so tunix's sampler falls back to `jax.random.PRNGKey(0)` (`tunix/generate/sampler.py`); deterministic.
+- LoRA init — `model.py` passes no `rngs`, so qwix falls back to `nnx.Rngs(10003)` (`qwix/_src/providers/lora.py`; `lora_a = he_uniform`, `lora_b = zeros`); deterministic.
+
+Seeds 2 and 3 are **library defaults, not pinned in this repo**, and tunix/qwix are installed from unpinned GitHub HEAD (`bootstrap.sh`). The comparison is valid only if this run and the G8 control share the same venv/library revisions. Do **not** set the rollout/LoRA seeds explicitly on this branch — that would diverge the RNG stream from the G8 control and reintroduce a confound.
 
 **Comparison:** Against the **G8 run** (`group-size-g8`, `n-generations-8`) — *not* baseline `jgs4c6kl`. The G8 run is still running; this stacked result is uninterpretable until it completes. A secondary read against the isolated length-only arm (`reward-length-bk`) would reveal any G8×length interaction.
 
