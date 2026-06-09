@@ -14,16 +14,19 @@ Tunix's RLCluster uses Orbax and will pick up the latest step in CKPT_DIR.
 import argparse
 import os
 
+from dotenv import load_dotenv
+load_dotenv(os.path.expanduser("~/.env"))
+
 import nest_asyncio
 import optax
 import wandb
-from dotenv import load_dotenv
 from orbax import checkpoint as ocp
 from tunix.rl import rl_cluster as rl_cluster_lib
 from tunix.rl.grpo.grpo_learner import GRPOConfig, GRPOLearner
 from tunix.rl.rollout import base_rollout
 from tunix.sft import metrics_logger
 
+import config as train_config
 from config import (
     B1, B2,
     BETA,
@@ -62,7 +65,6 @@ from rewards import REWARD_FNS
 
 
 def login_services():
-    load_dotenv()
     nest_asyncio.apply()  # tunix uses async; jupyter-style nesting helps in tmux too
     if os.environ.get("WANDB_API_KEY"):
         wandb.login(key=os.environ["WANDB_API_KEY"])
@@ -82,7 +84,11 @@ def maybe_init_wandb(run_id: str | None):
         # (which is what happens if the previous training crashed before
         # wandb.init was reached).
         kwargs.update({"id": run_id, "resume": "allow"})
-    return wandb.init(**kwargs)
+    run = wandb.init(**kwargs)
+    config_path = os.path.abspath(train_config.__file__)
+    wandb.save(config_path, base_path=os.path.dirname(config_path), policy="now")
+    print(f"Uploaded W&B config snapshot: {config_path}")
+    return run
 
 
 def build_optimizer():
