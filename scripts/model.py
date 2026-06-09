@@ -72,6 +72,11 @@ def get_lora_model(base_model, mesh):
         rank=RANK,
         alpha=ALPHA,
     )
+    # NOTE (determinism): apply_lora_to_model takes no rngs/seed argument in
+    # this qwix version, so adapter init uses qwix's fixed internal key and is
+    # already identical across branches/runs. There is intentionally no
+    # config.SEED wired in here — do not add a `rngs=`/`seed=` kwarg, it would
+    # be forwarded into the forward-pass inputs and break the call.
     model_input = base_model.get_model_input()
     lora_model = qwix.apply_lora_to_model(base_model, lora_provider, **model_input)
 
