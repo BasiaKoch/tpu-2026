@@ -26,6 +26,7 @@ from tunix.rl.grpo.grpo_learner import GRPOConfig, GRPOLearner
 from tunix.rl.rollout import base_rollout
 from tunix.sft import metrics_logger
 
+import config as train_config
 from config import (
     B1, B2,
     BETA,
@@ -83,7 +84,11 @@ def maybe_init_wandb(run_id: str | None):
         # (which is what happens if the previous training crashed before
         # wandb.init was reached).
         kwargs.update({"id": run_id, "resume": "allow"})
-    return wandb.init(**kwargs)
+    run = wandb.init(**kwargs)
+    config_path = os.path.abspath(train_config.__file__)
+    wandb.save(config_path, base_path=os.path.dirname(config_path), policy="now")
+    print(f"Uploaded W&B config snapshot: {config_path}")
+    return run
 
 
 def build_optimizer():
