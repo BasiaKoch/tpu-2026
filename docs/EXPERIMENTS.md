@@ -6,9 +6,32 @@ Pre-register each experiment before launching a full TPU run.
 
 | Experiment | Main change | Hypothesis | Success metric | Diagnostics | Status |
 |---|---|---|---|---|---|
-| Baseline GRPO | Default `scripts/config.py` and rewards. | Baseline should reproduce the expected reward/KL behaviour and improve over the base model. | GSM8K eval accuracy. | Reward curve, KL curve, output format accuracy. | planned |
+| Baseline GRPO | Default `scripts/config.py` and rewards (`NUM_GENERATIONS = 2`). | Baseline should reproduce the expected reward/KL behaviour and improve over the base model. | GSM8K eval accuracy. | Reward curve, KL curve, output format accuracy. | completed (run `jgs4c6kl`) |
+| Group size G=8 | `NUM_GENERATIONS` 2 → 8 in `scripts/config.py`. | A larger GRPO group gives a less noisy advantage baseline/normalisation, so policy updates are more stable and avoid the late-training collapse seen in the baseline. | Eval reward mean (and GSM8K accuracy) vs. baseline. | Eval/train reward curves, KL, grad-norm spikes, completion length, empty-completion rate. | running |
 | Variant A: reward/length | Add a mild length penalty or adjust shaping reward. | Reducing verbosity or reward hacking may improve correctness without excessive KL drift. | GSM8K eval accuracy vs. baseline. | Response length, malformed-output rate, correctness reward. | planned |
 | Variant B: KL control | Conservative change to beta or epsilon. | KL budget should trade off stability against policy movement. | Accuracy read alongside KL. | KL vs. reward and KL vs. accuracy. | planned |
+
+## Logged Experiments
+
+### `group-size-g8`
+
+**Question:** Does increasing the GRPO group size `NUM_GENERATIONS` from 2 to 8 fix the unstable, collapsing training seen in the baseline?
+
+**Main change:** `NUM_GENERATIONS = 2 → 8` in [scripts/config.py:44](../scripts/config.py). All other hyperparameters unchanged.
+
+**Hypothesis:** At G=2 the per-prompt advantage baseline is a 2-sample mean and the std-normalisation is extremely noisy, producing high-variance policy gradients. This is the likely driver of the baseline's late-training collapse (KL spike to 41, grad-norm spike to 696, completions degenerating to 0 length — see [baseline-analysis.md](rowan/baseline-analysis.md)). G=8 should give a much lower-variance advantage estimate, keeping KL and grad-norm controlled and sustaining the early reward gains instead of collapsing.
+
+**Config:** Branch TBD; commit TBD (the `2 → 8` edit). Seed: not yet fixed. Data: GSM8K, `TRAIN_FRACTION = 0.9`. Steps: `MAX_STEPS = 3364`. Changed parameter: `NUM_GENERATIONS = 8`.
+
+**Comparison:** Against baseline run `jgs4c6kl` (G=2) — see [RUNS.md](RUNS.md).
+
+**Metrics:** Eval reward mean, `rewards/eval/check_answer`, KL (`actor/train/kl`), grad-norm, completion length, empty-completion rate, format-match rewards.
+
+**Result:** _Pending — fill in after the run completes._
+
+**Interpretation:** _Pending._
+
+Baseline reference (G=2, `jgs4c6kl`): peak eval reward mean **1.711** at step **448**, collapsing to **-0.240** by the final eval (step 3328); wall-clock ≈ **4.7 h** over 3,364 steps.
 
 ## Template
 
