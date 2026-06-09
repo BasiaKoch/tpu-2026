@@ -12,8 +12,8 @@ import argparse
 import os
 
 from tqdm.auto import tqdm
-from tunix.sft.checkpoint_manager import CheckpointManager
 from tunix.generate import sampler as sampler_lib
+from tunix.sft.checkpoint_manager import CheckpointManager
 
 from config import (
     GENERATION_CONFIGS,
