@@ -17,10 +17,10 @@ this within the group of G rollouts to compute the advantage. This is the
 "group-relative" part of GRPO: no value network is learned; advantages come
 from comparing siblings drawn from the same prompt.
 """
+
 import re
 
-from data import reasoning_start, reasoning_end, solution_start, solution_end
-
+from data import reasoning_end, reasoning_start, solution_end, solution_start
 
 match_format = re.compile(
     rf"^[\s]{{0,}}"
@@ -38,10 +38,7 @@ match_numbers = re.compile(
 
 def match_format_exactly(prompts, completions, **kwargs):
     """+3 if the whole template parses, 0 otherwise."""
-    return [
-        0 if match_format.search(r) is None else 3.0
-        for r in completions
-    ]
+    return [0 if match_format.search(r) is None else 3.0 for r in completions]
 
 
 def match_format_approximately(prompts, completions, **kwargs):
@@ -67,7 +64,7 @@ def check_answer(prompts, completions, answer, **kwargs):
     assert len(extracted) == len(answer)
 
     scores = []
-    for guess, true in zip(extracted, answer):
+    for guess, true in zip(extracted, answer, strict=True):
         if guess is None:
             scores.append(0)
             continue
@@ -105,7 +102,7 @@ def check_numbers(prompts, completions, answer, **kwargs):
     print("END ==============================")
 
     scores = []
-    for guess, true in zip(extracted, answer):
+    for guess, true in zip(extracted, answer, strict=True):
         if guess is None:
             scores.append(0)
             continue

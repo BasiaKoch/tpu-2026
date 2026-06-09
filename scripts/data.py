@@ -8,6 +8,7 @@ its reasoning between <reasoning>...</reasoning> and the final numeric
 answer between <answer>...</answer>. The reward functions later check
 both the format and the number itself.
 """
+
 import csv
 import os
 import shutil
@@ -30,12 +31,7 @@ SYSTEM_PROMPT = (
     f"{solution_start} and {solution_end}."
 )
 
-TEMPLATE = (
-    "<start_of_turn>user\n"
-    "{system_prompt}\n\n"
-    "{question}<end_of_turn>\n"
-    "<start_of_turn>model\n"
-)
+TEMPLATE = "<start_of_turn>user\n{system_prompt}\n\n{question}<end_of_turn>\n<start_of_turn>model\n"
 
 
 def extract_hash_answer(text: str) -> str | None:
@@ -60,6 +56,7 @@ def get_dataset(data_dir: str, split: str = "train", source: str = "tfds") -> gr
 
     if source == "tfds":
         import tensorflow_datasets.text.gsm8k  # noqa: F401  (registers the builder)
+
         data = tfds.data_source(
             "gsm8k",
             split=split,
@@ -84,25 +81,29 @@ def get_dataset(data_dir: str, split: str = "train", source: str = "tfds") -> gr
     return (
         grain.MapDataset.source(data)
         .shuffle(seed=42)
-        .map(lambda x: {
-            "prompts": TEMPLATE.format(
-                system_prompt=SYSTEM_PROMPT,
-                question=_as_text(x["question"]),
-            ),
-            "question": _as_text(x["question"]),
-            "answer": extract_hash_answer(_as_text(x["answer"])),
-        })
+        .map(
+            lambda x: {
+                "prompts": TEMPLATE.format(
+                    system_prompt=SYSTEM_PROMPT,
+                    question=_as_text(x["question"]),
+                ),
+                "question": _as_text(x["question"]),
+                "answer": extract_hash_answer(_as_text(x["answer"])),
+            }
+        )
     )
 
 
-def build_train_val_test(num_batches: int,
-                         num_test_batches: int,
-                         train_micro_batch_size: int,
-                         train_fraction: float,
-                         num_epochs: int,
-                         train_dir: str,
-                         test_dir: str,
-                         source: str = "tfds"):
+def build_train_val_test(
+    num_batches: int,
+    num_test_batches: int,
+    train_micro_batch_size: int,
+    train_fraction: float,
+    num_epochs: int,
+    train_dir: str,
+    test_dir: str,
+    source: str = "tfds",
+):
     """Materialise (train, val, test) datasets with batching applied."""
     full = get_dataset(train_dir, "train", source).batch(train_micro_batch_size)[:num_batches]
 

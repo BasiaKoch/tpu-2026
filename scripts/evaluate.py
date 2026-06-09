@@ -8,26 +8,33 @@ Reports three numbers:
 Run as:
     python evaluate.py
 """
+
 import argparse
 
 from tqdm.auto import tqdm
 from tunix.generate import sampler as sampler_lib
 
 from config import (
+    DATA_SOURCE,
     GENERATION_CONFIGS,
     MAX_PROMPT_LENGTH,
+    NUM_BATCHES,
+    NUM_EPOCHS,
     NUM_TEST_BATCHES,
     TEST_DATA_DIR,
     TOTAL_GENERATION_STEPS,
     TRAIN_DATA_DIR,
     TRAIN_FRACTION,
     TRAIN_MICRO_BATCH_SIZE,
-    NUM_BATCHES,
-    NUM_EPOCHS,
-    DATA_SOURCE,
 )
 from data import SYSTEM_PROMPT, TEMPLATE, build_train_val_test
-from model import build_mesh, download_weights, load_base_model, get_lora_model, load_tokenizer, model_config_for
+from model import (
+    build_mesh,
+    download_weights,
+    get_lora_model,
+    load_base_model,
+    load_tokenizer,
+)
 from rewards import match_format, match_numbers
 
 
@@ -40,8 +47,12 @@ def generate(question, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.9
     out = sampler(
         input_strings=batch,
         max_generation_steps=TOTAL_GENERATION_STEPS,
-        temperature=temperature, top_k=top_k, top_p=top_p,
-        echo=False, seed=seed, eos_tokens=eos_tokens,
+        temperature=temperature,
+        top_k=top_k,
+        top_p=top_p,
+        echo=False,
+        seed=seed,
+        eos_tokens=eos_tokens,
     )
     return out.text[0] if isinstance(question, str) else out.text
 
@@ -58,7 +69,7 @@ def evaluate(dataset, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.95
             for i, r in enumerate(responses):
                 per_q[i].append(r)
 
-        for q, responses, ans in zip(questions, per_q, answers):
+        for responses, ans in zip(per_q, answers, strict=True):
             got_corr = got_partial = got_format = False
             for r in responses:
                 ext = guess.group(1) if (guess := match_numbers.search(r)) is not None else "-1e9"
@@ -80,10 +91,13 @@ def evaluate(dataset, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.95
             corr_format += int(got_format)
             total += 1
             if total % 10 == 0:
-                print(f"===> corr={corr} total={total} acc={corr/total*100:.2f}% "
-                      f"partial={partially_corr/total*100:.2f}% fmt={corr_format/total*100:.2f}%")
+                print(
+                    f"===> corr={corr} total={total} acc={corr / total * 100:.2f}% "
+                    f"partial={partially_corr / total * 100:.2f}% "
+                    f"fmt={corr_format / total * 100:.2f}%"
+                )
 
-    return corr, total, corr/total*100, partially_corr/total*100, corr_format/total*100
+    return corr, total, corr / total * 100, partially_corr / total * 100, corr_format / total * 100
 
 
 def main():
@@ -99,8 +113,14 @@ def main():
     tokenizer, eos_tokens = load_tokenizer(eos_tokens)
 
     _, _, test_ds = build_train_val_test(
-        NUM_BATCHES, NUM_TEST_BATCHES, TRAIN_MICRO_BATCH_SIZE, TRAIN_FRACTION,
-        NUM_EPOCHS, TRAIN_DATA_DIR, TEST_DATA_DIR, source=args.source,
+        NUM_BATCHES,
+        NUM_TEST_BATCHES,
+        TRAIN_MICRO_BATCH_SIZE,
+        TRAIN_FRACTION,
+        NUM_EPOCHS,
+        TRAIN_DATA_DIR,
+        TEST_DATA_DIR,
+        source=args.source,
     )
 
     sampler = sampler_lib.Sampler(
@@ -113,7 +133,12 @@ def main():
             head_dim=cfg.head_dim,
         ),
     )
-    n, t, acc, pacc, facc = evaluate(test_ds, sampler, eos_tokens, **GENERATION_CONFIGS[args.preset])
+    n, t, acc, pacc, facc = evaluate(
+        test_ds,
+        sampler,
+        eos_tokens,
+        **GENERATION_CONFIGS[args.preset],
+    )
     print(f"\nFINAL: correct={n}/{t}  acc={acc:.2f}%  partial={pacc:.2f}%  format={facc:.2f}%")
 
 

@@ -11,6 +11,7 @@ Resuming a wandb run: set WANDB_RUN_ID in env (or pass --wandb-run-id).
 Resuming from checkpoint: just point CKPT_DIR at the existing directory.
 Tunix's RLCluster uses Orbax and will pick up the latest step in CKPT_DIR.
 """
+
 import argparse
 import os
 
@@ -25,7 +26,8 @@ from tunix.rl.rollout import base_rollout
 from tunix.sft import metrics_logger
 
 from config import (
-    B1, B2,
+    B1,
+    B2,
     BETA,
     CKPT_DIR,
     DATA_SOURCE,
@@ -45,7 +47,8 @@ from config import (
     TEMPERATURE,
     TENSORBOARD_DIR,
     TEST_DATA_DIR,
-    TOP_K, TOP_P,
+    TOP_K,
+    TOP_P,
     TOTAL_GENERATION_STEPS,
     TRAIN_DATA_DIR,
     TRAIN_FRACTION,
@@ -57,7 +60,7 @@ from config import (
     WEIGHT_DECAY,
 )
 from data import build_train_val_test
-from model import build_mesh, download_weights, load_base_model, get_lora_model, load_tokenizer
+from model import build_mesh, download_weights, get_lora_model, load_base_model, load_tokenizer
 from rewards import REWARD_FNS
 
 
@@ -115,18 +118,22 @@ def build_cluster_config(mesh, optimizer, eos_tokens):
             mini_batch_size=TRAIN_MICRO_BATCH_SIZE,
             train_micro_batch_size=TRAIN_MICRO_BATCH_SIZE,
             metrics_logging_options=metrics_logger.MetricsLoggerOptions(
-                log_dir=TENSORBOARD_DIR, flush_every_n_steps=20,
+                log_dir=TENSORBOARD_DIR,
+                flush_every_n_steps=20,
             ),
             checkpoint_root_directory=CKPT_DIR,
             checkpointing_options=ocp.CheckpointManagerOptions(
-                save_interval_steps=SAVE_INTERVAL_STEPS, max_to_keep=MAX_TO_KEEP,
+                save_interval_steps=SAVE_INTERVAL_STEPS,
+                max_to_keep=MAX_TO_KEEP,
             ),
         ),
         rollout_config=base_rollout.RolloutConfig(
             max_tokens_to_generate=TOTAL_GENERATION_STEPS,
             max_prompt_length=MAX_PROMPT_LENGTH,
             kv_cache_size=MAX_PROMPT_LENGTH + TOTAL_GENERATION_STEPS + 256,
-            temperature=TEMPERATURE, top_p=TOP_P, top_k=TOP_K,
+            temperature=TEMPERATURE,
+            top_p=TOP_P,
+            top_k=TOP_K,
             eos_tokens=eos_tokens,
         ),
     )
@@ -135,8 +142,11 @@ def build_cluster_config(mesh, optimizer, eos_tokens):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", default=DATA_SOURCE, choices=["tfds", "kaggle"])
-    ap.add_argument("--wandb-run-id", default=WANDB_RUN_ID,
-                    help="Pass an existing run id (e.g. bnh9ttlt) to resume.")
+    ap.add_argument(
+        "--wandb-run-id",
+        default=WANDB_RUN_ID,
+        help="Pass an existing run id (e.g. bnh9ttlt) to resume.",
+    )
     args = ap.parse_args()
 
     login_services()
@@ -151,8 +161,14 @@ def main():
     tokenizer, eos_tokens = load_tokenizer(eos_tokens)
 
     train_ds, val_ds, _ = build_train_val_test(
-        NUM_BATCHES, NUM_TEST_BATCHES, TRAIN_MICRO_BATCH_SIZE, TRAIN_FRACTION,
-        NUM_EPOCHS, TRAIN_DATA_DIR, TEST_DATA_DIR, source=args.source,
+        NUM_BATCHES,
+        NUM_TEST_BATCHES,
+        TRAIN_MICRO_BATCH_SIZE,
+        TRAIN_FRACTION,
+        NUM_EPOCHS,
+        TRAIN_DATA_DIR,
+        TEST_DATA_DIR,
+        source=args.source,
     )
     print(f"Datasets: train={len(train_ds)} val={len(val_ds) if val_ds else 0}")
 
@@ -166,7 +182,10 @@ def main():
     )
 
     rl_cluster = rl_cluster_lib.RLCluster(
-        actor=lora, reference=base, tokenizer=tokenizer, cluster_config=cluster_cfg,
+        actor=lora,
+        reference=base,
+        tokenizer=tokenizer,
+        cluster_config=cluster_cfg,
     )
     trainer = GRPOLearner(rl_cluster=rl_cluster, reward_fns=REWARD_FNS, algo_config=grpo_cfg)
 

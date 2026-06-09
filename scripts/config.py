@@ -3,7 +3,9 @@
 Everything in this file is a knob you might tune. Other scripts import from here
 so a change in one place propagates everywhere.
 """
+
 import os
+
 import jax
 
 # ====== Model ======
@@ -38,15 +40,15 @@ MESH = [MESH_COUNTS, ("fsdp", "tp")]
 # ====== Generation during GRPO rollouts ======
 MAX_PROMPT_LENGTH = 256
 TOTAL_GENERATION_STEPS = 768
-TEMPERATURE = 0.9          # high enough that the G samples actually differ
+TEMPERATURE = 0.9  # high enough that the G samples actually differ
 TOP_P = 1.0
 TOP_K = 50
-NUM_GENERATIONS = 2        # G in the GRPO paper — group size for advantage norm
+NUM_GENERATIONS = 2  # G in the GRPO paper — group size for advantage norm
 
 # ====== GRPO loss ======
-NUM_ITERATIONS = 1         # mu — PPO-style inner optimisation passes per batch
-BETA = 0.08                # KL penalty coefficient (anchors to reference model)
-EPSILON = 0.2              # PPO-style clip range
+NUM_ITERATIONS = 1  # mu — PPO-style inner optimisation passes per batch
+BETA = 0.08  # KL penalty coefficient (anchors to reference model)
+EPSILON = 0.2  # PPO-style clip range
 
 # ====== Training ======
 TRAIN_MICRO_BATCH_SIZE = 1
@@ -62,7 +64,7 @@ B1 = 0.9
 B2 = 0.99
 WEIGHT_DECAY = 0.1
 WARMUP_STEPS = 0.1 * MAX_STEPS
-MAX_GRAD_NORM = 0.1        # tight clipping keeps KL well-behaved
+MAX_GRAD_NORM = 0.1  # tight clipping keeps KL well-behaved
 
 # ====== Checkpointing ======
 # NOTE: /tmp is volatile. For long runs, point this at persistent storage.
@@ -74,9 +76,9 @@ MAX_TO_KEEP = 4
 
 # ====== Inference presets ======
 GENERATION_CONFIGS = {
-    "greedy":   {"temperature": None, "top_k": 1,    "top_p": None},
-    "standard": {"temperature": 0.7,  "top_k": 50,   "top_p": 0.95},
-    "liberal":  {"temperature": 0.85, "top_k": 2000, "top_p": 1.0},
+    "greedy": {"temperature": None, "top_k": 1, "top_p": None},
+    "standard": {"temperature": 0.7, "top_k": 50, "top_p": 0.95},
+    "liberal": {"temperature": 0.85, "top_k": 2000, "top_p": 1.0},
 }
 
 # ====== W&B ======

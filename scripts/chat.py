@@ -17,6 +17,7 @@ Interactive commands inside the REPL:
     /step 3000                          hot-swap to a different checkpoint
     /quit  (or empty line, Ctrl-D)      exit
 """
+
 import argparse
 import os
 
@@ -43,8 +44,7 @@ def restore_lora(lora_model, ckpt_root: str, step: int | None) -> int:
     n, _ = mgr.maybe_restore(model=lora_model, step=step, restore_only_lora_params=True)
     if n == 0:
         raise RuntimeError(
-            f"No checkpoint found under {ckpt_root}. "
-            f"Pass --ckpt-dir or check `ls {ckpt_root}`."
+            f"No checkpoint found under {ckpt_root}. Pass --ckpt-dir or check `ls {ckpt_root}`."
         )
     print(f"Restored LoRA params from step {n}")
     return n
@@ -76,18 +76,30 @@ def generate(sampler, eos_tokens, prompt: str, sampling: dict, max_tokens: int) 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ckpt-dir", default=DEFAULT_CKPT_ROOT,
-                    help=f"Directory containing per-step subdirs. Default: {DEFAULT_CKPT_ROOT}")
-    ap.add_argument("--step", type=int, default=DEFAULT_STEP,
-                    help=f"Checkpoint step to load. Default: {DEFAULT_STEP}. Pass 0 for latest.")
+    ap.add_argument(
+        "--ckpt-dir",
+        default=DEFAULT_CKPT_ROOT,
+        help=f"Directory containing per-step subdirs. Default: {DEFAULT_CKPT_ROOT}",
+    )
+    ap.add_argument(
+        "--step",
+        type=int,
+        default=DEFAULT_STEP,
+        help=f"Checkpoint step to load. Default: {DEFAULT_STEP}. Pass 0 for latest.",
+    )
     ap.add_argument("--preset", default="standard", choices=list(GENERATION_CONFIGS))
-    ap.add_argument("--temperature", type=float, default=None,
-                    help="Override preset temperature.")
+    ap.add_argument("--temperature", type=float, default=None, help="Override preset temperature.")
     ap.add_argument("--max-tokens", type=int, default=TOTAL_GENERATION_STEPS)
-    ap.add_argument("--no-template", action="store_true",
-                    help="Skip GSM8K SYSTEM_PROMPT/TEMPLATE wrapping. Outputs may degrade.")
-    ap.add_argument("--no-restore", action="store_true",
-                    help="Use the base model only (skip LoRA adapter restore).")
+    ap.add_argument(
+        "--no-template",
+        action="store_true",
+        help="Skip GSM8K SYSTEM_PROMPT/TEMPLATE wrapping. Outputs may degrade.",
+    )
+    ap.add_argument(
+        "--no-restore",
+        action="store_true",
+        help="Use the base model only (skip LoRA adapter restore).",
+    )
     args = ap.parse_args()
 
     load_dotenv()
@@ -157,8 +169,7 @@ def main():
             continue
 
         prompt = (
-            TEMPLATE.format(system_prompt=SYSTEM_PROMPT, question=line)
-            if use_template else line
+            TEMPLATE.format(system_prompt=SYSTEM_PROMPT, question=line) if use_template else line
         )
         print(generate(sampler, eos_tokens, prompt, sampling, args.max_tokens))
         print()
