@@ -6,7 +6,7 @@ Pre-register each experiment before launching a full TPU run.
 
 | Experiment | Main change | Hypothesis | Success metric | Diagnostics | Status |
 |---|---|---|---|---|---|
-| Baseline GRPO | Default `scripts/config.py` and rewards. | Baseline should reproduce the expected reward/KL behaviour and improve over the base model. | GSM8K eval accuracy. | Reward curve, KL curve, output format accuracy. | planned |
+| Baseline GRPO | Default `scripts/config.py` and rewards. | Baseline should reproduce the expected reward/KL behaviour and improve over the base model. | GSM8K eval accuracy. | Reward curve, KL curve, output format accuracy. | completed; LoRA eval below base on 64-example greedy eval |
 | Variant A: reward/length | Add a mild length penalty or adjust shaping reward. | Reducing verbosity or reward hacking may improve correctness without excessive KL drift. | GSM8K eval accuracy vs. baseline. | Response length, malformed-output rate, correctness reward. | planned |
 | Variant B: KL control | Conservative change to beta or epsilon. | KL budget should trade off stability against policy movement. | Accuracy read alongside KL. | KL vs. reward and KL vs. accuracy. | planned |
 

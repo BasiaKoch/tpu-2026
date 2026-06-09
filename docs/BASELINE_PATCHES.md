@@ -6,7 +6,7 @@ Record any changes needed to make the as-shipped baseline run. Keep this file fo
 
 | Date | Commit | File(s) | Problem | Patch | Impact on experiment |
 |---|---|---|---|---|---|
-| 2026-06-08 | pending | `requirements.txt` | Official baseline failed before training with TFDS `FieldDescriptor.label` error from `./data/train`, including after cache cleanup. | Downgraded/pinned `protobuf==6.31.1`; tiny TFDS load now passes with default `tfds` source. | Dependency plumbing only; no model/data/reward/training config behaviour changed. |
+| 2026-06-08 | 7e696c4 | `requirements.txt` | Official baseline failed before training with TFDS `FieldDescriptor.label` error from `./data/train`, including after cache cleanup. | Downgraded/pinned `protobuf==6.31.1`; tiny TFDS load now passes with default `tfds` source. | Dependency plumbing only; no model/data/reward/training config behaviour changed. |
 
 ## Rules
 

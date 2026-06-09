@@ -23,6 +23,7 @@ dist/
 data/
 
 # run artifacts (checkpoints, wandb local cache, log files)
+checkpoints/
 ckpts_backup/
 wandb/
 scripts/wandb/
