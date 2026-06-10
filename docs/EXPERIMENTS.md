@@ -57,13 +57,13 @@ Baseline reference (G=2, `jgs4c6kl`): peak eval reward mean **1.711** at step **
 
 **Question:** Conditional on the G8 base, does adding a mild excess-length penalty further reduce verbosity / length-blowup reward-hacking and improve GSM8K accuracy without added KL drift?
 
-**Main change:** Add the `length_penalty` reward fn to [scripts/rewards.py](../scripts/rewards.py) and append it to `REWARD_FNS` — applied on top of the `n-generations-8` branch. No `config.py` change relative to that branch.
+**Main change:** Add the `length_penalty` reward fn to [scripts/rewards.py](../scripts/rewards.py) and append it to `REWARD_FNS`, on top of the `n-generations-8` (G8) branch. One `config.py` change vs that branch: `TRAIN_MICRO_BATCH_SIZE` reduced **2 → 1**, because G8 + micro-batch-2 exhausts HBM on the single-chip v6e-1 (see deviation note). The control run uses the same bs=1, so the length penalty stays the only delta between control and treatment.
 
-**Base / deviation note:** Relative to the original baseline this stacks **two** changes (G8 + `TRAIN_MICRO_BATCH_SIZE = 2`, *and* the length penalty), so it does **not** isolate the length penalty against the baseline. It deliberately deviates from the original `reward-length-bk` pre-registration, which held group size `K` fixed. To keep a single controlled variable, the declared control here is the **G8 run** (`group-size-g8` / `n-generations-8`), against which the only delta is the `length_penalty` reward.
+**Base / deviation note:** Relative to the original baseline this stacks several changes (G8, `TRAIN_MICRO_BATCH_SIZE` reduced to 1, *and* the length penalty), so it does **not** isolate the length penalty against the baseline. It deliberately deviates from the original `reward-length-bk` pre-registration, which held group size `K` fixed. **Hardware note:** this runs on a single-chip **v6e-1**, where Rowan's G8 + micro-batch-2 exhausts HBM after ~5h (a long-completion batch needs ~28 GB vs ~25 GB free → `RESOURCE_EXHAUSTED`), so micro-batch is reduced **2 → 1** on *both* arms. The declared control is therefore a **G8 + bs=1** run (`n-generations-8` with the same micro-batch edit), against which the only delta is the `length_penalty` reward. Because of the bs change, results are **not** directly comparable to Rowan's bs=2 G8 run.
 
 **Hypothesis:** G8 already lowers advantage-estimate variance and should curb the late-training collapse; the length penalty addresses a different failure mode (reward-hacking via verbose completions). On top of a more stable base, the penalty should pull mean completion length down and reduce empty/degenerate completions without raising KL, yielding equal-or-better GSM8K accuracy than G8 alone.
 
-**Config:** Branch `reward-length-on-g8-bk` (off `origin/n-generations-8`); commit: this branch HEAD. Data: GSM8K, `TRAIN_FRACTION = 0.9`. Steps: `MAX_STEPS = 3364`. Changed parameter vs. G8: `REWARD_FNS` gains `length_penalty` (`LENGTH_TARGET = 600`, `LENGTH_PENALTY_WEIGHT = 1.0`).
+**Config:** Branch `reward-length-on-g8-bk` (off `origin/n-generations-8`); commit: this branch HEAD. `NUM_GENERATIONS = 8`, `TRAIN_MICRO_BATCH_SIZE = 1`. Data: GSM8K, `TRAIN_FRACTION = 0.9`. Steps: `MAX_STEPS = 3364`. Checkpoints on persistent disk via `TPU_CONTENT_DIR=/home/basiakoch/content`. Delta vs the G8+bs1 control: `REWARD_FNS` gains `length_penalty` (`LENGTH_TARGET = 600`, `LENGTH_PENALTY_WEIGHT = 1.0`).
 
 **Determinism / effective seeds (verified against tunix + qwix source):** three randomness sources, all deterministic and identical to the G8 control:
 - Data shuffle — `seed=42`, explicit in [scripts/data.py:86](../scripts/data.py).
@@ -72,7 +72,7 @@ Baseline reference (G=2, `jgs4c6kl`): peak eval reward mean **1.711** at step **
 
 Seeds 2 and 3 are **library defaults, not pinned in this repo**, and tunix/qwix are installed from unpinned GitHub HEAD (`bootstrap.sh`). The comparison is valid only if this run and the G8 control share the same venv/library revisions. Do **not** set the rollout/LoRA seeds explicitly on this branch — that would diverge the RNG stream from the G8 control and reintroduce a confound.
 
-**Comparison:** Against the **G8 run** (`group-size-g8`, `n-generations-8`) — *not* baseline `jgs4c6kl`. The G8 run is still running; this stacked result is uninterpretable until it completes. A secondary read against the isolated length-only arm (`reward-length-bk`) would reveal any G8×length interaction.
+**Comparison:** Against a **G8 + bs=1 control** run on the same v6e-1 VM (`n-generations-8` with `TRAIN_MICRO_BATCH_SIZE = 1`) — *not* baseline `jgs4c6kl`, and *not* Rowan's bs=2 G8 run. Both arms run back-to-back on the same VM/venv so hardware and library revisions match by construction. Uninterpretable until the control run completes; a secondary read against the isolated length-only arm (`reward-length-bk`) would reveal any G8×length interaction.
 
 **Metrics:** Completion length vs step (primary), empty-completion rate, eval reward mean, `rewards/eval/check_answer`, GSM8K accuracy across checkpoints, KL (`actor/train/kl`), grad-norm.
 
