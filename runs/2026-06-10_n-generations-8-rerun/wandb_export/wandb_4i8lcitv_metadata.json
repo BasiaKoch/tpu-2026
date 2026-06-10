@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-06-10T07:14:14Z",
+  "exported_at": "2026-06-10T16:27:04.217790+00:00",
+  "heartbeat_at": "2026-06-10T14:32:20Z",
+  "history_keys_filter": null,
+  "history_rows": 3365,
+  "id": "4i8lcitv",
+  "name": "k=8 (rerun with all seeds)",
+  "path": "felsomoye-university-of-cambridge/tunix/runs/4i8lcitv",
+  "state": "finished",
+  "url": "https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/4i8lcitv"
+}

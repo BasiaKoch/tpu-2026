@@ -1,0 +1,18 @@
+G=8 training completed successfully.
+
+Run: k=8 (rerun with all seeds)
+Commit: 99059ce77f162a46c585a2ba1b9310aee4b55e9c
+Branch: main
+Changed vs. baseline: `NUM_GENERATIONS = 8`, `LEARNING_RATE = 3e-6`
+Start: 2026-06-10T07:13:53+00:00
+End: 2026-06-10T14:32:20+00:00
+Wall-clock: 7h 18m 27s
+Final step: 3364
+Exit code: 0
+Final checkpoint: /tmp/content_n_generations_8_rerun/ckpts/actor/3364
+Train log: runs/2026-06-10_n-generations-8-rerun/live_log.txt
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/4i8lcitv
+Final log marker: Training finished.
+Evaluation: complete
+Base eval (CPU fallback, greedy, 64-example GSM8K test): correct=31/64, acc=48.44%, partial=51.56%, format=6.25%
+LoRA eval (CPU fallback, greedy, step 3364): correct=38/64, acc=59.38%, partial=62.50%, format=95.31%

@@ -1,0 +1,6 @@
+cd /home/funmilooi-somoye/tpu-2026/scripts
+source /home/funmilooi-somoye/venvs/tunix/bin/activate
+set -a
+source /home/funmilooi-somoye/.env
+set +a
+TPU_CONTENT_DIR=/tmp/content_n_generations_8_rerun python -u train.py

@@ -1,0 +1,2 @@
+/tmp/content_n_generations_8_rerun/ckpts/actor/3364
+W&B run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/4i8lcitv
