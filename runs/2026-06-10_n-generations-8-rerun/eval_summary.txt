@@ -1,0 +1,28 @@
+G=8, LR=3e-6 evaluation summary
+
+Preset: greedy
+Source: tfds
+Split/sample: configured GSM8K test eval, NUM_TEST_BATCHES=64, TRAIN_MICRO_BATCH_SIZE=1
+
+Base model / zero-init LoRA wrapper:
+- Log: runs/2026-06-10_n-generations-8-rerun/base_eval.log
+- FINAL: correct=31/64  acc=48.44%  partial=51.56%  format=6.25%
+
+Restored LoRA checkpoint:
+- Checkpoint root: /tmp/content_n_generations_8_rerun/ckpts/actor
+- Step: 3364
+- Log: runs/2026-06-10_n-generations-8-rerun/lora_eval.log
+- FINAL: correct=38/64  acc=59.38%  partial=62.50%  format=95.31%
+
+Observation:
+- The trained G=8 / 3e-6 checkpoint beats the base model on exact and partial GSM8K accuracy under greedy 64-example eval and keeps high format adherence.
+- Compared with the `G=8, LR=1e-5` run, this 3e-6 run is materially stronger on recovered exact GSM8K eval, and the W&B scalar summary at step 3364 is also higher on final eval reward (`1.908`) and eval score mean (`7.633`).
+
+W&B scalar summary at step 3364:
+- `rewards/eval/mean = 1.9081926804812834`
+- `rewards/eval/score/mean = 7.632770721925134`
+- `rewards/eval/check_answer = 1.5283255347593583`
+- `rewards/eval/check_numbers = 0.8968917112299465`
+- `rewards/eval/match_format_approximately = 2.3559491978609626`
+- `rewards/eval/match_format_exactly = 2.8516042780748663`
+- `completions/eval/mean_length = 328.72493315508024`

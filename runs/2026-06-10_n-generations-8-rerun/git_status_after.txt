@@ -1,0 +1,4 @@
+Branch: n-generations-8-rerun
+Commit: 99059ce77f162a46c585a2ba1b9310aee4b55e9c
+
+Git status after training was not captured at process exit. This file was added during post-run documentation cleanup after confirming the training process exited successfully.

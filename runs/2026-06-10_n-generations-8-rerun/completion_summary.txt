@@ -1,0 +1,14 @@
+Run: n-generations-8-rerun
+Commit: 99059ce77f162a46c585a2ba1b9310aee4b55e9c
+Start: 2026-06-10T07:13:53Z
+End: 2026-06-10T14:32:17Z
+Wall-clock: 7h 18m 24s
+Final step: 3364
+Exit code: 0
+Final checkpoint: /tmp/content_n_generations_8_rerun/ckpts/actor/3364
+Checkpoint sweep: /tmp/content_n_generations_8_rerun/ckpts/actor/{2000,2500,3000,3364}
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/4i8lcitv
+Final log marker: W&B run completed at step 3364.
+Evaluation: complete
+Base eval: correct=31/64, acc=48.44%, partial=51.56%, format=6.25%
+LoRA eval: correct=38/64, acc=59.38%, partial=62.50%, format=95.31%

@@ -1,1 +1,2 @@
-/tmp/content_n_generations_8_rerun/ckpts/
+/tmp/content_n_generations_8_rerun/ckpts/actor/3364
+Sweep checkpoints: /tmp/content_n_generations_8_rerun/ckpts/actor/{2000,2500,3000,3364}
