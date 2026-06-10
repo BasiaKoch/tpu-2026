@@ -9,6 +9,7 @@ Run as:
     python evaluate.py
 """
 import argparse
+import json
 import os
 
 from tqdm.auto import tqdm
@@ -64,8 +65,11 @@ def generate(question, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.9
     return out.text[0] if isinstance(question, str) else out.text
 
 
-def evaluate(dataset, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.95, num_passes=1):
+def evaluate(dataset, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.95, num_passes=1, dump_path=None):
     corr = partially_corr = corr_format = total = 0
+    # If dump_path is given, write one JSON line per question (used for bootstrap CIs).
+    # When dump_path is None this stays None and nothing changes vs. the original code.
+    dump_file = open(dump_path, "w") if dump_path else None
 
     for batch in tqdm(dataset):
         answers = batch["answer"]
@@ -97,10 +101,30 @@ def evaluate(dataset, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.95
             partially_corr += int(got_partial)
             corr_format += int(got_format)
             total += 1
+
+            if dump_file is not None:
+                # One row per question. `correct` is the boolean the bootstrap CI scores;
+                # the rest is for inspection. The default greedy eval has one response per
+                # question, so we record responses[0] and re-extract its number.
+                first = responses[0]
+                pred = m.group(1) if (m := match_numbers.search(first)) is not None else None
+                dump_file.write(json.dumps({
+                    "index": total - 1,
+                    "question": q,
+                    "gold": ans,
+                    "prediction": pred,
+                    "response": first,
+                    "correct": bool(got_corr),
+                    "partial": bool(got_partial),
+                    "format": bool(got_format),
+                }) + "\n")
+
             if total % 10 == 0:
                 print(f"===> corr={corr} total={total} acc={corr/total*100:.2f}% "
                       f"partial={partially_corr/total*100:.2f}% fmt={corr_format/total*100:.2f}%")
 
+    if dump_file is not None:
+        dump_file.close()
     return corr, total, corr/total*100, partially_corr/total*100, corr_format/total*100
 
 
@@ -114,6 +138,8 @@ def main():
                     help=f"Checkpoint step to load. Default: {DEFAULT_STEP}. Pass 0 for latest.")
     ap.add_argument("--no-restore", action="store_true",
                     help="Evaluate the base LoRA wrapper without restoring trained adapter weights.")
+    ap.add_argument("--dump-per-question", default=None,
+                    help="Optional JSONL path: write one row per question (for bootstrap CIs).")
     args = ap.parse_args()
 
     mesh = build_mesh()
@@ -143,7 +169,11 @@ def main():
             head_dim=cfg.head_dim,
         ),
     )
-    n, t, acc, pacc, facc = evaluate(test_ds, sampler, eos_tokens, **GENERATION_CONFIGS[args.preset])
+    n, t, acc, pacc, facc = evaluate(
+        test_ds, sampler, eos_tokens,
+        dump_path=args.dump_per_question,
+        **GENERATION_CONFIGS[args.preset],
+    )
     print(f"\nFINAL: correct={n}/{t}  acc={acc:.2f}%  partial={pacc:.2f}%  format={facc:.2f}%")
 
 
