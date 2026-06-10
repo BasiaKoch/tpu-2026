@@ -1,0 +1,1 @@
+tmux new-session -d -s tunix-2026-06-09_lr1e5_seed42 /home/funmilooi-somoye/tpu-2026/runs/2026-06-09_lr1e5_seed42/launch_train.sh

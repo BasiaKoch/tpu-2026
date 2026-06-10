@@ -1,0 +1,2 @@
+ M scripts/config.py
+?? runs/2026-06-09_lr1e5_seed42/

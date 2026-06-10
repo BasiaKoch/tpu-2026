@@ -1,0 +1,22 @@
+Learning-rate 1e-5 training completed successfully.
+
+Run: lr1e5_seed42
+Commit: 99059ce77f162a46c585a2ba1b9310aee4b55e9c
+Branch: learning-rate-fls
+Changed vs. baseline: LEARNING_RATE = 1e-5
+Start: 2026-06-09T21:18:35Z
+End: 2026-06-10T05:21:57Z
+Wall-clock: 8h 03m 22s
+Final step: 3364
+Exit code: 0
+Final checkpoint: /tmp/content/ckpts/actor/3364
+Preserved local checkpoint copy: /home/funmilooi-somoye/tpu-2026/checkpoints/lr1e5_seed42/actor/3364
+Train log: runs/2026-06-09_lr1e5_seed42/live_log.txt
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/hozux9t6
+W&B checkpoint artifact: felsomoye-university-of-cambridge/tunix/lr1e5_seed42_checkpoint:latest
+W&B checkpoint artifact URL: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/lr1e5_seed42_checkpoint/latest
+W&B artifact upload run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/ntnst5w9
+Final log marker: Training finished.
+Evaluation: complete
+Base eval: correct=33/64, acc=51.56%, partial=53.12%, format=6.25%
+LoRA eval: correct=19/64, acc=29.69%, partial=34.38%, format=98.44%

@@ -1,0 +1,24 @@
+Learning-rate 1e-5 evaluation summary
+
+Preset: greedy
+Source: tfds
+Split/sample: configured GSM8K test eval, NUM_TEST_BATCHES=64, TRAIN_MICRO_BATCH_SIZE=1
+
+Base model / zero-init LoRA wrapper:
+- Log: runs/2026-06-09_lr1e5_seed42/base_eval.log
+- FINAL: correct=33/64  acc=51.56%  partial=53.12%  format=6.25%
+
+Restored LoRA checkpoint:
+- Checkpoint root: /home/funmilooi-somoye/tpu-2026/checkpoints/lr1e5_seed42/actor
+- Step: 3364
+- Log: runs/2026-06-09_lr1e5_seed42/lora_eval.log
+- FINAL: correct=19/64  acc=29.69%  partial=34.38%  format=98.44%
+
+Observation:
+- The trained 1e-5 checkpoint improved format adherence substantially but underperformed the base model on exact and partial numeric accuracy under the greedy 64-example GSM8K eval.
+
+Retained checkpoint sweep:
+- step 2000: correct=20/64  acc=31.25%  partial=37.50%  format=98.44%
+- step 2500: correct=20/64  acc=31.25%  partial=31.25%  format=95.31%
+- step 3000: correct=17/64  acc=26.56%  partial=26.56%  format=96.88%
+- step 3364: correct=19/64  acc=29.69%  partial=34.38%  format=98.44%

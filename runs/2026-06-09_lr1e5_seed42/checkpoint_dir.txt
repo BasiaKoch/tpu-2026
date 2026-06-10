@@ -1,0 +1,32 @@
+Checkpoint directory:
+/tmp/content/ckpts/
+
+Intermediate checkpoint directory:
+/tmp/content/intermediate_ckpt/
+
+Save interval:
+500 steps
+
+Max checkpoints to keep:
+4
+
+Final checkpoint:
+/tmp/content/ckpts/actor/3364
+
+Preserved local copy:
+/home/funmilooi-somoye/tpu-2026/checkpoints/lr1e5_seed42/actor/3364
+
+Intermediate checkpoints currently available:
+/tmp/content/ckpts/actor/2000
+/tmp/content/ckpts/actor/2500
+/tmp/content/ckpts/actor/3000
+/tmp/content/ckpts/actor/3364
+
+W&B artifact:
+felsomoye-university-of-cambridge/tunix/lr1e5_seed42_checkpoint:latest
+
+W&B artifact URL:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/lr1e5_seed42_checkpoint/latest
+
+W&B artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/ntnst5w9
