@@ -1,0 +1,18 @@
+Checkpoint directory (on training VM):
+/tmp/tunix-n-gen-16_10-06/ckpts/   (actor subdir: /tmp/tunix-n-gen-16_10-06/ckpts/actor)
+
+Intermediate checkpoint directory:
+/tmp/tunix-n-gen-16_10-06/intermediate_ckpt/
+
+Save interval: 500 steps
+Max to keep: 4
+
+Evaluated checkpoint: /tmp/tunix-n-gen-16_10-06/ckpts/actor/2500 (step 2500, intermediate)
+
+Preserved local copy: CANNOT_RETRIEVE: filesystem path on training VM — fill in manually
+
+W&B model artifacts:
+  CANNOT_RETRIEVE: no model artifact found — upload per CHECKLIST.md §3
+
+Sweep checkpoint coverage:
+  CANNOT_RETRIEVE: verify final plus eval-sweep steps are uploaded as artifact versions.
