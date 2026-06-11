@@ -7,18 +7,16 @@ This script queries the Weights & Biases (WandB) API to fetch and display:
 - Logged configuration hyperparameters
 - Latest training summary metrics (e.g., loss, reward, step count)
 
-To check a different run, edit the `WANDB_RUN_PATH` constant below.
+Usage:
+    python check_wandb.py --run-id <run_id>
+    python check_wandb.py --run-id <run_id> --entity my-team --project my-project
 """
 
+import argparse
 import sys
 
-# ==============================================================================
-# CONFIGURATION: Change your WandB run path here
-# ==============================================================================
-# The format should be "entity/project/runs/run_id"
-RUN_ID = "jgs4c6kl"
-WANDB_RUN_PATH = f"felsomoye-university-of-cambridge/tunix/runs/{RUN_ID}"
-# ==============================================================================
+DEFAULT_ENTITY = "felsomoye-university-of-cambridge"
+DEFAULT_PROJECT = "tunix"
 
 try:
     import wandb
@@ -32,6 +30,16 @@ except ImportError:
     sys.exit(1)
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Fetch and display W&B run metadata, config, and summary metrics."
+    )
+    parser.add_argument("--run-id", required=True, help="W&B run id, for example jgs4c6kl.")
+    parser.add_argument("--entity", default=DEFAULT_ENTITY, help=f"W&B entity/team. Defaults to {DEFAULT_ENTITY!r}.")
+    parser.add_argument("--project", default=DEFAULT_PROJECT, help=f"W&B project. Defaults to {DEFAULT_PROJECT!r}.")
+    return parser.parse_args()
+
+
 def format_value(v):
     if isinstance(v, float):
         return f"{v:.6f}"
@@ -39,10 +47,13 @@ def format_value(v):
 
 
 def main():
-    print(f"Connecting to WandB run: {WANDB_RUN_PATH}...")
+    args = parse_args()
+    run_path = f"{args.entity}/{args.project}/runs/{args.run_id}"
+
+    print(f"Connecting to WandB run: {run_path}...")
     try:
         api = wandb.Api()
-        run = api.run(WANDB_RUN_PATH)
+        run = api.run(run_path)
 
         print("\n" + "=" * 40)
         print(" RUN METADATA")

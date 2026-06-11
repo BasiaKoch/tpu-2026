@@ -37,7 +37,6 @@ except ImportError:
 
 DEFAULT_ENTITY = "felsomoye-university-of-cambridge"
 DEFAULT_PROJECT = "tunix"
-DEFAULT_RUN_ID = "jgs4c6kl"
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "data"
 
@@ -48,8 +47,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--run-id",
-        default=DEFAULT_RUN_ID,
-        help=f"W&B run id, for example bnh9ttlt. Defaults to {DEFAULT_RUN_ID!r}.",
+        default=None,
+        help="W&B run id, for example bnh9ttlt.",
     )
     parser.add_argument(
         "--entity",

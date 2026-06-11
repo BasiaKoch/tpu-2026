@@ -1,0 +1,11 @@
+Run: k=16 (fixed i think)
+Commit: 17c90d5659567398d7f9ce363b15080f0aa31261
+Start: 2026-06-10T08:39:32Z
+End: 2026-06-10T16:41:34Z
+Wall-clock: 8h 02m 02s
+Final step: 2991
+Status: failed
+Exit code: CANNOT_RETRIEVE: not recorded by W&B — fill in manually
+Final checkpoint: CANNOT_RETRIEVE: see checkpoint_dir.txt
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/xqbl406c
+Final log marker: CANNOT_RETRIEVE: from raw training log — fill in manually
