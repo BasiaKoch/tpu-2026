@@ -1,0 +1,1 @@
+TPU_CONTENT_DIR=/home/basiakoch/content_arm2 python -u train.py (via ~/run_arm.sh, tmux; bs=1)

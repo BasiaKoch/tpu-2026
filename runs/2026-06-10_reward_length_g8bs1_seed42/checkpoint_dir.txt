@@ -1,0 +1,1 @@
+final+sweep: ~/preserved/length_final/actor/{2000,2500,3000,3364}; matched-step ckpt: ~/preserved/length/actor/500; log: ~/preserved/length_train.log
