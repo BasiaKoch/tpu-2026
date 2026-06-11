@@ -1,0 +1,22 @@
+Run evaluation summary
+
+Base model / zero-init LoRA wrapper:
+- Log: runs/2026-06-11_lora_rank128_alpha128_g2_seed42/base_eval.log
+- Result: correct=34/64, acc=53.12%, partial=54.69%, format=7.81%.
+
+Training-time W&B eval for restored LoRA policy:
+- Checkpoint root: /home/funmilooi-somoye/tpu-2026/checkpoints/lora_rank128_alpha128_g2_seed42/actor
+- Step: 3364
+- W&B run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/v5cvlwkm
+- rewards/eval/mean: 0.8610461229946524
+- rewards/eval/score/mean: 3.4441844919786098
+- rewards/eval/check_answer: 0.3125
+- rewards/eval/match_format_exactly: 1.7045454545454546
+- rewards/eval/match_format_approximately: 1.032085561497326
+- rewards/eval/check_numbers: 0.3950534759358289
+- actor/eval/kl: 0.668775737285614
+- completions/eval/mean_length: 274.9438502673797
+
+Standalone restored LoRA checkpoint eval:
+- Log: runs/2026-06-11_lora_rank128_alpha128_g2_seed42/lora_eval.log
+- Result: correct=21/64, acc=32.81%, partial=32.81%, format=53.12%.

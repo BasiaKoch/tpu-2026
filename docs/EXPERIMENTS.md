@@ -49,11 +49,11 @@ Note: run `aoz8dtkp` completed with `NUM_GENERATIONS=8`, but it also changed `RA
 
 **Comparison:** Baseline run `jgs4c6kl` final checkpoint and early best checkpoint. Treat as a combined-parameter variant, not a single-variable ablation.
 
-**Metrics:** W&B final eval reward, answer reward, KL, grad norm, completion length, and standalone GSM8K accuracy once restored-checkpoint eval completes.
+**Metrics:** W&B final eval reward, answer reward, KL, grad norm, completion length, and standalone GSM8K accuracy from the restored checkpoint.
 
-**Result:** Training completed in 8h 32m 19s. Final W&B eval: `rewards/eval/mean=1.575096`, `rewards/eval/score/mean=6.300384`, `rewards/eval/check_answer=0.773981`, `actor/eval/kl=0.512891`, `completions/eval/mean_length=460.006`. Standalone base eval was `31/64` (`48.44%`); standalone restored-checkpoint accuracy is not saved yet.
+**Result:** Training completed in 8h 32m 19s. Final W&B eval: `rewards/eval/mean=1.575096`, `rewards/eval/score/mean=6.300384`, `rewards/eval/check_answer=0.773981`, `actor/eval/kl=0.512891`, `completions/eval/mean_length=460.006`. Standalone base eval was `34/64` (`53.12%`); standalone restored-checkpoint accuracy was `21/64` (`32.81%`).
 
-**Interpretation:** The W&B final eval does not show the obvious collapse seen in the G=2 baseline final checkpoint, but the reportable standalone LoRA accuracy remains pending.
+**Interpretation:** The W&B final eval does not show the obvious collapse seen in the G=2 baseline final checkpoint, but the standalone restored checkpoint still underperforms the base model on GSM8K greedy accuracy.
 
 ### `micro-batch-size-2`
 

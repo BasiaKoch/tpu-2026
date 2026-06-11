@@ -1,0 +1,1 @@
+cd /home/funmilooi-somoye/tpu-2026/scripts && source ~/venvs/tunix/bin/activate && [ -f ~/.env ] && set -a && source ~/.env && set +a && env -u WANDB_RUN_ID WANDB_NAME=lora_rank128_alpha128_g2_seed42 python -u train.py

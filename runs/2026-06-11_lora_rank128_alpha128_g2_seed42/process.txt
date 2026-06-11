@@ -1,0 +1,5 @@
+tmux session: lora_g2
+live log: /home/funmilooi-somoye/tpu-2026/runs/2026-06-11_lora_rank128_alpha128_g2_seed42/live_log.txt
+wandb run id: v5cvlwkm
+W&B run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/v5cvlwkm
+Final process status: exited (0)
