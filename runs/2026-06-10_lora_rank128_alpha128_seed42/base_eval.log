@@ -1,0 +1,12 @@
+Base-model evaluation on GSM8K test completed with greedy decoding.
+
+Result:
+- correct=31/64
+- acc=48.44%
+- partial=51.56%
+- format=6.25%
+
+Notes:
+- Ran with `JAX_PLATFORMS=cpu` because the sandbox cannot initialize TPU backends.
+- Used the cached local Gemma tokenizer at:
+  `/home/funmilooi-somoye/.cache/huggingface/hub/models--google--gemma-3-1b-it/snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752/tokenizer.model`

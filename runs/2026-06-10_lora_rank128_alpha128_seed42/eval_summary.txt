@@ -1,0 +1,27 @@
+Run evaluation summary
+
+Base model / zero-init LoRA wrapper:
+- Log: runs/2026-06-10_lora_rank128_alpha128_seed42/base_eval.log
+- FINAL: correct=31/64  acc=48.44%  partial=51.56%  format=6.25%
+
+Training-time W&B eval for restored LoRA policy:
+- Checkpoint root: /home/funmilooi-somoye/tpu-2026/checkpoints/lora_rank128_alpha128_seed42/actor
+- Step: 3364
+- W&B run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/aoz8dtkp
+- rewards/eval/mean: 1.575096
+- rewards/eval/score/mean: 6.300384
+- rewards/eval/check_answer: 0.773981
+- rewards/eval/match_format_exactly: 2.637032
+- rewards/eval/match_format_approximately: 2.278743
+- actor/eval/kl: 0.512891
+- actor/eval/perplexity: 1.041959
+- completions/eval/mean_length: 460.006
+
+Standalone restored LoRA checkpoint eval:
+- Log: runs/2026-06-10_lora_rank128_alpha128_seed42/lora_eval.log
+- Result: not available in the saved run folder; current log only records an incomplete sandbox restore/eval attempt.
+
+Observation:
+- The base eval completed on CPU with the cached local tokenizer.
+- The training-time W&B eval metrics are much healthier than the failed G=2 baseline final eval reward, but they are not the same artifact as the standalone 64-example greedy accuracy used in RUNS.md.
+- Do not report a checkpoint-vs-base standalone accuracy comparison for this run until `lora_eval.log` contains a completed `correct=N/64` result.

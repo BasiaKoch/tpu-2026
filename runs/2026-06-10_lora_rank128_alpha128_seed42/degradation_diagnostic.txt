@@ -1,0 +1,26 @@
+Run-specific diagnostic
+
+Status: partial, based on training-time W&B eval metrics and saved standalone base eval.
+
+Standalone eval:
+- Base model / zero-init LoRA wrapper: correct=31/64, acc=48.44%, partial=51.56%, format=6.25%.
+- Restored LoRA checkpoint: no completed standalone 64-example greedy eval is saved yet.
+
+Training-time final W&B eval at step 3364:
+- rewards/eval/mean: 1.575096
+- rewards/eval/score/mean: 6.300384
+- rewards/eval/check_answer: 0.773981
+- rewards/eval/match_format_exactly: 2.637032
+- rewards/eval/match_format_approximately: 2.278743
+- actor/eval/kl: 0.512891
+- actor/train/kl: 0.423037
+- actor/train/grad_norm: 1.34375
+- completions/eval/mean_length: 460.006
+
+Interpretation:
+- Unlike the prior G=2 baseline, this run does not show an obvious final-step training collapse in the W&B summary. Final eval reward remains positive, KL is modest, and completion lengths have not collapsed to near-zero.
+- This is not yet a complete degradation analysis because the comparable standalone restored-checkpoint GSM8K accuracy is missing.
+
+Notes:
+- The final checkpoint has been preserved locally under `checkpoints/lora_rank128_alpha128_seed42/actor/`.
+- The saved config changed both LoRA capacity (`RANK=128`, `ALPHA=128.0`) and group size (`NUM_GENERATIONS=8`) relative to the original baseline, so this should not be interpreted as a clean group-size-only ablation.

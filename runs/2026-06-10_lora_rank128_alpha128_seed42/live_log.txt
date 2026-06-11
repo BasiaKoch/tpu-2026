@@ -1,0 +1,1 @@
+/home/funmilooi-somoye/tpu-2026/scripts/train.log

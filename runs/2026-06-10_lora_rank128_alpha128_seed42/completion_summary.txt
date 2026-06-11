@@ -1,0 +1,19 @@
+Run completed successfully.
+
+Run: lora_rank128_alpha128_seed42
+Commit: 99059ce77f162a46c585a2ba1b9310aee4b55e9c
+Start time: 2026-06-10T18:44:36Z
+End time: 2026-06-11T03:16:55Z
+Wall-clock: 8h 32m 19s
+Final step: 3364
+Exit code: 0
+Final checkpoint: /tmp/content/ckpts/actor/3364
+Preserved local checkpoint copy: /home/funmilooi-somoye/tpu-2026/checkpoints/lora_rank128_alpha128_seed42/actor/
+Train log: scripts/train.log
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/aoz8dtkp
+Final log marker: Training finished.
+
+Evaluation status:
+Base standalone greedy eval: correct=31/64, acc=48.44%, partial=51.56%, format=6.25%
+Final W&B eval: rewards/eval/mean=1.575096, rewards/eval/score/mean=6.300384, rewards/eval/check_answer=0.773981, actor/eval/kl=0.512891
+Standalone restored-checkpoint greedy accuracy: not available in saved logs yet

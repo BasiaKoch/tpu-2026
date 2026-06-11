@@ -7,7 +7,8 @@ Pre-register each experiment before launching a full TPU run.
 | Experiment | Main change | Hypothesis | Success metric | Diagnostics | Status |
 |---|---|---|---|---|---|
 | Baseline GRPO | Default `scripts/config.py` and rewards (`NUM_GENERATIONS = 2`). | Baseline should reproduce the expected reward/KL behaviour and improve over the base model. | GSM8K eval accuracy. | Reward curve, KL curve, output format accuracy. | completed (run `jgs4c6kl`); LoRA eval below base on 64-example greedy eval |
-| Group size G=8 | `NUM_GENERATIONS` 2 → 8 in `scripts/config.py`. | A larger GRPO group gives a less noisy advantage baseline/normalisation, so policy updates are more stable and avoid the late-training collapse seen in the baseline. | Eval reward mean (and GSM8K accuracy) vs. baseline. | Eval/train reward curves, KL, grad-norm spikes, completion length, empty-completion rate. | running |
+| Group size G=8 | `NUM_GENERATIONS` 2 → 8 in `scripts/config.py`. | A larger GRPO group gives a less noisy advantage baseline/normalisation, so policy updates are more stable and avoid the late-training collapse seen in the baseline. | Eval reward mean (and GSM8K accuracy) vs. baseline. | Eval/train reward curves, KL, grad-norm spikes, completion length, empty-completion rate. | superseded/invalid as clean ablation: run `aoz8dtkp` also changed `RANK` and `ALPHA` to 128 |
+| LoRA rank/alpha 128 + G=8 | `RANK=128`, `ALPHA=128.0`, `NUM_GENERATIONS=8`. | More adapter capacity plus larger GRPO group should improve stability relative to the collapsed G=2 final checkpoint. | Eval reward mean and standalone GSM8K accuracy vs. baseline. | Eval/train reward curves, KL, grad-norm, completion length, standalone restored-checkpoint eval. | completed training (`aoz8dtkp`); standalone LoRA accuracy pending |
 | Micro batch size 2 | `TRAIN_MICRO_BATCH_SIZE` 1 → 2 in `scripts/config.py`. | A larger micro-batch should improve TPU compute efficiency by doing more useful work per step, as long as memory headroom is sufficient and training dynamics remain comparable. | Wall-clock time per step and eval reward/GSM8K accuracy vs. baseline. | TPU utilisation, step time, OOMs, KL, grad norm, reward curves. | planned |
 | Variant A: reward/length | Add a mild length penalty or adjust shaping reward. | Reducing verbosity or reward hacking may improve correctness without excessive KL drift. | GSM8K eval accuracy vs. baseline. | Response length, malformed-output rate, correctness reward. | planned |
 | Variant B: KL control | Conservative change to beta or epsilon. | KL budget should trade off stability against policy movement. | Accuracy read alongside KL. | KL vs. reward and KL vs. accuracy. | planned |
@@ -33,6 +34,26 @@ Pre-register each experiment before launching a full TPU run.
 **Interpretation:** _Pending._
 
 Baseline reference (G=2, `jgs4c6kl`): peak eval reward mean **1.711** at step **448**, collapsing to **-0.240** by the final eval (step 3328); wall-clock ≈ **4.7 h** over 3,364 steps.
+
+Note: run `aoz8dtkp` completed with `NUM_GENERATIONS=8`, but it also changed `RANK=128` and `ALPHA=128.0`, so it should not be used as the clean result for this experiment.
+
+### `lora-rank128-alpha128-g8`
+
+**Question:** Does increasing LoRA rank/alpha to 128 while using `NUM_GENERATIONS=8` avoid the final collapse seen in the baseline?
+
+**Main change:** `RANK=64 → 128`, `ALPHA=64.0 → 128.0`, and `NUM_GENERATIONS=2 → 8`.
+
+**Hypothesis:** Higher adapter capacity plus lower-variance GRPO group normalisation should allow useful policy movement without the severe final-step collapse seen in the baseline.
+
+**Config:** Commit `99059ce77f162a46c585a2ba1b9310aee4b55e9c`; seed `42`; GSM8K with `TRAIN_FRACTION=0.9`; `MAX_STEPS=3364`; W&B run `aoz8dtkp`.
+
+**Comparison:** Baseline run `jgs4c6kl` final checkpoint and early best checkpoint. Treat as a combined-parameter variant, not a single-variable ablation.
+
+**Metrics:** W&B final eval reward, answer reward, KL, grad norm, completion length, and standalone GSM8K accuracy once restored-checkpoint eval completes.
+
+**Result:** Training completed in 8h 32m 19s. Final W&B eval: `rewards/eval/mean=1.575096`, `rewards/eval/score/mean=6.300384`, `rewards/eval/check_answer=0.773981`, `actor/eval/kl=0.512891`, `completions/eval/mean_length=460.006`. Standalone base eval was `31/64` (`48.44%`); standalone restored-checkpoint accuracy is not saved yet.
+
+**Interpretation:** The W&B final eval does not show the obvious collapse seen in the G=2 baseline final checkpoint, but the reportable standalone LoRA accuracy remains pending.
 
 ### `micro-batch-size-2`
 
