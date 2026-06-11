@@ -1,0 +1,3 @@
+clean at launch, at commit 89cde305 (bs=1 already committed on the branch and pulled to
+the VM; the control run's uncommitted config edit on n-generations-8 was discarded with
+`git checkout -- scripts/config.py` before switching branches).
