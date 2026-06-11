@@ -116,4 +116,24 @@ def check_numbers(prompts, completions, answer, **kwargs):
     return scores
 
 
-REWARD_FNS = [match_format_exactly, match_format_approximately, check_answer, check_numbers]
+EMPTY_THRESHOLD = 20   # chars; below this a completion counts as "near-empty"
+EMPTY_PENALTY = -2.0
+
+
+def empty_penalty(prompts, completions, **kwargs):
+    """Penalise near-empty completions.
+
+    The collapse attractor observed in the baseline, beta, and length-penalty
+    runs is the empty completion: it is reward-flat (a tagless non-empty string
+    and an empty string both score -2.5 from the format terms, so empty is never
+    *worse* than its siblings) and KL-free (no tokens), so nothing in the loss
+    resists it. This penalty makes a near-empty completion score strictly below
+    any non-empty sibling (-4.5 vs -2.5 at worst) while groups are still mixed,
+    making the attractor's entrance repulsive. Caveat: once a group is fully
+    empty, sigma_r = 0 and no reward function can produce a gradient - the
+    penalty can only act during the descent into the attractor.
+    """
+    return [EMPTY_PENALTY if len(c.strip()) < EMPTY_THRESHOLD else 0.0 for c in completions]
+
+
+REWARD_FNS = [match_format_exactly, match_format_approximately, check_answer, check_numbers, empty_penalty]
