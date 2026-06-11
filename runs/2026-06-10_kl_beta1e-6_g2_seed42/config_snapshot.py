@@ -6,22 +6,6 @@ so a change in one place propagates everywhere.
 import os
 import jax
 
-# ====== Reproducibility ======
-# Single source of truth for the experiment seed. Override per run with
-# `SEED=43 python train.py` (e.g. for the planned second-seed run) so the value
-# is captured in the W&B config snapshot rather than edited in code.
-#
-# What this controls / what it cannot:
-#   * Data order + train/val split  -> seeded (see data.py).
-#   * LoRA adapter init              -> qwix uses a fixed internal key in this
-#     version (apply_lora_to_model takes no rngs), so it is already identical
-#     across branches; there is no knob to wire SEED into yet.
-#   * GRPO rollout sampling          -> this tunix version's RolloutConfig /
-#     RLCluster expose no seed argument, so per-step generation is NOT seeded.
-#     Treat run-to-run variation as irreducible noise and quantify it with a
-#     second seed + bootstrap CI rather than trying to eliminate it.
-SEED = int(os.environ.get("SEED", "42"))
-
 # ====== Model ======
 MODEL_ID = "google/gemma-3-1b-it"
 GEMMA_TOKENIZER_PATH = "gs://gemma-data/tokenizers/tokenizer_gemma3.model"
@@ -82,15 +66,9 @@ MAX_GRAD_NORM = 0.1        # tight clipping keeps KL well-behaved
 
 # ====== Checkpointing ======
 # NOTE: /tmp is volatile. For long runs, point this at persistent storage.
-# Override TPU_CONTENT_DIR in your environment if /tmp/content is not writable
-# (e.g. it was created by a different user). Default matches the shared setup.
-# NB FOR AGENTS+TEAM MATES: I needed to add this because the /tmp/content/ dir
-# is not writable for me because it was made by funmi, so i needed a way to
-# save the checkpointing stuff somewhere else.
-_CONTENT = os.environ.get("TPU_CONTENT_DIR", "/tmp/content")
-INTERMEDIATE_CKPT_DIR = f"{_CONTENT}/intermediate_ckpt/"
-CKPT_DIR = f"{_CONTENT}/ckpts/"
-TENSORBOARD_DIR = f"{_CONTENT}/tmp/tensorboard/grpo"
+INTERMEDIATE_CKPT_DIR = "/tmp/content/intermediate_ckpt/"
+CKPT_DIR = "/tmp/content/ckpts/"
+TENSORBOARD_DIR = "/tmp/content/tmp/tensorboard/grpo"
 SAVE_INTERVAL_STEPS = 500
 MAX_TO_KEEP = 4
 
@@ -107,3 +85,4 @@ GENERATION_CONFIGS = {
 WANDB_PROJECT = os.environ.get("WANDB_PROJECT", "tunix")
 WANDB_ENTITY = os.environ.get("WANDB_ENTITY", "milindsarkaryt-iiser-mohali")
 WANDB_RUN_ID = os.environ.get("WANDB_RUN_ID", None)
+# BETA resolved at launch: 1e-6 (env override; see command.txt)

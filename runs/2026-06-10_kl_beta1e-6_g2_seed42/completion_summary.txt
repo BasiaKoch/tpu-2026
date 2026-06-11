@@ -1,0 +1,15 @@
+KL-control run (beta = 1e-6) training completed successfully.
+
+Run: kl_beta1e-6_g2_seed42
+Commit: 5e7d8f5a665e16f01015172864b7a05fe824a114
+Branch: kl-control-bk
+Changed vs. baseline: BETA = 1e-6 (env override; effectively removes the reference-KL penalty)
+Start: 2026-06-10T20:35Z (approximate; see start_time.txt)
+End: 2026-06-11T00:50Z (train.log mtime)
+Wall-clock: ~4h15m (approximate; authoritative runtime on the W&B run page)
+Final step: 3364
+Exit code: 0 (run reached MAX_STEPS; tmux session showed normal completion)
+Checkpoints: preserved at ~/preserved/kl_beta1e6_content/ckpts/actor/{2000,2500,3000,3364} (VM basia-tpu-06092034 / t1v-n-cf158ba8)
+Train log: ~/preserved/kl_beta1e6_train.log
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/8rmv0hgg
+Evaluation: pending (see notes.md)
