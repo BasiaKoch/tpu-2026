@@ -1,0 +1,5 @@
+W&B run URL:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/x4j7yhdp
+
+Checkpoint artifact URL(s):
+CANNOT_RETRIEVE: no model artifact found — upload per CHECKLIST.md §3
