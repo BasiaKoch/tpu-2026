@@ -1,0 +1,3 @@
+WANDB_NAME=reward_length_g2_seed42 python -u train.py
+
+Launched on TPU VM `basia` (`t1v-n-cf158ba8-w-0`) from branch `reward-length-bk`, reportedly via `~/launch_len2.sh`.
