@@ -1,0 +1,16 @@
+Reward-length G2 run completed successfully.
+
+Run: reward_length_g2_seed42
+Commit: f50d731e3a3679fa9330120f30265bf88369e214
+Branch: reward-length-bk
+Changed vs. baseline: added `length_penalty` reward; `NUM_GENERATIONS = 2`
+Start: 2026-06-11T11:30:20Z (from W&B local run directory name)
+End: 2026-06-11T14:04Z (train.log mtime)
+Final step: 3364
+Exit code: 0 (log ends with `Training finished.`)
+Checkpoints: preserved on TPU VM `basia` at `/home/basiakoch/preserved/length_g2_content/ckpts/actor/{2000,2500,3000,3364}`
+Train log: `/home/basiakoch/preserved/length_g2_train.log`
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jcp0b5cy
+W&B checkpoint artifact: `felsomoye-university-of-cambridge/tunix/reward_length_g2_seed42_checkpoint:latest`
+W&B artifact upload run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/gy146naa
+Evaluation: pending

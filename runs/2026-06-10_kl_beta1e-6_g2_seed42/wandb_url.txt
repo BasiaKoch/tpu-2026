@@ -1,1 +1,7 @@
 https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/8rmv0hgg
+
+W&B checkpoint artifact:
+felsomoye-university-of-cambridge/tunix/kl_beta1e6_g2_seed42_checkpoint:latest
+
+W&B artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/p0y6k89y

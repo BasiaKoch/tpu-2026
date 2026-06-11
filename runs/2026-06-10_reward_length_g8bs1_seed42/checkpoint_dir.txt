@@ -1,0 +1,7 @@
+final+sweep: ~/preserved/length_final/actor/{2000,2500,3000,3364}; matched-step ckpt: ~/preserved/length/actor/500; log: ~/preserved/length_train.log
+
+W&B artifact:
+felsomoye-university-of-cambridge/tunix/reward_length_g8bs1_seed42_checkpoint:latest
+
+W&B artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/f8g3j4ks

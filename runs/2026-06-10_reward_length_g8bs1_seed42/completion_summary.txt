@@ -1,0 +1,18 @@
+Length-penalty run (on G8 + bs=1 base) training completed successfully.
+
+Run: reward_length_g8bs1_seed42
+Commit: 89cde305128d7e4a9ecd0b7f36b7e2dbb0a8b452
+Branch: reward-length-on-g8-bk
+Changed vs. G8 base: + length_penalty reward; TRAIN_MICRO_BATCH_SIZE 2 -> 1 (v6e-1 OOM fix)
+Start: 2026-06-10T09:30Z (approximate; see start_time.txt)
+End: 2026-06-10T16:33Z (train.log mtime)
+Wall-clock: ~7h (approximate; authoritative runtime on the W&B run page)
+Final step: 3364
+Exit code: 0 (reached MAX_STEPS)
+Checkpoints: ~/preserved/length_final/actor/{2000,2500,3000,3364}; matched-step ~/preserved/length/actor/500 (VM basia-tpu-06092034 / t1v-n-cf158ba8)
+Control checkpoint: /home/basiakoch/content/ckpts/actor/500 (G8+bs1, no penalty, same VM)
+Train log: ~/preserved/length_train.log
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/cyay16mj
+W&B checkpoint artifact: `felsomoye-university-of-cambridge/tunix/reward_length_g8bs1_seed42_checkpoint:latest`
+W&B artifact upload run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/f8g3j4ks
+Evaluation: pending (see notes.md)

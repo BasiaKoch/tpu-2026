@@ -1,0 +1,18 @@
+Training checkpoint directory:
+/tmp/content/ckpts/
+
+Preserved checkpoint copy on TPU VM `basia`:
+/home/basiakoch/preserved/kl_beta032_content/ckpts/actor/{2000,2500,3000,3364}
+
+Preserved train log slice:
+/home/basiakoch/preserved/kl_beta032_train.log
+
+Preserved command/provenance:
+/home/basiakoch/preserved/kl_beta032_command.txt
+/home/basiakoch/preserved/kl_beta032_provenance.txt
+
+W&B artifact:
+felsomoye-university-of-cambridge/tunix/kl_beta032_g2_seed42_checkpoint:latest
+
+W&B artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/kfcc6z4m

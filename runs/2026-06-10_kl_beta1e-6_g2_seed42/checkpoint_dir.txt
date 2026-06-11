@@ -1,1 +1,7 @@
 final + sweep ckpts: ~/preserved/kl_beta1e6_content/ckpts/actor/{2000,2500,3000,3364}; train log: ~/preserved/kl_beta1e6_train.log
+
+W&B artifact:
+felsomoye-university-of-cambridge/tunix/kl_beta1e6_g2_seed42_checkpoint:latest
+
+W&B artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/p0y6k89y

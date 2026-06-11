@@ -30,3 +30,6 @@ Conclusions are read primarily from trajectory shape, which is robust to this.
 
 Evaluation: pending — greedy 64-example suite (base + restored checkpoint + sweep over
 saved steps 2000/2500/3000/3364) after the beta=0.32 run frees the chip.
+
+W&B checkpoint artifact: `felsomoye-university-of-cambridge/tunix/kl_beta1e6_g2_seed42_checkpoint:latest`.
+Artifact upload run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/p0y6k89y.

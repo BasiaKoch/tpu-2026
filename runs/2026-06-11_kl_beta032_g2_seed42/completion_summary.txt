@@ -1,0 +1,16 @@
+KL-control run (beta = 0.32) training completed successfully.
+
+Run: kl_beta032_g2_seed42
+Commit: 5e7d8f5a665e16f01015172864b7a05fe824a114
+Branch: kl-control-bk
+Changed vs. baseline: BETA = 0.32 (env override; 4x the baseline KL coefficient)
+Start: 2026-06-11T09:23:41Z (W&B created_at)
+End: 2026-06-11T10:30:27Z (W&B heartbeat; runtime 4004.64s)
+Final step: 3364
+Exit code: 0 (W&B state `finished`)
+Checkpoints: preserved on TPU VM `basia` at `/home/basiakoch/preserved/kl_beta032_content/ckpts/actor/{2000,2500,3000,3364}`
+Train log: `/home/basiakoch/preserved/kl_beta032_train.log`
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/oet2tfjd
+W&B checkpoint artifact: `felsomoye-university-of-cambridge/tunix/kl_beta032_g2_seed42_checkpoint:latest`
+W&B artifact upload run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/kfcc6z4m
+Evaluation: pending
