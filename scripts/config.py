@@ -35,8 +35,8 @@ DATA_SOURCE = os.environ.get("DATA_SOURCE", "tfds")  # "tfds" or "kaggle"
 # ====== LoRA (parameter-efficient finetuning) ======
 # Only the LoRA adapters are trained; the base model is frozen and shared with
 # the reference model. Smaller rank => fewer trainable params, smaller KL drift.
-RANK = 64
-ALPHA = 64.0
+RANK = 128
+ALPHA = 128.0
 
 # ====== Sharding (TPU mesh) ======
 NUM_TPUS = len(jax.devices())
