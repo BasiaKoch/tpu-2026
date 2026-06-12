@@ -13,6 +13,7 @@ Tunix's RLCluster uses Orbax and will pick up the latest step in CKPT_DIR.
 """
 import argparse
 import os
+import types
 
 from dotenv import load_dotenv
 load_dotenv(os.path.expanduser("~/.env"))
@@ -72,12 +73,19 @@ def login_services():
         os.system(f'hf auth login --token "{os.environ["HF_TOKEN"]}"')
 
 
+def _config_as_dict() -> dict:
+    return {
+        k: v for k, v in vars(train_config).items()
+        if not k.startswith("_") and not isinstance(v, types.ModuleType)
+    }
+
+
 def maybe_init_wandb(run_id: str | None):
     """Init wandb. If run_id is given we resume; otherwise a fresh run is created."""
     if not os.environ.get("WANDB_API_KEY"):
         print("WANDB_API_KEY not set — skipping wandb.")
         return None
-    kwargs = {"project": WANDB_PROJECT, "entity": WANDB_ENTITY}
+    kwargs = {"project": WANDB_PROJECT, "entity": WANDB_ENTITY, "config": _config_as_dict()}
     if run_id:
         # "allow" => resume if the run exists on the server, otherwise create
         # a new run with this id. "must" errors out if the run was never synced

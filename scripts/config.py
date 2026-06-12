@@ -6,6 +6,22 @@ so a change in one place propagates everywhere.
 import os
 import jax
 
+# ====== Reproducibility ======
+# Single source of truth for the experiment seed. Override per run with
+# `SEED=43 python train.py` (e.g. for the planned second-seed run) so the value
+# is captured in the W&B config snapshot rather than edited in code.
+#
+# What this controls / what it cannot:
+#   * Data order + train/val split  -> seeded (see data.py).
+#   * LoRA adapter init              -> qwix uses a fixed internal key in this
+#     version (apply_lora_to_model takes no rngs), so it is already identical
+#     across branches; there is no knob to wire SEED into yet.
+#   * GRPO rollout sampling          -> this tunix version's RolloutConfig /
+#     RLCluster expose no seed argument, so per-step generation is NOT seeded.
+#     Treat run-to-run variation as irreducible noise and quantify it with a
+#     second seed + bootstrap CI rather than trying to eliminate it.
+SEED = int(os.environ.get("SEED", "42"))
+
 # ====== Model ======
 MODEL_ID = "google/gemma-3-1b-it"
 GEMMA_TOKENIZER_PATH = "gs://gemma-data/tokenizers/tokenizer_gemma3.model"
@@ -41,15 +57,15 @@ TOTAL_GENERATION_STEPS = 768
 TEMPERATURE = 0.9          # high enough that the G samples actually differ
 TOP_P = 1.0
 TOP_K = 50
-NUM_GENERATIONS = 8        # G in the GRPO paper — group size for advantage norm
+NUM_GENERATIONS = 2        # G in the GRPO paper — group size for advantage norm
 
 # ====== GRPO loss ======
 NUM_ITERATIONS = 1         # mu — PPO-style inner optimisation passes per batch
-BETA = 0.08                # KL penalty coefficient (anchors to reference model)
+BETA = float(os.environ.get("BETA", "0.08"))  # KL penalty coefficient (anchors to reference model); override per run, e.g. BETA=0.0
 EPSILON = 0.2              # PPO-style clip range
 
 # ====== Training ======
-TRAIN_MICRO_BATCH_SIZE = 2
+TRAIN_MICRO_BATCH_SIZE = 1
 NUM_BATCHES = 3738
 NUM_TEST_BATCHES = 64
 EVAL_EVERY_N_STEPS = 64
@@ -76,7 +92,7 @@ INTERMEDIATE_CKPT_DIR = f"{_CONTENT}/intermediate_ckpt/"
 CKPT_DIR = f"{_CONTENT}/ckpts/"
 TENSORBOARD_DIR = f"{_CONTENT}/tmp/tensorboard/grpo"
 SAVE_INTERVAL_STEPS = 500
-MAX_TO_KEEP = 4
+MAX_TO_KEEP = 1000
 
 # ====== Inference presets ======
 GENERATION_CONFIGS = {

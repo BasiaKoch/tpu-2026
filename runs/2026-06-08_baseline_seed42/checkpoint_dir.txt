@@ -1,0 +1,20 @@
+Checkpoint directory:
+/tmp/content/ckpts/
+
+Intermediate checkpoint directory:
+/tmp/content/intermediate_ckpt/
+
+Save interval:
+500 steps
+
+Max checkpoints to keep:
+4
+
+Preserved local copy:
+/home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/baseline_seed42/actor/3364
+
+W&B artifact:
+felsomoye-university-of-cambridge/tunix/baseline_seed42_checkpoint:latest
+
+W&B artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/bah3rczo

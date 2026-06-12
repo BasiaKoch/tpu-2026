@@ -27,6 +27,19 @@ Shared code and experiment records for the GRPO finetuning practical on
 - [TPU setup](tpu-setup.md)
 - [Scripts guide](scripts/README.md)
 
+## Access the TPU
+
+```bash
+gcloud auth login
+
+export TEAM=dakolo
+
+gcloud alpha compute tpus tpu-vm ssh $TEAM \
+  --zone=us-east5-a --project=tpu-2026 --tunnel-through-iap
+
+cd tpu-2026
+```
+
 ## Run Discipline
 
 - No full TPU run from uncommitted code.

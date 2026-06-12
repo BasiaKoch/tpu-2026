@@ -17,6 +17,8 @@ import grain
 import kagglehub
 import tensorflow_datasets as tfds
 
+from config import SEED
+
 # Special tokens used by the policy and parsed by the reward fns.
 reasoning_start = "<reasoning>"
 reasoning_end = "</reasoning>"
@@ -83,7 +85,7 @@ def get_dataset(data_dir: str, split: str = "train", source: str = "tfds") -> gr
 
     return (
         grain.MapDataset.source(data)
-        .shuffle(seed=42)
+        .shuffle(seed=SEED)
         .map(lambda x: {
             "prompts": TEMPLATE.format(
                 system_prompt=SYSTEM_PROMPT,
