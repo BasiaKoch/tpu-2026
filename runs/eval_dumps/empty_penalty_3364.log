@@ -1,0 +1,36 @@
+/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.28.3 is exactly one major version older than the runtime version 6.31.1 at grain/proto/execution_summary.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
+  warnings.warn(
+Downloading google/gemma-3-1b-it from Hugging Face...
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files: 100%|██████████| 10/10 [00:00<00:00, 148734.18it/s]
+/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/qwix/_src/providers/lora.py:44: UserWarning: rngs must be provided for NNX models to initialize LoRA weights. Please specify rngs=nnx.Rngs(...) in apply_lora_to_model.
+  warnings.warn(
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781258552.390831  272793 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1781258552.392182  272793 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1781258553.600846  272793 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1781258553.601607  272793 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Model downloaded to: /home/basiakoch/.cache/huggingface/hub/models--google--gemma-3-1b-it/snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752
+Traceback (most recent call last):
+  File "/home/basiakoch/tpu-2026/scripts/evaluate.py", line 181, in <module>
+    main()
+  File "/home/basiakoch/tpu-2026/scripts/evaluate.py", line 155, in main
+    restore_lora(lora, args.ckpt_dir, step)
+  File "/home/basiakoch/tpu-2026/scripts/evaluate.py", line 43, in restore_lora
+    n, _ = mgr.maybe_restore(model=lora_model, step=step, restore_only_lora_params=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/tunix/sft/checkpoint_manager.py", line 178, in maybe_restore
+    metadata = self._checkpoint_manager.metadata(step)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/checkpoint_manager.py", line 1943, in metadata
+    return self._get_step_metadata(step)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/checkpoint_manager.py", line 1886, in _get_step_metadata
+    step_metadata = self._checkpointer.metadata(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/_src/checkpointers/checkpointer.py", line 336, in metadata
+    return self._handler.metadata(directory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/_src/handlers/composite_checkpoint_handler.py", line 1011, in metadata
+    raise FileNotFoundError(f'Directory does not exist: {directory}')
+FileNotFoundError: Directory does not exist: /home/basiakoch/preserved/empty_penalty_content/ckpts/actor/3364
