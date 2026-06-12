@@ -66,7 +66,7 @@ EPSILON = 0.2              # PPO-style clip range
 
 # ====== Training ======
 TRAIN_MICRO_BATCH_SIZE = 1
-NUM_BATCHES = 5500
+NUM_BATCHES = 6516
 NUM_TEST_BATCHES = 64
 EVAL_EVERY_N_STEPS = 64
 NUM_EPOCHS = 1
