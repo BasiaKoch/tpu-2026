@@ -1,36 +1,23 @@
 /home/basiakoch/venvs/tunix/lib/python3.12/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.28.3 is exactly one major version older than the runtime version 6.31.1 at grain/proto/execution_summary.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
   warnings.warn(
 Downloading google/gemma-3-1b-it from Hugging Face...
-Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files: 100%|██████████| 10/10 [00:00<00:00, 148734.18it/s]
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files: 100%|██████████| 10/10 [00:00<00:00, 153076.79it/s]
 /home/basiakoch/venvs/tunix/lib/python3.12/site-packages/qwix/_src/providers/lora.py:44: UserWarning: rngs must be provided for NNX models to initialize LoRA weights. Please specify rngs=nnx.Rngs(...) in apply_lora_to_model.
   warnings.warn(
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1781258552.390831  272793 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-I0000 00:00:1781258552.392182  272793 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+I0000 00:00:1781259299.436626  277406 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1781259299.437989  277406 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1781258553.600846  272793 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-I0000 00:00:1781258553.601607  272793 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+I0000 00:00:1781259300.635296  277406 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1781259300.636043  277406 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
 Model downloaded to: /home/basiakoch/.cache/huggingface/hub/models--google--gemma-3-1b-it/snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752
-Traceback (most recent call last):
-  File "/home/basiakoch/tpu-2026/scripts/evaluate.py", line 181, in <module>
-    main()
-  File "/home/basiakoch/tpu-2026/scripts/evaluate.py", line 155, in main
-    restore_lora(lora, args.ckpt_dir, step)
-  File "/home/basiakoch/tpu-2026/scripts/evaluate.py", line 43, in restore_lora
-    n, _ = mgr.maybe_restore(model=lora_model, step=step, restore_only_lora_params=True)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/tunix/sft/checkpoint_manager.py", line 178, in maybe_restore
-    metadata = self._checkpoint_manager.metadata(step)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/checkpoint_manager.py", line 1943, in metadata
-    return self._get_step_metadata(step)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/checkpoint_manager.py", line 1886, in _get_step_metadata
-    step_metadata = self._checkpointer.metadata(
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/_src/checkpointers/checkpointer.py", line 336, in metadata
-    return self._handler.metadata(directory)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/basiakoch/venvs/tunix/lib/python3.12/site-packages/orbax/checkpoint/_src/handlers/composite_checkpoint_handler.py", line 1011, in metadata
-    raise FileNotFoundError(f'Directory does not exist: {directory}')
-FileNotFoundError: Directory does not exist: /home/basiakoch/preserved/empty_penalty_content/ckpts/actor/3364
+Restored LoRA params from step 3364
+  0%|          | 0/64 [00:00<?, ?it/s]  2%|▏         | 1/64 [00:14<14:55, 14.21s/it]  3%|▎         | 2/64 [00:15<06:49,  6.61s/it]  5%|▍         | 3/64 [00:16<04:03,  4.00s/it]  6%|▋         | 4/64 [00:32<08:57,  8.97s/it]  8%|▊         | 5/64 [00:34<06:11,  6.30s/it]  9%|▉         | 6/64 [00:35<04:17,  4.44s/it] 11%|█         | 7/64 [00:36<03:13,  3.40s/it] 12%|█▎        | 8/64 [00:38<02:38,  2.82s/it] 14%|█▍        | 9/64 [00:39<02:03,  2.24s/it] 16%|█▌        | 10/64 [00:40<01:39,  1.83s/it] 17%|█▋        | 11/64 [00:41<01:22,  1.55s/it] 19%|█▉        | 12/64 [00:41<01:08,  1.32s/it] 20%|██        | 13/64 [00:43<01:06,  1.30s/it] 22%|██▏       | 14/64 [00:44<01:02,  1.25s/it] 23%|██▎       | 15/64 [00:45<01:03,  1.29s/it] 25%|██▌       | 16/64 [00:46<00:58,  1.22s/it] 27%|██▋       | 17/64 [00:47<00:55,  1.19s/it] 28%|██▊       | 18/64 [00:49<00:57,  1.24s/it] 30%|██▉       | 19/64 [00:50<01:00,  1.34s/it] 31%|███▏      | 20/64 [00:51<00:53,  1.22s/it] 33%|███▎      | 21/64 [00:52<00:49,  1.15s/it] 34%|███▍      | 22/64 [00:54<00:53,  1.28s/it] 36%|███▌      | 23/64 [00:55<00:52,  1.29s/it] 38%|███▊      | 24/64 [00:56<00:45,  1.13s/it] 39%|███▉      | 25/64 [00:57<00:49,  1.26s/it] 41%|████      | 26/64 [00:58<00:46,  1.22s/it] 42%|████▏     | 27/64 [00:59<00:41,  1.13s/it] 44%|████▍     | 28/64 [01:00<00:40,  1.13s/it] 45%|████▌     | 29/64 [01:01<00:34,  1.03it/s] 47%|████▋     | 30/64 [01:02<00:35,  1.03s/it] 48%|████▊     | 31/64 [01:03<00:32,  1.01it/s] 50%|█████     | 32/64 [01:04<00:30,  1.06it/s] 52%|█████▏    | 33/64 [01:06<00:35,  1.13s/it] 53%|█████▎    | 34/64 [01:06<00:31,  1.06s/it] 55%|█████▍    | 35/64 [01:07<00:29,  1.01s/it] 56%|█████▋    | 36/64 [01:09<00:29,  1.06s/it] 58%|█████▊    | 37/64 [01:10<00:30,  1.13s/it] 59%|█████▉    | 38/64 [01:11<00:29,  1.14s/it] 61%|██████    | 39/64 [01:12<00:28,  1.13s/it] 62%|██████▎   | 40/64 [01:14<00:29,  1.22s/it] 64%|██████▍   | 41/64 [01:14<00:25,  1.09s/it] 66%|██████▌   | 42/64 [01:15<00:22,  1.03s/it] 67%|██████▋   | 43/64 [01:16<00:20,  1.00it/s] 69%|██████▉   | 44/64 [01:18<00:23,  1.17s/it] 70%|███████   | 45/64 [01:19<00:23,  1.22s/it] 72%|███████▏  | 46/64 [01:20<00:20,  1.12s/it] 73%|███████▎  | 47/64 [01:22<00:21,  1.26s/it] 75%|███████▌  | 48/64 [01:22<00:17,  1.12s/it] 77%|███████▋  | 49/64 [01:23<00:16,  1.13s/it] 78%|███████▊  | 50/64 [01:25<00:15,  1.14s/it] 80%|███████▉  | 51/64 [01:26<00:14,  1.14s/it] 81%|████████▏ | 52/64 [01:27<00:13,  1.10s/it] 83%|████████▎ | 53/64 [01:28<00:11,  1.06s/it] 84%|████████▍ | 54/64 [01:29<00:11,  1.16s/it] 86%|████████▌ | 55/64 [01:30<00:09,  1.08s/it] 88%|████████▊ | 56/64 [01:31<00:08,  1.00s/it] 89%|████████▉ | 57/64 [01:32<00:06,  1.02it/s] 91%|█████████ | 58/64 [01:33<00:05,  1.07it/s] 92%|█████████▏| 59/64 [01:34<00:04,  1.02it/s] 94%|█████████▍| 60/64 [01:35<00:04,  1.02s/it] 95%|█████████▌| 61/64 [01:36<00:03,  1.03s/it] 97%|█████████▋| 62/64 [01:37<00:02,  1.02s/it] 98%|█████████▊| 63/64 [01:38<00:00,  1.03it/s]100%|██████████| 64/64 [01:38<00:00,  1.11it/s]100%|██████████| 64/64 [01:38<00:00,  1.55s/it]
+===> corr=1 total=10 acc=10.00% partial=20.00% fmt=40.00%
+===> corr=5 total=20 acc=25.00% partial=30.00% fmt=50.00%
+===> corr=5 total=30 acc=16.67% partial=20.00% fmt=33.33%
+===> corr=6 total=40 acc=15.00% partial=17.50% fmt=35.00%
+===> corr=6 total=50 acc=12.00% partial=16.00% fmt=34.00%
+===> corr=9 total=60 acc=15.00% partial=18.33% fmt=38.33%
+
+FINAL: correct=9/64  acc=14.06%  partial=17.19%  format=39.06%
