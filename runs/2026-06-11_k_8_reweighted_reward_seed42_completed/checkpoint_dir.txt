@@ -1,0 +1,16 @@
+Checkpoint directory (on training VM):
+/home/ext_rowandauria1_gmail_com/checkpoints/11-06_rowan-k-16-reweighted-reward/ckpts/
+
+Intermediate checkpoint directory:
+/home/ext_rowandauria1_gmail_com/checkpoints/11-06_rowan-k-16-reweighted-reward/intermediate_ckpt/
+
+Save interval: 500 steps
+Max to keep: 4
+
+Preserved local copy: CANNOT_RETRIEVE: filesystem path on training VM — fill in manually
+
+W&B model artifacts:
+  CANNOT_RETRIEVE: no model artifact found — upload per CHECKLIST.md §3
+
+Sweep checkpoint coverage:
+  CANNOT_RETRIEVE: verify final plus eval-sweep steps are uploaded as artifact versions.

@@ -1,0 +1,5 @@
+CANNOT_RETRIEVE: Full launcher command (tmux wrapper, env setup) not captured by W&B.
+Fill in manually.
+
+Training entry point (from W&B metadata):
+python -u /home/ext_rowandauria1_gmail_com/tpu-2026/scripts/train.py

@@ -1,0 +1,11 @@
+Run: k=16 updated reward
+Commit: 24583db65f22909f70012c92cf8261847d3cd869
+Start: 2026-06-11T14:32:20Z
+End: 2026-06-11T21:40:41Z
+Wall-clock: 7h 08m 21s
+Final step: 4950
+Status: completed
+Exit code: CANNOT_RETRIEVE: not recorded by W&B — fill in manually
+Final checkpoint: /home/ext_rowandauria1_gmail_com/checkpoints/11-06_rowan-k-16-reweighted-reward/ckpts/
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/smuzmoal
+Final log marker: CANNOT_RETRIEVE: from raw training log — fill in manually
