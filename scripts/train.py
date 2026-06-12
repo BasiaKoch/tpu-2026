@@ -7,12 +7,19 @@ Run under tmux:
     python train.py
     # detach: Ctrl-b d   # reattach: tmux attach -t tunix
 
-Resuming a wandb run: set WANDB_RUN_ID in env (or pass --wandb-run-id).
-Resuming from checkpoint: just point CKPT_DIR at the existing directory.
-Tunix's RLCluster uses Orbax and will pick up the latest step in CKPT_DIR.
+Checkpoints are written to ~/checkpoints/<wandb_run_id>/ (one dir per run, so
+runs never overwrite each other) and each committed step is uploaded to W&B as a
+versioned model artifact during training.
+
+Resuming a wandb run: set WANDB_RUN_ID in env (or pass --wandb-run-id). Because
+the checkpoint dir is derived from the run id, resuming the same run id also
+points Orbax at that run's existing checkpoints, and it picks up the latest step.
 """
 import argparse
+import glob
 import os
+import threading
+import time
 import types
 
 from dotenv import load_dotenv
@@ -31,7 +38,6 @@ import config as train_config
 from config import (
     B1, B2,
     BETA,
-    CKPT_DIR,
     DATA_SOURCE,
     EPSILON,
     EVAL_EVERY_N_STEPS,
@@ -47,7 +53,6 @@ from config import (
     NUM_TEST_BATCHES,
     SAVE_INTERVAL_STEPS,
     TEMPERATURE,
-    TENSORBOARD_DIR,
     TEST_DATA_DIR,
     TOP_K, TOP_P,
     TOTAL_GENERATION_STEPS,
@@ -113,7 +118,7 @@ def build_optimizer():
     return opt
 
 
-def build_cluster_config(mesh, optimizer, eos_tokens):
+def build_cluster_config(mesh, optimizer, eos_tokens, ckpt_dir, tensorboard_dir):
     return rl_cluster_lib.ClusterConfig(
         role_to_mesh={
             rl_cluster_lib.Role.ACTOR: mesh,
@@ -129,9 +134,9 @@ def build_cluster_config(mesh, optimizer, eos_tokens):
             mini_batch_size=TRAIN_MICRO_BATCH_SIZE,
             train_micro_batch_size=TRAIN_MICRO_BATCH_SIZE,
             metrics_logging_options=metrics_logger.MetricsLoggerOptions(
-                log_dir=TENSORBOARD_DIR, flush_every_n_steps=20,
+                log_dir=tensorboard_dir, flush_every_n_steps=20,
             ),
-            checkpoint_root_directory=CKPT_DIR,
+            checkpoint_root_directory=ckpt_dir,
             checkpointing_options=ocp.CheckpointManagerOptions(
                 save_interval_steps=SAVE_INTERVAL_STEPS, max_to_keep=MAX_TO_KEEP,
             ),
@@ -146,6 +151,57 @@ def build_cluster_config(mesh, optimizer, eos_tokens):
     )
 
 
+def start_checkpoint_uploader(run, ckpt_dir, stop_event, poll_seconds=120, settle_seconds=30):
+    """Log each committed Orbax checkpoint to W&B as it appears during training.
+
+    tunix has no per-save hook, so we watch the filesystem instead. It writes
+    actor checkpoints under <ckpt_dir>/actor/<step>/; a step is finalised once
+    Orbax has written its `_CHECKPOINT_METADATA` marker. We treat a step as ready
+    only when that marker has been stable for `settle_seconds`, so we never upload
+    a checkpoint that is still being flushed. Each step is logged as a new version
+    of a single 'model' artifact, aliased `step-<n>`. Upload errors are caught so
+    they can never take down the training run.
+
+    Returns the started daemon thread; call stop_event.set() then join() it after
+    training so the final checkpoint(s) get a last upload pass.
+    """
+    actor_dir = os.path.join(ckpt_dir, "actor")
+    artifact_name = f"{run.id}-actor-ckpt"
+    uploaded: set[str] = set()
+
+    def ready_steps(min_age):
+        steps = {}
+        for marker in glob.glob(os.path.join(actor_dir, "*", "_CHECKPOINT_METADATA")):
+            step_dir = os.path.dirname(marker)
+            step = os.path.basename(step_dir)
+            if step.isdigit() and (time.time() - os.path.getmtime(marker)) >= min_age:
+                steps[step] = step_dir
+        return dict(sorted(steps.items(), key=lambda kv: int(kv[0])))
+
+    def sweep(min_age):
+        for step, step_dir in ready_steps(min_age).items():
+            if step in uploaded:
+                continue
+            try:
+                art = wandb.Artifact(artifact_name, type="model", metadata={"step": int(step)})
+                art.add_dir(step_dir)
+                run.log_artifact(art, aliases=[f"step-{step}"])
+                uploaded.add(step)
+                print(f"[ckpt-uploader] logged checkpoint step {step} to W&B")
+            except Exception as e:  # never let an upload error kill training
+                print(f"[ckpt-uploader] failed to upload step {step}: {e}")
+
+    def loop():
+        while not stop_event.is_set():
+            sweep(settle_seconds)
+            stop_event.wait(poll_seconds)
+        sweep(min_age=0)  # final pass: catch the last checkpoint(s) after training ends
+
+    t = threading.Thread(target=loop, name="ckpt-uploader", daemon=True)
+    t.start()
+    return t
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", default=DATA_SOURCE, choices=["tfds", "kaggle"])
@@ -156,7 +212,16 @@ def main():
     login_services()
     # init wandb BEFORE the trainer because tunix sometimes hangs if wandb is
     # initialised mid-RLCluster construction (known bug).
-    maybe_init_wandb(args.wandb_run_id)
+    run = maybe_init_wandb(args.wandb_run_id)
+
+    # Save each run's checkpoints under ~/checkpoints/<wandb_run_id> so a new run
+    # never overwrites or evicts a previous run's checkpoints (the run id isn't
+    # known until after wandb.init, which is why this isn't baked into config.py).
+    # Falls back to a timestamped dir when wandb is disabled.
+    run_id = run.id if run is not None else time.strftime("local-%Y%m%d-%H%M%S")
+    ckpt_dir = os.path.expanduser(os.path.join("~/checkpoints", run_id))
+    tensorboard_dir = os.path.join(ckpt_dir, "tensorboard", "grpo")
+    print(f"Checkpoints -> {ckpt_dir}")
 
     mesh = build_mesh()
     local_path, eos_tokens = download_weights()
@@ -171,7 +236,7 @@ def main():
     print(f"Datasets: train={len(train_ds)} val={len(val_ds) if val_ds else 0}")
 
     optimizer = build_optimizer()
-    cluster_cfg = build_cluster_config(mesh, optimizer, eos_tokens)
+    cluster_cfg = build_cluster_config(mesh, optimizer, eos_tokens, ckpt_dir, tensorboard_dir)
     grpo_cfg = GRPOConfig(
         num_generations=NUM_GENERATIONS,
         num_iterations=NUM_ITERATIONS,
@@ -184,8 +249,17 @@ def main():
     )
     trainer = GRPOLearner(rl_cluster=rl_cluster, reward_fns=REWARD_FNS, algo_config=grpo_cfg)
 
-    print(f"Starting GRPO training. CKPT_DIR={CKPT_DIR}  MAX_STEPS={MAX_STEPS}")
-    trainer.train(train_ds, val_ds)
+    print(f"Starting GRPO training. CKPT_DIR={ckpt_dir}  MAX_STEPS={MAX_STEPS}")
+
+    # Upload intermediate checkpoints to W&B as they are written during training.
+    stop_uploading = threading.Event()
+    uploader = start_checkpoint_uploader(run, ckpt_dir, stop_uploading) if run is not None else None
+    try:
+        trainer.train(train_ds, val_ds)
+    finally:
+        stop_uploading.set()
+        if uploader is not None:
+            uploader.join(timeout=900)  # let the final-sweep upload finish
     print("Training finished.")
 
 
