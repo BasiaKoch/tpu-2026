@@ -92,7 +92,7 @@ INTERMEDIATE_CKPT_DIR = f"{_CONTENT}/intermediate_ckpt/"
 CKPT_DIR = f"{_CONTENT}/ckpts/"
 TENSORBOARD_DIR = f"{_CONTENT}/tmp/tensorboard/grpo"
 SAVE_INTERVAL_STEPS = 500
-MAX_TO_KEEP = 4
+MAX_TO_KEEP = 1000
 
 # ====== Inference presets ======
 GENERATION_CONFIGS = {
