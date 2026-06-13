@@ -16,4 +16,4 @@ Final log marker: Training finished.
 Evaluation status:
 Base standalone greedy eval: correct=31/64, acc=48.44%, partial=51.56%, format=6.25%
 Final W&B eval: rewards/eval/mean=1.575096, rewards/eval/score/mean=6.300384, rewards/eval/check_answer=0.773981, actor/eval/kl=0.512891
-Standalone restored-checkpoint greedy accuracy: not available in saved logs yet
+Standalone restored-checkpoint greedy accuracy: correct=19/64, acc=29.69%, partial=29.69%, format=56.25%

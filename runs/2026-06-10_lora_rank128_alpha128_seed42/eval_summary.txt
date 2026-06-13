@@ -19,9 +19,12 @@ Training-time W&B eval for restored LoRA policy:
 
 Standalone restored LoRA checkpoint eval:
 - Log: runs/2026-06-10_lora_rank128_alpha128_seed42/lora_eval.log
-- Result: not available in the saved run folder; current log only records an incomplete sandbox restore/eval attempt.
+- Restored artifact: `felsomoye-university-of-cambridge/tunix/lora_rank128_alpha128_g2_seed42-actor:v0`
+- Step: 3364
+- Command: `source ~/venvs/tunix/bin/activate && cd /home/funmilooi-somoye/tpu-2026/scripts && JAX_PLATFORMS=cpu python -u evaluate.py --preset greedy --ckpt-dir /home/funmilooi-somoye/tpu-2026/artifacts/lora_rank128_alpha128_seed42_actor --step 3364`
+- FINAL: correct=19/64  acc=29.69%  partial=29.69%  format=56.25%
 
 Observation:
 - The base eval completed on CPU with the cached local tokenizer.
 - The training-time W&B eval metrics are much healthier than the failed G=2 baseline final eval reward, but they are not the same artifact as the standalone 64-example greedy accuracy used in RUNS.md.
-- Do not report a checkpoint-vs-base standalone accuracy comparison for this run until `lora_eval.log` contains a completed `correct=N/64` result.
+- The restored LoRA checkpoint underperformed the base model on this greedy GSM8K eval.

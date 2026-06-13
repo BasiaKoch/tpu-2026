@@ -1,10 +1,11 @@
-LoRA checkpoint evaluation was started, but the restore/eval path did not complete in this sandbox.
+LoRA checkpoint evaluation completed successfully in this workspace.
 
-Attempted settings:
+Settings:
 - preset: greedy
-- ckpt-dir: /home/funmilooi-somoye/tpu-2026/checkpoints/lora_rank128_alpha128_seed42/actor
+- ckpt-dir: /home/funmilooi-somoye/tpu-2026/artifacts/lora_rank128_alpha128_seed42_actor
 - step: 3364
 - execution mode: `JAX_PLATFORMS=cpu`
+- restored artifact: `felsomoye-university-of-cambridge/tunix/lora_rank128_alpha128_g2_seed42-actor:v0`
 
-Observed issue:
-- The restored checkpoint path did not finish initializing within the available sandbox time, so no final GSM8K greedy result was produced here.
+Result:
+- FINAL: correct=19/64  acc=29.69%  partial=29.69%  format=56.25%
