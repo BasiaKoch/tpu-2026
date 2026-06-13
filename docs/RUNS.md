@@ -11,6 +11,7 @@ Single source of truth for completed, failed, and planned runs.
 | reward_length_penalty_seed42 | | reward-variant | | 42 | | | | GSM8K test | | | planned | Reward shaping or length-control variant. |
 | kl_beta1e-6_g2_seed42 | 5e7d8f5 | kl-control-bk | `BETA=1e-6` (env override), else default G=2 | 42 | 3364 | ~4h15m (approx; see W&B) | preserved on VM: `~/preserved/kl_beta1e6_content/ckpts/actor/{2000,2500,3000,3364}` | GSM8K test, 64-example greedy | eval pending | https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/8rmv0hgg | completed | Reference-KL effectively off (1e-6, not literal 0 — tunix skips KL logging at 0). Supersedes the planned `kl_beta_low_seed42`. See `runs/2026-06-10_kl_beta1e-6_g2_seed42/`. |
 | kl_beta032_g2_seed42 | 5e7d8f5 | kl-control-bk | `BETA=0.32` (env override), else default G=2 | 42 | 3364 | | `/tmp/content/ckpts/actor` (to be preserved) | GSM8K test, 64-example greedy | | https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/oet2tfjd | running | 4x baseline KL leash; partner run to kl_beta1e-6. |
+| hard_medium_jsonl_g8_seed42 | 1ba6769 | medium-hard-data-fls | `jsonl`, `NUM_GENERATIONS=8` | 42 | | | `/tmp/content/ckpts/actor/` | GSM8K test, 64-example greedy | | https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/hlo1w4go; `scripts/train.log` | running | Training on the local hard/medium JSONL dataset. Everything else held constant unless noted in `scripts/config.py`. |
 
 ## Status Values
 

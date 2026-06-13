@@ -1,0 +1,4 @@
+tmux session: tunix
+window.pane: 0.0
+train python pid: 598618
+launcher pid: 49236

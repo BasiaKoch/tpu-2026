@@ -107,7 +107,7 @@ def evaluate(dataset, sampler, eos_tokens, temperature=0.7, top_k=50, top_p=0.95
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--preset", default="greedy", choices=list(GENERATION_CONFIGS))
-    ap.add_argument("--source", default=DATA_SOURCE, choices=["tfds", "kaggle"])
+    ap.add_argument("--source", default=DATA_SOURCE, choices=["tfds", "kaggle", "jsonl"])
     ap.add_argument("--ckpt-dir", default=DEFAULT_CKPT_ROOT,
                     help=f"Directory containing per-step checkpoint subdirs. Default: {DEFAULT_CKPT_ROOT}")
     ap.add_argument("--step", type=int, default=DEFAULT_STEP,

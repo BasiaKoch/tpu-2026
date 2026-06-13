@@ -148,7 +148,7 @@ def build_cluster_config(mesh, optimizer, eos_tokens):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--source", default=DATA_SOURCE, choices=["tfds", "kaggle"])
+    ap.add_argument("--source", default=DATA_SOURCE, choices=["tfds", "kaggle", "jsonl"])
     ap.add_argument("--wandb-run-id", default=WANDB_RUN_ID,
                     help="Pass an existing run id (e.g. bnh9ttlt) to resume.")
     args = ap.parse_args()

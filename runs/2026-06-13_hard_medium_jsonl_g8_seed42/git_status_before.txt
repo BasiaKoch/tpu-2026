@@ -1,0 +1,5 @@
+ M scripts/config.py
+ M scripts/data.py
+ M scripts/evaluate.py
+ M scripts/train.py
+?? runs/2026-06-13_hard_medium_jsonl_g8_seed42/

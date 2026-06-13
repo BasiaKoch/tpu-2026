@@ -1,0 +1,5 @@
+Attempted launcher:
+bash scripts/run_tmux.sh
+
+Actual launch command used after the existing tmux session was detected:
+tmux send-keys -t tunix:0.0 "cd /home/ext_felsomoye_gmail_com/tpu-2026/scripts && source /home/ext_felsomoye_gmail_com/venvs/tunix/bin/activate && [ -f ~/.env ] && set -a && source ~/.env && set +a && python -u train.py 2>&1 | tee -a /home/ext_felsomoye_gmail_com/tpu-2026/scripts/train.log; echo; echo \"--- process exited (\$?) ---\"; exec bash" C-m

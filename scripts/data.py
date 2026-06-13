@@ -9,6 +9,7 @@ answer between <answer>...</answer>. The reward functions later check
 both the format and the number itself.
 """
 import csv
+import json
 import os
 import shutil
 from pathlib import Path
@@ -47,6 +48,11 @@ def extract_hash_answer(text: str) -> str | None:
     return text.split("####")[1].strip()
 
 
+def _normalize_answer(text: str) -> str:
+    text = text if isinstance(text, str) else text.decode("utf-8")
+    return extract_hash_answer(text) or text.strip()
+
+
 def _download_kaggle_dataset(target_dir: str = "./data/gsm8k") -> str:
     os.makedirs(target_dir, exist_ok=True)
     src = Path(kagglehub.dataset_download("thedevastator/grade-school-math-8k-q-a"))
@@ -54,6 +60,22 @@ def _download_kaggle_dataset(target_dir: str = "./data/gsm8k") -> str:
     for csv_file in src.glob("*.csv"):
         shutil.copy2(csv_file, dst / csv_file.name)
     return target_dir
+
+
+def _load_jsonl_dataset(jsonl_path: Path) -> list[dict[str, str]]:
+    if not jsonl_path.exists():
+        raise FileNotFoundError(f"JSONL dataset not found: {jsonl_path}")
+    data = []
+    with jsonl_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            data.append({
+                "question": row["question"],
+                "answer": row["expected_answer"],
+            })
+    return data
 
 
 def get_dataset(data_dir: str, split: str = "train", source: str = "tfds") -> grain.MapDataset:
@@ -77,6 +99,18 @@ def get_dataset(data_dir: str, split: str = "train", source: str = "tfds") -> gr
             reader = csv.DictReader(f)
             for row in reader:
                 data.append({"question": row["question"], "answer": row["answer"]})
+    elif source == "jsonl":
+        if split != "train":
+            import tensorflow_datasets.text.gsm8k  # noqa: F401  (registers the builder)
+            data = tfds.data_source(
+                "gsm8k",
+                split=split,
+                data_dir=data_dir,
+                builder_kwargs={"file_format": tfds.core.FileFormat.ARRAY_RECORD},
+                download=True,
+            )
+        else:
+            data = _load_jsonl_dataset(Path(__file__).with_name("gsm8k_train_base_hard_medium 1.jsonl"))
     else:
         raise ValueError(f"Unknown source: {source}")
 
@@ -92,7 +126,7 @@ def get_dataset(data_dir: str, split: str = "train", source: str = "tfds") -> gr
                 question=_as_text(x["question"]),
             ),
             "question": _as_text(x["question"]),
-            "answer": extract_hash_answer(_as_text(x["answer"])),
+            "answer": _normalize_answer(_as_text(x["answer"])),
         })
     )
 
@@ -116,5 +150,6 @@ def build_train_val_test(num_batches: int,
         train_ds = full[:cut].repeat(num_epochs)
         val_ds = full[cut:].repeat(num_epochs)
 
-    test_ds = get_dataset(test_dir, "test", source).batch(train_micro_batch_size)[:num_test_batches]
+    test_source = "tfds" if source == "jsonl" else source
+    test_ds = get_dataset(test_dir, "test", test_source).batch(train_micro_batch_size)[:num_test_batches]
     return train_ds, val_ds, test_ds
