@@ -1,0 +1,26 @@
+Launch command
+==============
+
+tmux session:
+  tunix_resume_5864
+
+Exact launched command:
+
+  tmux new-session -d -s tunix_resume_5864 "bash -lc 'cd /home/funmilooi-somoye/tpu-2026/scripts && source /home/funmilooi-somoye/venvs/tunix/bin/activate && [ -f ~/.env ] && set -a && source ~/.env && set +a && WANDB_ENTITY=felsomoye-university-of-cambridge WANDB_PROJECT=tunix WANDB_RUN_ID=jgs4c6kl python -u train.py --wandb-run-id jgs4c6kl 2>&1 | tee -a /home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log; echo; echo \"--- process exited ($?) ---\"; exec bash'"
+
+Equivalent inner training command:
+
+  cd /home/funmilooi-somoye/tpu-2026/scripts
+  source /home/funmilooi-somoye/venvs/tunix/bin/activate
+  set -a
+  source ~/.env
+  set +a
+  WANDB_ENTITY=felsomoye-university-of-cambridge \
+  WANDB_PROJECT=tunix \
+  WANDB_RUN_ID=jgs4c6kl \
+  python -u train.py --wandb-run-id jgs4c6kl
+
+Monitoring:
+
+  tmux attach -t tunix_resume_5864
+  tail -f /home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log

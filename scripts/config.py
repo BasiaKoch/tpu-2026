@@ -53,8 +53,8 @@ TRAIN_MICRO_BATCH_SIZE = 1
 NUM_BATCHES = 3738
 NUM_TEST_BATCHES = 64
 EVAL_EVERY_N_STEPS = 64
-NUM_EPOCHS = 1
-MAX_STEPS = int(NUM_BATCHES * NUM_ITERATIONS * TRAIN_FRACTION * NUM_EPOCHS)
+NUM_EPOCHS = 2
+MAX_STEPS = 5864
 
 # ====== Optimiser ======
 LEARNING_RATE = 3e-6
@@ -67,10 +67,10 @@ MAX_GRAD_NORM = 0.1        # tight clipping keeps KL well-behaved
 # ====== Checkpointing ======
 # NOTE: /tmp is volatile. For long runs, point this at persistent storage.
 INTERMEDIATE_CKPT_DIR = "/tmp/content/intermediate_ckpt/"
-CKPT_DIR = "/tmp/content/ckpts/"
+CKPT_DIR = "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864"
 TENSORBOARD_DIR = "/tmp/content/tmp/tensorboard/grpo"
 SAVE_INTERVAL_STEPS = 500
-MAX_TO_KEEP = 4
+MAX_TO_KEEP = 8
 
 # ====== Inference presets ======
 GENERATION_CONFIGS = {

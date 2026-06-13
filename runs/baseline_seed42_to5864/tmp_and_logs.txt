@@ -1,0 +1,26 @@
+/tmp and logging metadata
+=========================
+
+Pre-launch /tmp status:
+  /tmp/content did not exist
+  /tmp/content/ckpts did not exist
+  /tmp/content/intermediate_ckpt did not exist
+  /tmp/content/tmp/tensorboard/grpo did not exist
+  /tmp had approximately 78-79G free
+
+Current TensorBoard event file:
+  /tmp/content/tmp/tensorboard/grpo/events.out.tfevents.1781373532.t1v-n-e9b5fb70-w-0
+
+Live train log:
+  /home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log
+
+W&B local run directory:
+  /home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260613_175840-jgs4c6kl
+
+Note:
+  The canonical metadata folder is:
+    /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864
+
+  The dated folder contains the active tee log because it was created before
+  this canonical folder:
+    /home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864

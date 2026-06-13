@@ -1,0 +1,29 @@
+Planned continuation launch command
+===================================
+
+Before launch, ensure scripts/config.py uses:
+
+  NUM_EPOCHS = 2
+  MAX_STEPS = 5864
+  CKPT_DIR = "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864"
+  SAVE_INTERVAL_STEPS = 500
+  MAX_TO_KEEP = 8
+
+Launch:
+
+  cd /home/funmilooi-somoye/tpu-2026/scripts
+  WANDB_ENTITY=felsomoye-university-of-cambridge \
+  WANDB_PROJECT=tunix \
+  WANDB_RUN_ID=jgs4c6kl \
+  python -u train.py --wandb-run-id jgs4c6kl
+
+Expected behavior:
+
+  Tunix resumes from latest checkpoint under:
+    /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor
+
+  Latest available step before continuation:
+    3364
+
+  Target final global step:
+    5864

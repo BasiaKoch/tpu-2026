@@ -1,0 +1,50 @@
+{
+  "run_name": "baseline_seed42_to5864",
+  "status": "running",
+  "created_utc": "2026-06-13T18:03:30Z",
+  "purpose": "Continue baseline_seed42 training from checkpoint step 3364 to target step 5864.",
+  "previous_step": 3364,
+  "target_step": 5864,
+  "additional_steps_requested": 2500,
+  "latest_saved_checkpoint_observed": 3500,
+  "latest_wandb_actor_step_observed_from_tmux": 3619,
+  "tmux_session": "tunix_resume_5864",
+  "training_pid_observed": 33810,
+  "wandb": {
+    "entity": "felsomoye-university-of-cambridge",
+    "project": "tunix",
+    "run_id": "jgs4c6kl",
+    "run_url": "https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl",
+    "run_name": "Baseline k=2"
+  },
+  "checkpoint": {
+    "resume_root": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864",
+    "restored_actor_step": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3364",
+    "post_launch_checkpoint_observed": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3500",
+    "source_wandb_artifact": "felsomoye-university-of-cambridge/tunix/Checkpoint-baseline-k-2:v0",
+    "missing_documented_artifact": "felsomoye-university-of-cambridge/tunix/baseline_seed42_checkpoint:latest",
+    "local_artifact_download": "/home/funmilooi-somoye/tpu-2026/artifacts/Checkpoint-baseline-k-2_v0"
+  },
+  "logs": {
+    "dated_run_folder": "/home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864",
+    "live_train_log": "/home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log",
+    "tensorboard_event_file": "/tmp/content/tmp/tensorboard/grpo/events.out.tfevents.1781373532.t1v-n-e9b5fb70-w-0",
+    "wandb_local_dir": "/home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260613_175840-jgs4c6kl"
+  },
+  "git": {
+    "branch": "baseline-fls",
+    "head": "a520adf7a9f6651a4ed3ed4e474f3eddd19be53b",
+    "dirty_at_metadata_capture": true,
+    "dirty_reason": "scripts/config.py modified for continuation; artifacts and run metadata untracked"
+  },
+  "resume_evidence": {
+    "actor_train_first_step": 3365,
+    "actor_train_latest_step_from_tensorboard_parse": 3583,
+    "tmux_wandb_warning_current_step_observed": 3619,
+    "checkpoint_3500_saved": true
+  },
+  "environment_fixes": [
+    "Installed nest-asyncio==1.6.0 into /home/funmilooi-somoye/venvs/tunix before successful launch.",
+    "Installed libtpu==0.0.40 into /home/funmilooi-somoye/venvs/tunix before successful launch."
+  ]
+}

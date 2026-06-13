@@ -1,0 +1,35 @@
+Checkpoint metadata
+===================
+
+Resume checkpoint root:
+  /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864
+
+Restored source checkpoint:
+  /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3364
+
+Restored checkpoint contents:
+  _CHECKPOINT_METADATA
+  model_params/
+  optimizer_state/
+  33 files
+  approximately 233M
+
+Source artifact:
+  felsomoye-university-of-cambridge/tunix/Checkpoint-baseline-k-2:v0
+
+Missing documented artifact:
+  felsomoye-university-of-cambridge/tunix/baseline_seed42_checkpoint:latest
+
+Post-launch checkpoint progression:
+  actor/3364 restored before launch
+  actor/3500 saved at 2026-06-13T18:03:09 UTC
+
+Expected future checkpoints with SAVE_INTERVAL_STEPS=500:
+  actor/4000
+  actor/4500
+  actor/5000
+  actor/5500
+  actor/5864 final save if trainer saves at close
+
+Retention:
+  MAX_TO_KEEP = 8

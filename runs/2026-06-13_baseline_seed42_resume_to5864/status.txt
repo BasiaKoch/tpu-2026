@@ -1,0 +1,38 @@
+Status: running
+
+Launch session:
+  tmux session: tunix_resume_5864
+  launch time: 2026-06-13 17:58 UTC
+
+Launch fixes required:
+  Installed missing dependency in venv:
+    nest-asyncio==1.6.0
+
+  Installed missing TPU runtime in venv:
+    libtpu==0.0.40
+
+TPU check:
+  After installing libtpu, JAX outside the sandbox reported:
+    [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0)]
+
+Resume confirmation:
+  Training started with:
+    CKPT_DIR=/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864
+    MAX_STEPS=5864
+
+  TensorBoard event file:
+    /tmp/content/tmp/tensorboard/grpo/events.out.tfevents.1781373532.t1v-n-e9b5fb70-w-0
+
+  Parsed event evidence:
+    actor/train/loss first step: 3365
+    actor/train/loss latest observed step: 3391
+    actor/train/kl first step: 3365
+    actor/train/kl latest observed step: 3391
+
+Conclusion:
+  The run is continuing from the restored step-3364 checkpoint. The next actor
+  optimizer step is 3365, as expected.
+
+Monitoring:
+  tail -f /home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log
+  tmux attach -t tunix_resume_5864

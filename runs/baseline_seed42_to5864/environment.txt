@@ -1,0 +1,46 @@
+Environment metadata
+====================
+
+Host/workspace:
+  repo: /home/funmilooi-somoye/tpu-2026
+  venv: /home/funmilooi-somoye/venvs/tunix
+  branch: baseline-fls
+  git HEAD: a520adf7a9f6651a4ed3ed4e474f3eddd19be53b
+
+Dirty working tree at metadata capture:
+  M scripts/config.py
+  ?? artifacts/
+  ?? runs/2026-06-13_baseline_seed42_resume_to5864/
+
+Runtime:
+  python: 3.12.13
+  google-tunix: 0.1.7
+  jax: 0.10.2.dev20260613+242ad12b6
+  jaxlib: 0.10.1
+  libtpu: 0.0.40
+  nest-asyncio: 1.6.0
+  wandb: 0.26.1
+  orbax-checkpoint: 0.12.0
+  tensorflow: 2.21.0
+  tensorflow-datasets: 4.9.10
+  grain: 0.2.17
+  kagglehub: 1.0.2
+
+Launch fixes:
+  The first launch failed with:
+    ModuleNotFoundError: No module named 'nest_asyncio'
+
+  Fixed by installing:
+    nest-asyncio==1.6.0
+
+  JAX initially saw CPU only because libtpu was missing.
+  Fixed by installing:
+    libtpu==0.0.40
+
+TPU:
+  Before the active run took the TPU, JAX outside the sandbox reported:
+    [TpuDevice(id=0, process_index=0, coords=(0,0,0), core_on_chip=0)]
+
+  After the run was active, new JAX processes failed to initialize TPU because
+  the TPU was already in use by training process pid 33810. This is expected
+  while the run is active.

@@ -1,0 +1,25 @@
+/tmp status before continuation launch
+======================================
+
+Date checked: 2026-06-13
+
+Training-specific paths:
+  /tmp/content: missing
+  /tmp/content/ckpts: missing
+  /tmp/content/intermediate_ckpt: missing
+  /tmp/content/tmp/tensorboard/grpo: missing
+
+Disk space:
+  Filesystem: /dev/root
+  Size: 97G
+  Used: 19G
+  Available: 79G
+  Use: 19%
+  Mounted on: /tmp
+
+Conclusion:
+  /tmp is clean enough for launch. The training job can create /tmp/content fresh.
+
+Notes:
+  Normal system runtime directories and small logs were present under /tmp.
+  No training checkpoint or tensorboard directories were present under /tmp/content.

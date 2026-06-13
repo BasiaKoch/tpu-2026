@@ -1,0 +1,38 @@
+Resume confirmation
+===================
+
+Goal:
+  Continue from global actor step 3364 to target step 5864.
+
+Evidence that training continued from step 3364:
+
+1. Pre-launch checkpoint layout:
+     /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3364
+
+2. Training startup log:
+     Starting GRPO training. CKPT_DIR=/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864  MAX_STEPS=5864
+
+3. TensorBoard actor metrics:
+     actor/train/loss first observed step: 3365
+     actor/train/kl first observed step: 3365
+     actor/train/grad_norm first observed step: 3365
+     latest parsed actor step at metadata capture: 3583
+
+4. Live tmux/W&B output later showed current actor steps progressing through:
+     3599 ... 3619
+
+5. A new checkpoint was saved after launch:
+     /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3500
+
+Conclusion:
+  The continuation did not restart from step 0. Actor optimizer metrics resumed
+  at step 3365, which is the expected next step after restoring actor/3364.
+
+Known logging caveat:
+  W&B emits warnings like:
+    Tried to log to step 0 that is less than the current step 3365
+
+  These warnings appear to come from reward/rollout metrics using local
+  continuation indices while the resumed W&B run expects monotonically
+  increasing global actor steps. Actor training metrics and checkpoint saves
+  confirm actual optimizer continuation from the restored checkpoint.
