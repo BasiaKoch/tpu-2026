@@ -1,0 +1,23 @@
+k-8-new-reward evaluation summary
+
+Variant: k=8, reweighted/new reward (vs baseline).
+Preset: greedy (matching prior eval convention).
+Source: tfds GSM8K test.
+
+Restored LoRA checkpoint — FULL TEST SET (all 1319 examples):
+- FINAL: correct=772/1319  acc=58.53%  partial=60.80%  format=94.31%
+
+Restored LoRA checkpoint — SUBSET (NUM_TEST_BATCHES=64, like all prior evals):
+- FINAL: correct=46/64  acc=71.88%  partial=73.44%  format=98.44%
+
+Base model / zero-init LoRA wrapper — FULL TEST SET (all 1319 examples):
+- FINAL: correct=625/1319  acc=47.38%  partial=49.96%  format=4.02%
+
+Trained LoRA vs base (full test set): +147 correct, +11.15 pts acc (58.53% vs 47.38%),
++10.84 pts partial, and format jumps 4.02% -> 94.31% (the reward successfully taught
+the answer format).
+
+Notes:
+- These numbers were supplied directly by the operator (not retrievable from W&B; evaluate.py does not log to W&B).
+- The 64-example subset is directly comparable to all previous runs' evals.
+- Per CHECKLIST.md §3, optionally push these to W&B via wandb.run.summary.update() then re-run run_checklist_data.py to pick them up.

@@ -1,0 +1,56 @@
+Checkpoint directory (actual, verified on training VM):
+/home/ext_rowandauria1_gmail_com/checkpoints/k-8-new-reward/actor/
+
+Saved actor checkpoint steps (local): 3000, 3364, 3500, 4000, 4500, 5000, 5500, 5864
+  - Final step 5864 is present locally but is NOT uploaded to W&B
+    (latest W&B artifact is step-5500). Upload it if it should be preserved.
+
+Save interval: 500 steps
+Max to keep: 1000 (config default)
+
+NOTE: The path captured in W&B config (the 11-06_rowan-k-16-reweighted-reward
+dir, with ckpts/ and intermediate_ckpt/ subdirs) is the committed config.py
+default and does NOT match this run. The run wrote to a flatter layout under
+~/checkpoints/k-8-new-reward/actor/ (no separate ckpts/ or intermediate_ckpt/).
+
+Preserved local copy: /home/ext_rowandauria1_gmail_com/checkpoints/k-8-new-reward/actor/
+
+W&B model artifacts:
+  felsomoye-university-of-cambridge/tunix/k-8-new-reward-actor-ckpt:v0
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v0
+    aliases: step-3000
+    metadata has commit: CANNOT_RETRIEVE
+    metadata has seed: CANNOT_RETRIEVE
+  felsomoye-university-of-cambridge/tunix/k-8-new-reward-actor-ckpt:v1
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v1
+    aliases: step-3364
+    metadata has commit: CANNOT_RETRIEVE
+    metadata has seed: CANNOT_RETRIEVE
+  felsomoye-university-of-cambridge/tunix/k-8-new-reward-actor-ckpt:v2
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v2
+    aliases: step-3500
+    metadata has commit: CANNOT_RETRIEVE
+    metadata has seed: CANNOT_RETRIEVE
+  felsomoye-university-of-cambridge/tunix/k-8-new-reward-actor-ckpt:v3
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v3
+    aliases: step-4000
+    metadata has commit: CANNOT_RETRIEVE
+    metadata has seed: CANNOT_RETRIEVE
+  felsomoye-university-of-cambridge/tunix/k-8-new-reward-actor-ckpt:v4
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v4
+    aliases: step-4500
+    metadata has commit: CANNOT_RETRIEVE
+    metadata has seed: CANNOT_RETRIEVE
+  felsomoye-university-of-cambridge/tunix/k-8-new-reward-actor-ckpt:v5
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v5
+    aliases: step-5000
+    metadata has commit: CANNOT_RETRIEVE
+    metadata has seed: CANNOT_RETRIEVE
+  felsomoye-university-of-cambridge/tunix/k-8-new-reward-actor-ckpt:v6
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v6
+    aliases: latest, step-5500
+    metadata has commit: CANNOT_RETRIEVE
+    metadata has seed: CANNOT_RETRIEVE
+
+Sweep checkpoint coverage:
+  CANNOT_RETRIEVE: verify final plus eval-sweep steps are uploaded as artifact versions.

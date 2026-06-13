@@ -1,0 +1,11 @@
+Run: k-8-new-reward
+Commit: e4f6d695a889905089e31265598da50efd82b7f9
+Start: 2026-06-12T20:57:35Z
+End: 2026-06-13T06:30:16Z
+Wall-clock: 9h 32m 41s
+Final step: 5864
+Status: completed
+Exit code: CANNOT_RETRIEVE: not recorded by W&B — fill in manually
+Final checkpoint: /home/ext_rowandauria1_gmail_com/checkpoints/k-8-new-reward/actor/5864 (local; not uploaded to W&B — latest W&B artifact is step-5500)
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/k-8-new-reward
+Final log marker: CANNOT_RETRIEVE: from raw training log — fill in manually

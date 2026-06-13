@@ -1,0 +1,19 @@
+TensorBoard log directory (actual, verified on training VM):
+/home/ext_rowandauria1_gmail_com/checkpoints/k-8-new-reward/tensorboard/grpo
+
+  events.out.tfevents.1781270315.t1v-n-f769470f-w-0  (5.4M, to Jun 12 20:42)
+  events.out.tfevents.1781297867.t1v-n-f769470f-w-0  (4.1M, to Jun 13 06:30 = run end)
+
+View with:
+  tensorboard --logdir ~/checkpoints/k-8-new-reward/tensorboard/grpo
+
+NOTE: The path captured in W&B config (config_snapshot.py TENSORBOARD_DIR =
+{TPU_CONTENT_DIR}/tmp/tensorboard/grpo, defaulting to the
+11-06_rowan-k-16-reweighted-reward dir) is the committed default and does NOT
+match where this run actually wrote. The run used a flatter layout under
+~/checkpoints/k-8-new-reward/ (no tmp/ subdir).
+
+The reward metrics (rewards/train/*) failed to upload to the W&B rewards/ panel
+due to conflicting step counts, but are present in these tensorboard event files.
+
+Configured flush interval: CANNOT_RETRIEVE: not in W&B — check train.py MetricsLoggerOptions

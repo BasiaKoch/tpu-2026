@@ -1,0 +1,11 @@
+W&B run URL:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/k-8-new-reward
+
+Checkpoint artifact URL(s):
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v0
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v1
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v2
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v3
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v4
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v5
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/k-8-new-reward-actor-ckpt/v6
