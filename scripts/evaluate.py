@@ -112,6 +112,12 @@ def main():
                     help=f"Directory containing per-step checkpoint subdirs. Default: {DEFAULT_CKPT_ROOT}")
     ap.add_argument("--step", type=int, default=DEFAULT_STEP,
                     help=f"Checkpoint step to load. Default: {DEFAULT_STEP}. Pass 0 for latest.")
+    ap.add_argument("--num-test-batches", type=int, default=NUM_TEST_BATCHES,
+                    help=(
+                        "Number of GSM8K test batches to evaluate. "
+                        f"Default: {NUM_TEST_BATCHES}. With the current train micro-batch size, "
+                        "this is also the number of test questions."
+                    ))
     ap.add_argument("--no-restore", action="store_true",
                     help="Evaluate the base LoRA wrapper without restoring trained adapter weights.")
     args = ap.parse_args()
@@ -129,7 +135,7 @@ def main():
         restore_lora(lora, args.ckpt_dir, step)
 
     _, _, test_ds = build_train_val_test(
-        NUM_BATCHES, NUM_TEST_BATCHES, TRAIN_MICRO_BATCH_SIZE, TRAIN_FRACTION,
+        NUM_BATCHES, args.num_test_batches, TRAIN_MICRO_BATCH_SIZE, TRAIN_FRACTION,
         NUM_EPOCHS, TRAIN_DATA_DIR, TEST_DATA_DIR, source=args.source,
     )
 
