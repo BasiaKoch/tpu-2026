@@ -91,6 +91,49 @@ gcloud alpha compute tpus tpu-vm ssh $TEAM \
 cd tpu-2026
 ```
 
+## Run Bootstrapping
+
+Compute 95% bootstrap confidence intervals for the GSM8K metrics (accuracy, partial
+accuracy, format accuracy) for both the **base** `gemma-3-1b-it` and a **fine-tuned LoRA**
+checkpoint, over the full 1319-question test split. Method: empirical percentile bootstrap,
+10,000 iterations, seeded for reproducibility (see [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md)).
+
+The eval step needs the TPU `tunix` venv and `wandb login`; the bootstrap step itself is
+plain numpy. Run from the repo root:
+
+```bash
+# Interactive — prompts for a run label and the W&B checkpoint URL:
+./run_bootstrap.sh
+
+# Or pass them as arguments to skip the prompts:
+./run_bootstrap.sh k8 https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/8k-baseline-6516-steps-rd-actor-ckpt
+```
+
+The script is **idempotent**: it evaluates the base model and the fine-tuned LoRA only if
+their per-question `.jsonl` files are missing, then bootstraps both. Delete a `.jsonl` (or set
+`FORCE_EVAL=1`) to force a fresh eval. Other env overrides: `N_ITER` (default 10000),
+`SEED` (default 42), `NUM_TEST_BATCHES` (default 1319), `VENV`.
+
+### Where results are stored
+
+Everything lands in `analysis/` (for a run labelled `k8`):
+
+| File | Contents |
+|---|---|
+| `analysis/base_no_ft.jsonl` | Per-question results for the base model (1319 lines; reused across runs). |
+| `analysis/k8_lora.jsonl` | Per-question results for the fine-tuned LoRA checkpoint (1319 lines). |
+| `analysis/bootstrap_results_k8.txt` | Human-readable summary: one table per model (base first, fine-tuned second) with point value, 95% CI, bootstrap mean, and std error for accuracy / partial / format. |
+
+The summary `.txt` is also printed to the terminal at the end of the run.
+
+To re-bootstrap from existing `.jsonl` files without touching the TPU (e.g. to change `N_ITER`),
+call the bootstrap step directly:
+
+```bash
+python bootstrap.py ci analysis/k8_lora.jsonl --label "fine-tuned LoRA (k8)" \
+  --n-iter 10000 --seed 42 --output analysis/bootstrap_results_k8.txt
+```
+
 ## Team Members
 Barbara Koch, Funmi Looi-Somoye, Rowan d’Auria
 
