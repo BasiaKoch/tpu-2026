@@ -164,6 +164,24 @@ def download_wandb_artifact(ref):
     return path
 
 
+def _stage_bare_checkpoint(ckpt_dir, step):
+    """Expose a bare step checkpoint as a CheckpointManager root.
+
+    `ckpt_dir` holds a single step's contents (`_CHECKPOINT_METADATA` + items),
+    but `CheckpointManager(root_directory=R).maybe_restore(step=S)` reads from
+    `R/S/`. Build a sibling root `<ckpt_dir>__as_step/` with a `<step>` symlink
+    pointing back at `ckpt_dir`, and return `(root, step)`.
+    """
+    root = ckpt_dir.rstrip("/") + "__as_step"
+    os.makedirs(root, exist_ok=True)
+    link = os.path.join(root, str(step))
+    if os.path.lexists(link):
+        os.remove(link)
+    os.symlink(os.path.abspath(ckpt_dir), link)
+    print(f"Staged bare checkpoint as root={root} step={step}")
+    return root, step
+
+
 def find_ckpt_root_and_step(download_dir):
     """Locate the orbax checkpoint root + step inside a downloaded artifact.
 
@@ -177,6 +195,23 @@ def find_ckpt_root_and_step(download_dir):
         if steps:
             candidates.append((dirpath, max(steps)))
     if not candidates:
+        # Some artifacts are uploaded as the *contents* of a single step dir
+        # (orbax writes `_CHECKPOINT_METADATA` at the step root) rather than the
+        # CheckpointManager root that wraps it. Stage it as `<root>/<step>/` via a
+        # symlink so CheckpointManager can restore it. The step value is arbitrary
+        # here (restore only uses it to locate the dir), so use a placeholder.
+        if os.path.exists(os.path.join(download_dir, "_CHECKPOINT_METADATA")):
+            base = os.path.basename(download_dir.rstrip("/"))
+            if base.isdigit():
+                # Already orbax-shaped (e.g. `.../actor/5864`): the parent is the
+                # CheckpointManager root and this dir's name is the step.
+                root = os.path.dirname(os.path.abspath(download_dir.rstrip("/")))
+                step = int(base)
+                print(f"Detected checkpoint root={root} step={step}")
+                return root, step
+            # Non-zero step: maybe_restore returns the step on success and the
+            # caller treats a 0 return as "nothing restored".
+            return _stage_bare_checkpoint(download_dir, step=1)
         raise RuntimeError(
             f"No orbax step subdirs found under {download_dir!r}; "
             f"cannot determine the checkpoint root automatically."
@@ -266,15 +301,21 @@ def cmd_eval(args):
 
     if args.no_restore:
         print("Skipping checkpoint restore; evaluating base model / zero-init LoRA adapter.")
-    elif args.wandb_artifact:
-        ckpt_root, step = find_ckpt_root_and_step(download_wandb_artifact(args.wandb_artifact))
+    elif args.wandb_artifact or args.checkpoint_path:
+        if args.checkpoint_path:
+            ckpt_dir = os.path.abspath(os.path.expanduser(args.checkpoint_path))
+            if not os.path.isdir(ckpt_dir):
+                raise SystemExit(f"--checkpoint-path not found: {ckpt_dir}")
+        else:
+            ckpt_dir = download_wandb_artifact(args.wandb_artifact)
+        ckpt_root, step = find_ckpt_root_and_step(ckpt_dir)
         mgr = CheckpointManager(root_directory=ckpt_root)
         n, _ = mgr.maybe_restore(model=lora, step=step, restore_only_lora_params=True)
         if n == 0:
             raise RuntimeError(f"No checkpoint restored from {ckpt_root} (step {step}).")
         print(f"Restored LoRA params from step {n}")
     else:
-        raise SystemExit("eval requires --no-restore or --wandb-artifact.")
+        raise SystemExit("eval requires --no-restore, --wandb-artifact, or --checkpoint-path.")
 
     _, _, test_ds = build_train_val_test(
         NUM_BATCHES, args.num_test_batches, TRAIN_MICRO_BATCH_SIZE, TRAIN_FRACTION,
@@ -312,6 +353,9 @@ def main():
                     help="Evaluate the base model / zero-init LoRA adapter (no fine-tuning).")
     pe.add_argument("--wandb-artifact", default=None,
                     help="W&B model artifact URL or ref to download and restore.")
+    pe.add_argument("--checkpoint-path", default=None,
+                    help="Local checkpoint dir to restore (e.g. .../actor/5864 or its "
+                         "CheckpointManager root). Skips the W&B download.")
     pe.add_argument("--preset", default="greedy", help="Generation preset (default greedy).")
     pe.add_argument("--source", default="tfds", choices=["tfds", "kaggle"])
     pe.add_argument("--num-test-batches", type=int, default=1319,

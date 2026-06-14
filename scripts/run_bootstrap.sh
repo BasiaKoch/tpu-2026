@@ -15,12 +15,15 @@
 # re-runs (or a machine without a TPU) just redo the cheap bootstrap. Delete the
 # .jsonl to force a fresh eval. Set FORCE_EVAL=1 to regenerate unconditionally.
 #
-# Env overrides: N_ITER (default 10000), SEED (default 42), VENV, NUM_TEST_BATCHES.
+# Env overrides: N_ITER (default 10000), SEED (default 42), VENV, NUM_TEST_BATCHES,
+# CHECKPOINT_PATH (restore from a local checkpoint dir instead of a W&B artifact).
 #
 # Usage (from the repo root):
 #   ./scripts/run_bootstrap.sh
 #   ./scripts/run_bootstrap.sh k8 https://wandb.ai/<entity>/<project>/artifacts/model/<name>
-#   (positional args skip the prompts; either or both may be omitted.)
+#   CHECKPOINT_PATH=~/checkpoints/k-8-new-reward/actor/5864 ./scripts/run_bootstrap.sh k8
+#   (positional args skip the prompts; either or both may be omitted. A local
+#    CHECKPOINT_PATH takes precedence over the W&B URL.)
 
 set -euo pipefail
 
@@ -33,6 +36,9 @@ SEED=${SEED:-42}
 # Number of test questions to eval (1 question per batch at TRAIN_MICRO_BATCH_SIZE=1).
 # Default = the full 1319-question GSM8K test split.
 NUM_TEST_BATCHES=${NUM_TEST_BATCHES:-1319}
+# Restore from a local checkpoint dir (e.g. .../actor/5864) instead of a W&B
+# artifact. When set, the W&B URL is not required.
+CHECKPOINT_PATH=${CHECKPOINT_PATH:-}
 
 RUN_LABEL=${1:-}
 WANDB_URL=${2:-}
@@ -46,12 +52,21 @@ if [[ -z "$RUN_LABEL" ]]; then
   exit 1
 fi
 
-if [[ -z "$WANDB_URL" ]]; then
-  read -r -p "W&B checkpoint artifact URL for the fine-tuned LoRA model: " WANDB_URL
-fi
-if [[ -z "$WANDB_URL" ]]; then
-  echo "ERROR: a W&B checkpoint URL is required." >&2
-  exit 1
+# A local checkpoint path takes precedence over the W&B URL. Only prompt for /
+# require the URL when no local path was provided.
+if [[ -n "$CHECKPOINT_PATH" ]]; then
+  if [[ ! -d "$CHECKPOINT_PATH" ]]; then
+    echo "ERROR: CHECKPOINT_PATH not found: $CHECKPOINT_PATH" >&2
+    exit 1
+  fi
+else
+  if [[ -z "$WANDB_URL" ]]; then
+    read -r -p "W&B checkpoint artifact URL for the fine-tuned LoRA model: " WANDB_URL
+  fi
+  if [[ -z "$WANDB_URL" ]]; then
+    echo "ERROR: a W&B checkpoint URL is required (or set CHECKPOINT_PATH)." >&2
+    exit 1
+  fi
 fi
 
 mkdir -p "$ANALYSIS"
@@ -91,8 +106,13 @@ fi
 # --- 2. fine-tuned LoRA --------------------------------------------------------
 
 if needs_eval "$LORA_JSONL"; then
-  echo "==> Downloading checkpoint + evaluating fine-tuned LoRA ($RUN_LABEL)"
-  run_eval --wandb-artifact "$WANDB_URL" --dump-jsonl "$LORA_JSONL"
+  if [[ -n "$CHECKPOINT_PATH" ]]; then
+    echo "==> Evaluating fine-tuned LoRA ($RUN_LABEL) from local checkpoint $CHECKPOINT_PATH"
+    run_eval --checkpoint-path "$CHECKPOINT_PATH" --dump-jsonl "$LORA_JSONL"
+  else
+    echo "==> Downloading checkpoint + evaluating fine-tuned LoRA ($RUN_LABEL)"
+    run_eval --wandb-artifact "$WANDB_URL" --dump-jsonl "$LORA_JSONL"
+  fi
 else
   echo "==> Reusing existing $LORA_JSONL (skip eval; set FORCE_EVAL=1 to redo)"
 fi

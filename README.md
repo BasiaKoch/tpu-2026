@@ -111,12 +111,19 @@ plain numpy. Run from the repo root:
 
 # Or pass them as arguments to skip the prompts:
 ./scripts/run_bootstrap.sh k8 https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/8k-baseline-6516-steps-rd-actor-ckpt
+
+# Restore from a local checkpoint dir instead of a W&B artifact (no URL needed):
+CHECKPOINT_PATH=~/checkpoints/k-8-new-reward/actor/5864 ./scripts/run_bootstrap.sh k8-new-reward
 ```
+
+`CHECKPOINT_PATH` accepts either an orbax step dir (`.../actor/5864`) or its
+`CheckpointManager` root (`.../actor`), and takes precedence over the W&B URL when set.
 
 The script is **idempotent**: it evaluates the base model and the fine-tuned LoRA only if
 their per-question `.jsonl` files are missing, then bootstraps both. Delete a `.jsonl` (or set
 `FORCE_EVAL=1`) to force a fresh eval. Other env overrides: `N_ITER` (default 10000),
-`SEED` (default 42), `NUM_TEST_BATCHES` (default 1319), `VENV`.
+`SEED` (default 42), `NUM_TEST_BATCHES` (default 1319), `VENV`,
+`CHECKPOINT_PATH` (local checkpoint dir; skips the W&B download).
 
 ### Where results are stored
 
