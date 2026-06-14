@@ -1,0 +1,25 @@
+Hard/medium JSONL G=8 rerun completed successfully.
+
+Run: hard_medium_jsonl_g8_seed42_rerun
+Commit: 50030f2
+Start: 2026-06-13T15:26:45Z
+End: 2026-06-13T23:02:20Z
+Wall-clock: 7h 35m 35s from local launch timestamp; W&B runtime 27,306.63s (~7h 35m 7s)
+Final step: 3364
+Exit code: 0
+Final checkpoint: /home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/hard_medium_jsonl_g8_seed42_rerun_content/ckpts/actor/3364
+Checkpoint root: /home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/hard_medium_jsonl_g8_seed42_rerun_content/ckpts/actor/
+Retained checkpoints: 1, 500, 1000, 1500, 2000, 2500, 3000, 3364
+Train log: scripts/train.log
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/6yiowy1y
+W&B checkpoint artifact: felsomoye-university-of-cambridge/tunix/hard_medium_jsonl_g8_seed42_rerun_checkpoint:latest
+W&B artifact upload run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/336gnz8g
+Final log marker: Training finished.
+Evaluation: pending
+
+Final W&B summary:
+rewards/eval/mean: 1.481680
+rewards/eval/score/mean: 5.926721
+actor/eval/kl: 0.279609
+actor/eval/loss: 0.022619
+completions/eval/mean_length: 324.882353

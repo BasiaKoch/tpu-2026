@@ -1,0 +1,2 @@
+cd /home/ext_felsomoye_gmail_com/tpu-2026/scripts
+TPU_CONTENT_DIR=/home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/hard_medium_jsonl_g8_seed42_rerun_content ./run_tmux.sh

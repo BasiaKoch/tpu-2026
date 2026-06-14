@@ -1,0 +1,7 @@
+ M docs/RUNS.md
+ M runs/2026-06-13_hard_medium_jsonl_g8_seed42/notes.md
+ M runs/2026-06-13_hard_medium_jsonl_g8_seed42/status.txt
+ M scripts/run_tmux.sh
+?? runs/2026-06-13_hard_medium_jsonl_g8_seed42/end_time.txt
+?? runs/2026-06-13_hard_medium_jsonl_g8_seed42/failure_summary.txt
+?? runs/2026-06-13_hard_medium_jsonl_g8_seed42_rerun/

@@ -1,0 +1,18 @@
+Run: hard_medium_jsonl_g8_seed42
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/hlo1w4go
+Status: failed
+Observed stop time: 2026-06-13T13:10:00Z (last train.log modification)
+Host reboot: 2026-06-13T13:12:25Z
+
+Cause:
+The VM rebooted while training was active. The train.py process, tmux server,
+and W&B backend disappeared without a Python traceback or clean process-exit
+marker. W&B marked the run crashed after the process stopped heartbeating.
+
+Checkpoint impact:
+The run wrote checkpoints to /tmp/content/ckpts/actor/. After the reboot,
+/tmp/content no longer existed, so there is no model checkpoint to resume.
+
+Action:
+Rerun from scratch with TPU_CONTENT_DIR pointing at a persistent project-local
+directory under ~/tpu-2026/checkpoints/.

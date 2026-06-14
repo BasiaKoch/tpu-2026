@@ -1,0 +1,13 @@
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/6yiowy1y
+
+Checkpoint artifact URL(s):
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v0
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v1
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v2
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v3
+
+Checkpoint artifact latest:
+felsomoye-university-of-cambridge/tunix/hard_medium_jsonl_g8_seed42_rerun_checkpoint:latest
+
+Artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/336gnz8g

@@ -1,0 +1,32 @@
+Final checkpoint:
+/home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/hard_medium_jsonl_g8_seed42_rerun_content/ckpts/actor/3364
+
+Checkpoint root:
+/home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/hard_medium_jsonl_g8_seed42_rerun_content/ckpts/actor/
+
+Retained checkpoints:
+1
+500
+1000
+1500
+2000
+2500
+3000
+3364
+
+W&B model artifacts:
+  felsomoye-university-of-cambridge/tunix/hard_medium_jsonl_g8_seed42_rerun_checkpoint:v0
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v0
+    aliases: step-2000
+  felsomoye-university-of-cambridge/tunix/hard_medium_jsonl_g8_seed42_rerun_checkpoint:v1
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v1
+    aliases: step-2500
+  felsomoye-university-of-cambridge/tunix/hard_medium_jsonl_g8_seed42_rerun_checkpoint:v2
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v2
+    aliases: step-3000
+  felsomoye-university-of-cambridge/tunix/hard_medium_jsonl_g8_seed42_rerun_checkpoint:v3
+    url: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/hard_medium_jsonl_g8_seed42_rerun_checkpoint/v3
+    aliases: latest, final, step-3364, commit-50030f2, seed-42
+
+W&B artifact upload run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/336gnz8g
