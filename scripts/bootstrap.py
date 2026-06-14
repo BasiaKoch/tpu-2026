@@ -34,7 +34,8 @@ import re
 import sys
 
 # Directory holding config.py / data.py / model.py / rewards.py (the eval deps).
-SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts")
+# This file lives in scripts/ alongside them, so it is simply its own directory.
+SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # ======================================================================

@@ -59,7 +59,3 @@ Generated with `analysis/plot_baseline_curves.py` from TensorBoard event file `/
 The baseline did not run as-shipped initially because TFDS/GSM8K loading failed with a protobuf `FieldDescriptor.label` error. The only accepted baseline patch was pinning `protobuf==6.31.1` for compatibility with `tensorflow-datasets==4.9.9`. This is environment/dependency plumbing only; it did not change the model, reward functions, data split, or training hyperparameters.
 
 Patch details are in `docs/BASELINE_PATCHES.md` and setup history is in `docs/SETUP_NOTES.md`.
-
-## Suggested Report Wording
-
-The baseline was run from commit `7e696c428687bc083604690f5f51009da6abb6d9` for 3364 GRPO steps, taking 4h 41m 38s wall-clock time. Evaluation used the configured GSM8K test split with `NUM_TEST_BATCHES=64`, shuffle seed 42, and greedy decoding. The base model scored 33/64 = 51.56% exact accuracy, while the final LoRA checkpoint at step 3364 scored 2/64 = 3.12%. Thus, in this run, the final LoRA checkpoint was substantially worse than the base model. This appears to be a real training/checkpoint-selection failure rather than a restore failure: the checkpoint restored successfully, TensorBoard eval reward peaked early and then declined, and retained checkpoints also degraded over time.

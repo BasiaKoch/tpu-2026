@@ -17,14 +17,15 @@
 #
 # Env overrides: N_ITER (default 10000), SEED (default 42), VENV, NUM_TEST_BATCHES.
 #
-# Usage:
-#   ./run_bootstrap.sh
-#   ./run_bootstrap.sh k8 https://wandb.ai/<entity>/<project>/artifacts/model/<name>
+# Usage (from the repo root):
+#   ./scripts/run_bootstrap.sh
+#   ./scripts/run_bootstrap.sh k8 https://wandb.ai/<entity>/<project>/artifacts/model/<name>
 #   (positional args skip the prompts; either or both may be omitted.)
 
 set -euo pipefail
 
-REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# This script lives in scripts/; the repo root is its parent directory.
+REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 VENV=${VENV:-$HOME/venvs/tunix}
 ANALYSIS="$REPO/analysis"
 N_ITER=${N_ITER:-10000}
@@ -71,7 +72,7 @@ run_eval() {
   fi
   ( source "$VENV/bin/activate" \
     && { [ -f "$HOME/.env" ] && set -a && source "$HOME/.env" && set +a || true; } \
-    && python -u "$REPO/bootstrap.py" eval --num-test-batches "$NUM_TEST_BATCHES" "$@" )
+    && python -u "$REPO/scripts/bootstrap.py" eval --num-test-batches "$NUM_TEST_BATCHES" "$@" )
 }
 
 needs_eval() {
@@ -103,10 +104,10 @@ PY=python3
 if [[ -d "$VENV" ]]; then PY="$VENV/bin/python"; fi
 
 echo "==> Bootstrapping ($N_ITER iters, seed $SEED) -> $RESULTS"
-"$PY" "$REPO/bootstrap.py" ci "$BASE_JSONL" \
+"$PY" "$REPO/scripts/bootstrap.py" ci "$BASE_JSONL" \
   --label "base gemma-3-1b-it (no fine-tuning)" \
   --n-iter "$N_ITER" --seed "$SEED" --output "$RESULTS"
-"$PY" "$REPO/bootstrap.py" ci "$LORA_JSONL" \
+"$PY" "$REPO/scripts/bootstrap.py" ci "$LORA_JSONL" \
   --label "fine-tuned LoRA — run ${RUN_LABEL}" \
   --n-iter "$N_ITER" --seed "$SEED" --output "$RESULTS" --append
 

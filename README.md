@@ -103,10 +103,10 @@ plain numpy. Run from the repo root:
 
 ```bash
 # Interactive — prompts for a run label and the W&B checkpoint URL:
-./run_bootstrap.sh
+./scripts/run_bootstrap.sh
 
 # Or pass them as arguments to skip the prompts:
-./run_bootstrap.sh k8 https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/8k-baseline-6516-steps-rd-actor-ckpt
+./scripts/run_bootstrap.sh k8 https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/8k-baseline-6516-steps-rd-actor-ckpt
 ```
 
 The script is **idempotent**: it evaluates the base model and the fine-tuned LoRA only if
@@ -130,7 +130,7 @@ To re-bootstrap from existing `.jsonl` files without touching the TPU (e.g. to c
 call the bootstrap step directly:
 
 ```bash
-python bootstrap.py ci analysis/k8_lora.jsonl --label "fine-tuned LoRA (k8)" \
+python scripts/bootstrap.py ci analysis/k8_lora.jsonl --label "fine-tuned LoRA (k8)" \
   --n-iter 10000 --seed 42 --output analysis/bootstrap_results_k8.txt
 ```
 
