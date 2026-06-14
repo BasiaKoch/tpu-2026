@@ -4,6 +4,12 @@ Resume confirmation
 Goal:
   Continue from global actor step 3364 to target step 5864.
 
+Final result:
+  Completed successfully.
+  Final step: 5864
+  Exit code: 0
+  Final checkpoint: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+
 Evidence that training continued from step 3364:
 
 1. Pre-launch checkpoint layout:
@@ -18,21 +24,36 @@ Evidence that training continued from step 3364:
      actor/train/grad_norm first observed step: 3365
      latest parsed actor step at metadata capture: 3583
 
-4. Live tmux/W&B output later showed current actor steps progressing through:
+4. Live tmux/W&B output during the run showed current actor steps progressing
+   past the restored step:
      3599 ... 3619
 
-5. A new checkpoint was saved after launch:
+5. New checkpoints were saved after launch:
      /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3500
+     /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/4000
+     /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/4500
+     /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5000
+     /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5500
+     /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+
+6. The W&B summary for run jgs4c6kl records:
+     _step: 5864
+
+7. The train log ends with:
+     Training finished.
+     --- process exited (0) ---
 
 Conclusion:
   The continuation did not restart from step 0. Actor optimizer metrics resumed
-  at step 3365, which is the expected next step after restoring actor/3364.
+  at step 3365, which is the expected next step after restoring actor/3364, and
+  the run completed at target step 5864.
 
 Known logging caveat:
   W&B emits warnings like:
-    Tried to log to step 0 that is less than the current step 3365
+    Tried to log to step 0 that is less than the current step 5864
 
   These warnings appear to come from reward/rollout metrics using local
   continuation indices while the resumed W&B run expects monotonically
-  increasing global actor steps. Actor training metrics and checkpoint saves
-  confirm actual optimizer continuation from the restored checkpoint.
+  increasing global actor steps. Actor training metrics, checkpoint saves, and
+  the final W&B summary confirm actual optimizer continuation from the restored
+  checkpoint.

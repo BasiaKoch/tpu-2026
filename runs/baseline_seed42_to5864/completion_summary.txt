@@ -1,0 +1,33 @@
+Baseline seed 42 continuation completed successfully.
+
+Run: baseline_seed42_to5864
+Previous run: baseline_seed42
+Start checkpoint: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3364
+Start step: 3364
+Target step: 5864
+Final step: 5864
+Additional requested steps: 2500
+Launch: 2026-06-13T17:58:35Z
+End: 2026-06-13T18:37:59Z
+Exit code: 0
+Final checkpoint: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+Final checkpoint size: approximately 200M
+W&B checkpoint artifact: felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint:v0
+W&B checkpoint artifact URL: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/baseline_seed42_to5864_checkpoint/v0
+W&B checkpoint artifact aliases: latest, step-5864
+Checkpoint root: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864
+Train log: /home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log
+TensorBoard event file: /tmp/content/tmp/tensorboard/grpo/events.out.tfevents.1781373532.t1v-n-e9b5fb70-w-0
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl
+W&B run id: jgs4c6kl
+W&B final local summary step: 5864
+W&B local run directory: /home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260613_175840-jgs4c6kl
+W&B final sync: status 200 OK, complete true, exit_code 0
+Final log marker: Training finished.
+Final tmux marker: --- process exited (0) ---
+
+Known caveat:
+  W&B ignored repeated reward/rollout records logged at local step 0 after the
+  resumed run had advanced to global step 5864. Actor metrics, checkpoint
+  progression, final W&B summary, and process exit all indicate successful
+  completion.

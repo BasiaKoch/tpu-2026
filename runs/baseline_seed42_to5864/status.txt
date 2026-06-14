@@ -1,0 +1,33 @@
+Status: completed
+
+Run:
+  baseline_seed42_to5864
+
+Launch:
+  tmux session: tunix_resume_5864
+  launch time: 2026-06-13 17:58 UTC
+  observed training pid: 33810
+
+Completion:
+  end time: 2026-06-13 18:37:59 UTC
+  exit code: 0
+  final log marker: Training finished.
+  final tmux marker: --- process exited (0) ---
+
+W&B:
+  entity: felsomoye-university-of-cambridge
+  project: tunix
+  run id: jgs4c6kl
+  run URL: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl
+  final local summary step: 5864
+  final sync status: 200 OK
+
+Checkpoint:
+  root: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864
+  restored from: actor/3364
+  final checkpoint: actor/5864
+  final checkpoint path: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+
+Conclusion:
+  The continuation reached MAX_STEPS=5864, saved actor/5864, synced W&B run
+  jgs4c6kl, and exited successfully.

@@ -1,0 +1,34 @@
+Status: completed
+
+Tmux:
+  session: tunix_resume_5864
+  window: eval_5864
+
+Launch:
+  2026-06-13T19:44:48Z
+
+Commands:
+  Base:
+    python -u evaluate.py --preset greedy --source tfds --no-restore
+
+  LoRA checkpoint:
+    python -u evaluate.py --preset greedy --source tfds --ckpt-dir /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor --step 5864
+
+Logs:
+  Base:
+    /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/base_eval.log
+
+  LoRA checkpoint:
+    /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/lora_eval_step5864.log
+
+Results:
+  Base:
+    FINAL: correct=33/64  acc=51.56%  partial=53.12%  format=6.25%
+
+  LoRA checkpoint step 5864:
+    FINAL: correct=0/64  acc=0.00%  partial=0.00%  format=0.00%
+
+Note:
+  The original tmux wrapper printed `Eval failed` because shell variables for
+  exit-code tracking were expanded before the tmux command ran. The eval logs
+  completed and contain valid FINAL result lines for both runs.

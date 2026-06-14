@@ -1,0 +1,39 @@
+Status: completed
+
+Tmux:
+  session: tunix_resume_5864
+  window: full_eval_5864
+
+Launch:
+  2026-06-13T19:55:40Z
+
+Full test examples:
+  1319
+
+Logs:
+  Base: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/base_eval_full.log
+  LoRA step 5864: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/lora_eval_step5864_full.log
+
+Commands:
+  Base:
+    python -u evaluate.py --preset greedy --source tfds --no-restore
+
+  LoRA checkpoint:
+    python -u evaluate.py --preset greedy --source tfds --ckpt-dir /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor --step 5864
+
+Execution:
+  Base full eval started: 2026-06-13T19:55:40Z
+  Base full eval exit: 0 at 2026-06-13T20:07:48Z
+  LoRA step 5864 full eval started: 2026-06-13T20:07:48Z
+  LoRA step 5864 full eval exit: 0 at 2026-06-13T20:09:19Z
+
+Results:
+  Base: FINAL: correct=625/1319  acc=47.38%  partial=49.96%  format=4.02%
+  LoRA step 5864: FINAL: correct=0/1319  acc=0.00%  partial=0.00%  format=0.08%
+
+Exit status:
+  Base: 0
+  LoRA step 5864: 0
+
+End:
+  2026-06-13T20:09:19Z

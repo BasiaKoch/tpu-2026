@@ -1,0 +1,64 @@
+Baseline seed 42 to 5864 results/checkpoint manifest
+====================================================
+
+Audit date:
+  2026-06-14 UTC
+
+Canonical run folder:
+  /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864
+
+Training result:
+  Status: completed
+  Target/final step: 5864
+  Exit code: 0
+  Train log: /home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log
+  Completion summary: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/completion_summary.txt
+  Machine-readable metadata: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/metadata.json
+
+Local checkpoints:
+  Root: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864
+  Observed actor checkpoints: 3364, 3500, 4000, 4500, 5000, 5500, 5864
+  Final checkpoint: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+  Final checkpoint size: 200M
+  Final checkpoint file count under maxdepth 2: 7
+  Checkpoint details: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/checkpoints.txt
+
+W&B run:
+  Run URL: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl
+  Run id: jgs4c6kl
+  Local final W&B summary: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/wandb_summary.json
+  Local final W&B summary step: 5864
+
+W&B checkpoint artifact:
+  Artifact: felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint:v0
+  URL: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/baseline_seed42_to5864_checkpoint/v0
+  Aliases: latest, step-5864
+  Artifact record: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/checkpoint_artifact.txt
+  URL-only file: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/checkpoint_artifact_url.txt
+  Verification: wandb artifact get resolved and downloaded v0 on 2026-06-14 UTC.
+  Verification download path: /tmp/baseline_seed42_to5864_artifact_reverify
+  Verification reported: 199.14MB, 30 W&B artifact files
+
+64-example eval results:
+  Summary: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/eval_summary.txt
+  Status: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/eval_status.txt
+  Base log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/base_eval.log
+  Base final: FINAL: correct=33/64  acc=51.56%  partial=53.12%  format=6.25%
+  LoRA step 5864 log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/lora_eval_step5864.log
+  LoRA step 5864 final: FINAL: correct=0/64  acc=0.00%  partial=0.00%  format=0.00%
+
+Full-test eval results:
+  Full test examples: 1319
+  Summary: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/eval_full_summary.txt
+  Status: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/eval_full_status.txt
+  Base log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/base_eval_full.log
+  Base final: FINAL: correct=625/1319  acc=47.38%  partial=49.96%  format=4.02%
+  LoRA step 5864 log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/lora_eval_step5864_full.log
+  LoRA step 5864 final: FINAL: correct=0/1319  acc=0.00%  partial=0.00%  format=0.08%
+
+Validation performed:
+  metadata.json parses as JSON.
+  wandb_summary.json parses as JSON.
+  Final local checkpoint actor/5864 exists.
+  W&B checkpoint artifact v0 resolves from W&B.
+  Eval logs contain FINAL lines for base and LoRA runs.

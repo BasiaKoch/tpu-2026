@@ -1,0 +1,31 @@
+Baseline seed 42 continuation eval summary
+==========================================
+
+Preset:
+  greedy
+
+Source:
+  tfds
+
+Split/sample:
+  configured GSM8K test eval, NUM_TEST_BATCHES=64, TRAIN_MICRO_BATCH_SIZE=1
+
+Base model / zero-init LoRA wrapper:
+  Log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/base_eval.log
+  FINAL: correct=33/64  acc=51.56%  partial=53.12%  format=6.25%
+
+Restored LoRA checkpoint:
+  Checkpoint root: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor
+  Step: 5864
+  Log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/lora_eval_step5864.log
+  FINAL: correct=0/64  acc=0.00%  partial=0.00%  format=0.00%
+
+Comparison:
+  Base model outperformed the restored step-5864 LoRA checkpoint on this
+  64-example greedy GSM8K eval.
+
+Operational note:
+  The eval ran in tmux session `tunix_resume_5864`, window `eval_5864`.
+  The wrapper status line in the pane reported `Eval failed` due to a shell
+  quoting issue in the wrapper, not due to the evaluation commands. The result
+  logs contain complete FINAL lines for both evals.

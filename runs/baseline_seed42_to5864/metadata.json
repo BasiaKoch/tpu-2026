@@ -1,35 +1,62 @@
 {
   "run_name": "baseline_seed42_to5864",
-  "status": "running",
+  "status": "completed",
   "created_utc": "2026-06-13T18:03:30Z",
+  "launch_time_utc": "2026-06-13T17:58:35Z",
+  "end_time_utc": "2026-06-13T18:37:59Z",
+  "exit_code": 0,
   "purpose": "Continue baseline_seed42 training from checkpoint step 3364 to target step 5864.",
   "previous_step": 3364,
   "target_step": 5864,
   "additional_steps_requested": 2500,
-  "latest_saved_checkpoint_observed": 3500,
-  "latest_wandb_actor_step_observed_from_tmux": 3619,
+  "final_step": 5864,
+  "final_wandb_step": 5864,
   "tmux_session": "tunix_resume_5864",
   "training_pid_observed": 33810,
+  "training_process_state": "finished",
   "wandb": {
     "entity": "felsomoye-university-of-cambridge",
     "project": "tunix",
     "run_id": "jgs4c6kl",
     "run_url": "https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl",
-    "run_name": "Baseline k=2"
+    "run_name": "Baseline k=2",
+    "linked_to_existing_run": true,
+    "local_summary_step": 5864,
+    "local_runtime_seconds": 19253.83979569,
+    "final_sync_status": "filestream status 200 OK, complete true, exit_code 0"
   },
   "checkpoint": {
     "resume_root": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864",
     "restored_actor_step": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3364",
-    "post_launch_checkpoint_observed": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/3500",
+    "saved_actor_steps": [3364, 3500, 4000, 4500, 5000, 5500, 5864],
+    "final_actor_step": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864",
+    "final_actor_step_size": "approximately 200M",
+    "checkpoint_root_size": "approximately 1.3G",
+    "uploaded_wandb_artifact": {
+      "name": "baseline_seed42_to5864_checkpoint",
+      "qualified_name": "felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint:v0",
+      "url": "https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/baseline_seed42_to5864_checkpoint/v0",
+      "aliases": ["latest", "step-5864"],
+      "type": "model",
+      "attached_run_id": "jgs4c6kl",
+      "source_path": "/home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864",
+      "upload_command": "wandb artifact put --name felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint --type model --alias latest --alias step-5864 --id jgs4c6kl /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864",
+      "upload_reported_artifact_files": 31,
+      "verified_with_artifact_get": true,
+      "verification_download_path": "/tmp/baseline_seed42_to5864_artifact_verify"
+    },
     "source_wandb_artifact": "felsomoye-university-of-cambridge/tunix/Checkpoint-baseline-k-2:v0",
     "missing_documented_artifact": "felsomoye-university-of-cambridge/tunix/baseline_seed42_checkpoint:latest",
     "local_artifact_download": "/home/funmilooi-somoye/tpu-2026/artifacts/Checkpoint-baseline-k-2_v0"
   },
   "logs": {
     "dated_run_folder": "/home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864",
-    "live_train_log": "/home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log",
+    "train_log": "/home/funmilooi-somoye/tpu-2026/runs/2026-06-13_baseline_seed42_resume_to5864/train.log",
+    "train_log_size": "approximately 19M",
     "tensorboard_event_file": "/tmp/content/tmp/tensorboard/grpo/events.out.tfevents.1781373532.t1v-n-e9b5fb70-w-0",
-    "wandb_local_dir": "/home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260613_175840-jgs4c6kl"
+    "wandb_local_dir": "/home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260613_175840-jgs4c6kl",
+    "wandb_local_dir_size": "approximately 61M",
+    "wandb_summary_file": "/home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260613_175840-jgs4c6kl/files/wandb-summary.json"
   },
   "git": {
     "branch": "baseline-fls",
@@ -40,11 +67,15 @@
   "resume_evidence": {
     "actor_train_first_step": 3365,
     "actor_train_latest_step_from_tensorboard_parse": 3583,
-    "tmux_wandb_warning_current_step_observed": 3619,
-    "checkpoint_3500_saved": true
+    "tmux_wandb_warning_current_step_observed_during_run": 3619,
+    "final_wandb_warning_current_step": 5864,
+    "final_checkpoint_exists": true,
+    "training_finished_marker": true,
+    "process_exited_zero": true
   },
   "environment_fixes": [
     "Installed nest-asyncio==1.6.0 into /home/funmilooi-somoye/venvs/tunix before successful launch.",
     "Installed libtpu==0.0.40 into /home/funmilooi-somoye/venvs/tunix before successful launch."
-  ]
+  ],
+  "known_logging_caveat": "W&B ignored repeated local step-0 reward/rollout records after the resumed run reached global step 5864. The actor continuation and final checkpoint are still valid."
 }

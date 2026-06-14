@@ -20,16 +20,52 @@ Source artifact:
 Missing documented artifact:
   felsomoye-university-of-cambridge/tunix/baseline_seed42_checkpoint:latest
 
-Post-launch checkpoint progression:
+Saved checkpoint progression:
   actor/3364 restored before launch
-  actor/3500 saved at 2026-06-13T18:03:09 UTC
+  actor/3500 saved after launch
+  actor/4000 saved after launch
+  actor/4500 saved after launch
+  actor/5000 saved after launch
+  actor/5500 saved after launch
+  actor/5864 final checkpoint saved at 2026-06-13T18:37:59 UTC
 
-Expected future checkpoints with SAVE_INTERVAL_STEPS=500:
-  actor/4000
-  actor/4500
-  actor/5000
-  actor/5500
-  actor/5864 final save if trainer saves at close
+Observed actor checkpoint directories:
+  3364
+  3500
+  4000
+  4500
+  5000
+  5500
+  5864
+
+Final checkpoint:
+  /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+
+Final checkpoint size:
+  approximately 200M
+
+Final checkpoint W&B artifact:
+  felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint:v0
+
+Final checkpoint W&B artifact URL:
+  https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/baseline_seed42_to5864_checkpoint/v0
+
+Final checkpoint artifact aliases:
+  latest
+  step-5864
+
+Final checkpoint artifact upload:
+  uploaded with wandb artifact put
+  type: model
+  attached run id: jgs4c6kl
+  uploaded files reported by W&B: 31 artifact files
+
+Final checkpoint artifact verification:
+  wandb artifact get felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint:v0
+  downloaded successfully to /tmp/baseline_seed42_to5864_artifact_verify
+
+Checkpoint root size:
+  approximately 1.3G
 
 Retention:
   MAX_TO_KEEP = 8

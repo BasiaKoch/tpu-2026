@@ -1,0 +1,28 @@
+Baseline seed 42 continuation full-test eval summary
+======================================================
+
+Preset:
+  greedy
+
+Source:
+  tfds
+
+Split/sample:
+  full GSM8K test split, 1319 examples, TRAIN_MICRO_BATCH_SIZE=1
+
+Base model / zero-init LoRA wrapper:
+  Log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/base_eval_full.log
+  FINAL: correct=625/1319  acc=47.38%  partial=49.96%  format=4.02%
+
+Restored LoRA checkpoint:
+  Checkpoint root: /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor
+  Step: 5864
+  Log: /home/funmilooi-somoye/tpu-2026/runs/baseline_seed42_to5864/lora_eval_step5864_full.log
+  FINAL: correct=0/1319  acc=0.00%  partial=0.00%  format=0.08%
+
+Exit status:
+  Base: 0
+  LoRA step 5864: 0
+
+End:
+  2026-06-13T20:09:19Z

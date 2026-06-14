@@ -1,0 +1,33 @@
+Final checkpoint W&B artifact
+=============================
+
+Artifact:
+  felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint:v0
+
+Artifact URL:
+  https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/baseline_seed42_to5864_checkpoint/v0
+
+Aliases:
+  latest
+  step-5864
+
+Type:
+  model
+
+Attached run:
+  https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl
+
+Upload source:
+  /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+
+Upload command:
+  wandb artifact put --name felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint --type model --alias latest --alias step-5864 --id jgs4c6kl /home/funmilooi-somoye/tpu-2026/checkpoints/baseline_seed42_to5864/actor/5864
+
+Upload result:
+  W&B reported artifact version v0.
+  W&B reported 31 uploaded artifact files.
+
+Verification:
+  wandb artifact get felsomoye-university-of-cambridge/tunix/baseline_seed42_to5864_checkpoint:v0
+  Verification download path: /tmp/baseline_seed42_to5864_artifact_verify
+  Verification result: downloaded successfully.
