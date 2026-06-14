@@ -53,7 +53,11 @@ Each experiment lives on its own branch.
 | `reward-length-on-g8-bk` | Reward/length variant run on the G=8, batch-size-1 base (incl. `g8_bs1` control). |
 | `reward-reweight` | Reward reweighting variant. |
 | `empty-penalty-bk` | `empty_penalty` reward to discourage empty completions. |
+| `medium-hard-data-fls` | Data/curriculum experiment: train on medium + hard GSM8K questions on the G=8 base. |
+| `analysis-bk` | Analysis tooling: per-question eval dumps, bootstrap CI, training-curve overlays, and an offline advantage-signal (degenerate-group) diagnostic. |
 | `improvement-rd` | Environment fixes (e.g. pinning protobuf for the TFDS baseline). |
+| `run-record-fixes-bk` | Housekeeping: fix run records and checkpoint artifacts (KL β=0.32 and reward-length run metadata). |
+| `pre-commit-hooks` | Tooling: pre-commit config, `pyproject.toml`, and formatting of the `scripts/` code. |
 
 ## Baseline Results
 
