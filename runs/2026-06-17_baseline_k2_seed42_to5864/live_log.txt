@@ -1,0 +1,21 @@
+Live log snapshot captured during metadata update.
+
+Full tmux pane remained active, but direct redirection from `tmux capture-pane`
+to this file was blocked by the sandbox with:
+
+error connecting to /tmp/tmux-2001/default (Operation not permitted)
+
+Relevant observed startup lines from direct pane capture:
+
+wandb: Tracking run with wandb version 0.26.1
+wandb: Run data is saved locally in /home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260617_162508-keh7f5es
+wandb: Syncing run genial-capybara-52
+wandb: View run at https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/keh7f5es
+Uploaded W&B config snapshot: /home/funmilooi-somoye/tpu-2026/scripts/config.py
+Downloading google/gemma-3-1b-it from Hugging Face...
+Model downloaded to: /home/funmilooi-somoye/.cache/huggingface/hub/models--google--gemma-3-1b-it/snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752
+Datasets: train=5864 val=652
+Starting GRPO training. CKPT_DIR=/tmp/content/ckpts/  MAX_STEPS=5864
+
+Later direct pane capture showed active reward/eval sample logging, confirming
+the training process was still running after startup.

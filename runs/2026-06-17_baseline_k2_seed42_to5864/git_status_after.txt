@@ -1,0 +1,8 @@
+RUNNING: fill at completion.
+
+Status observed during metadata update:
+## baseline-k=2
+ M scripts/config.py
+?? artifacts/
+?? runs/2026-06-17_baseline_k2_seed42_to5864/
+

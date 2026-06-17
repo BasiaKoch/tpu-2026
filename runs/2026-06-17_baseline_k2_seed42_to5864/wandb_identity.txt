@@ -1,0 +1,15 @@
+Entity/project: felsomoye-university-of-cambridge/tunix
+Run id: keh7f5es
+Run name: genial-capybara-52
+Group: CANNOT_RETRIEVE: not set by current train.py
+Job type: CANNOT_RETRIEVE: not set by current train.py
+Tags: CANNOT_RETRIEVE: not set by current train.py
+Branch from local metadata: baseline-k=2
+Git commit captured: yes
+
+Checklist tag checks:
+  seed42 tag: CANNOT_RETRIEVE: not set by current train.py
+  baseline/experiment tag: CANNOT_RETRIEVE: not set by current train.py
+  branch tag matches metadata: CANNOT_RETRIEVE: no W&B tag configured
+  one-variable tag: CANNOT_RETRIEVE: no W&B tag configured
+

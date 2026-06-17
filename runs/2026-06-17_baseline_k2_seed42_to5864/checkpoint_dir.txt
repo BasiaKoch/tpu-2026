@@ -1,0 +1,21 @@
+Checkpoint directory:
+/tmp/content/ckpts/
+
+Intermediate checkpoint directory:
+/tmp/content/intermediate_ckpt/
+
+Save interval:
+500 steps
+
+Max checkpoints to keep:
+1000
+
+Final checkpoint:
+PENDING: run still active.
+
+Preserved local copy:
+PENDING: copy final checkpoint after completion if needed.
+
+W&B artifact:
+PENDING: upload final checkpoint artifact after completion.
+

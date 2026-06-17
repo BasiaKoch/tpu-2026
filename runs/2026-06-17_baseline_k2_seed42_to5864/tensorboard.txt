@@ -1,0 +1,6 @@
+TensorBoard log directory:
+/tmp/content/tmp/tensorboard/grpo
+
+Configured flush interval:
+20 steps
+

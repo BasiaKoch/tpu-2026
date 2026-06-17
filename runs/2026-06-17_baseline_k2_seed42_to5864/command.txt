@@ -1,0 +1,16 @@
+Launcher:
+manual tmux launch from Codex
+
+Tmux command:
+tmux new-session -d -s tunix 'bash -lc "cd /home/funmilooi-somoye/tpu-2026/scripts; source /home/funmilooi-somoye/venvs/tunix/bin/activate; if [ -f ~/.env ]; then set -a; source ~/.env; set +a; fi; python -u train.py"'
+
+Training entry point:
+python -u train.py
+
+Working directory:
+/home/funmilooi-somoye/tpu-2026/scripts
+
+Environment bootstrap:
+- venv: /home/funmilooi-somoye/venvs/tunix
+- loaded ~/.env when present
+

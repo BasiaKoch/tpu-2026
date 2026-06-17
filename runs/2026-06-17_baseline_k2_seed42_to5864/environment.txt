@@ -1,0 +1,13 @@
+Relevant effective environment at launch/update:
+
+SEED=42
+BETA=0.08
+DATA_SOURCE=tfds
+TPU_CONTENT_DIR=/tmp/content
+WANDB_PROJECT=tunix
+WANDB_ENTITY=felsomoye-university-of-cambridge
+WANDB_RUN_ID=
+
+Note:
+The launch command sourced ~/.env if present.
+

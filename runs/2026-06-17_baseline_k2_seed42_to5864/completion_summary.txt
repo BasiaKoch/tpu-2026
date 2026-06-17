@@ -1,0 +1,16 @@
+Run: baseline_k2_seed42_to5864
+Commit: 3a22268d1762f628cc7f17761dc0a30dc55b05db
+Start: 2026-06-17T16:24:58Z
+End: RUNNING
+Wall-clock: RUNNING
+Final step: PENDING, target 5864
+Status: running
+Exit code: PENDING
+Final checkpoint: PENDING
+W&B: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/keh7f5es
+Final log marker: PENDING
+
+Observed startup:
+Datasets: train=5864 val=652
+Starting GRPO training. CKPT_DIR=/tmp/content/ckpts/  MAX_STEPS=5864
+

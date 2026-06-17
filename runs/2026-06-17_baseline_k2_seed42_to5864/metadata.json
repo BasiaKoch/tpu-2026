@@ -1,0 +1,71 @@
+{
+  "run_name": "baseline_k2_seed42_to5864",
+  "launched_at_utc": "2026-06-17T16:24:58Z",
+  "branch": "baseline-k=2",
+  "commit": "3a22268d1762f628cc7f17761dc0a30dc55b05db",
+  "tmux_session": "tunix",
+  "working_directory": "/home/funmilooi-somoye/tpu-2026/scripts",
+  "command": "cd /home/funmilooi-somoye/tpu-2026/scripts; source /home/funmilooi-somoye/venvs/tunix/bin/activate; if [ -f ~/.env ]; then set -a; source ~/.env; set +a; fi; python -u train.py",
+  "wandb": {
+    "entity": "felsomoye-university-of-cambridge",
+    "project": "tunix",
+    "run_id": "keh7f5es",
+    "run_name": "genial-capybara-52",
+    "url": "https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/keh7f5es",
+    "local_dir": "/home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260617_162508-keh7f5es"
+  },
+  "config": {
+    "seed": 42,
+    "data_source": "tfds",
+    "model_id": "google/gemma-3-1b-it",
+    "rank": 64,
+    "alpha": 64.0,
+    "max_prompt_length": 256,
+    "total_generation_steps": 768,
+    "temperature": 0.9,
+    "top_p": 1.0,
+    "top_k": 50,
+    "num_generations": 2,
+    "num_iterations": 1,
+    "beta": 0.08,
+    "epsilon": 0.2,
+    "train_micro_batch_size": 1,
+    "num_batches": 6516,
+    "num_test_batches": 64,
+    "eval_every_n_steps": 64,
+    "num_epochs": 1,
+    "train_fraction": 0.9,
+    "max_steps": 5864,
+    "learning_rate": 0.000003,
+    "b1": 0.9,
+    "b2": 0.99,
+    "weight_decay": 0.1,
+    "warmup_steps": 586.4,
+    "max_grad_norm": 0.1,
+    "ckpt_dir": "/tmp/content/ckpts/",
+    "tensorboard_dir": "/tmp/content/tmp/tensorboard/grpo",
+    "save_interval_steps": 500,
+    "max_to_keep": 1000
+  },
+  "reward_functions": [
+    "match_format_exactly",
+    "match_format_approximately",
+    "check_answer",
+    "check_numbers"
+  ],
+  "observed_startup": {
+    "train_dataset_size": 5864,
+    "val_dataset_size": 652,
+    "printed_max_steps": 5864,
+    "printed_ckpt_dir": "/tmp/content/ckpts/"
+  },
+  "intentional_diff_from_active_baseline": {
+    "scripts/config.py": {
+      "NUM_BATCHES": {
+        "from": 3738,
+        "to": 6516,
+        "reason": "Keep the existing MAX_STEPS formula while increasing the derived step count from 3364 to 5864."
+      }
+    }
+  }
+}

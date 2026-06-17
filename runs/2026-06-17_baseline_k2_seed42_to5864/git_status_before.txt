@@ -1,0 +1,19 @@
+## baseline-k=2
+ M scripts/config.py
+?? artifacts/
+
+Relevant launch diff:
+diff --git a/scripts/config.py b/scripts/config.py
+index e4f5b39..ad7afc4 100644
+--- a/scripts/config.py
++++ b/scripts/config.py
+@@ -66,7 +66,7 @@ EPSILON = 0.2              # PPO-style clip range
+ 
+ # ====== Training ======
+ TRAIN_MICRO_BATCH_SIZE = 1
+-NUM_BATCHES = 3738
++NUM_BATCHES = 6516
+ NUM_TEST_BATCHES = 64
+ EVAL_EVERY_N_STEPS = 64
+ NUM_EPOCHS = 1
+

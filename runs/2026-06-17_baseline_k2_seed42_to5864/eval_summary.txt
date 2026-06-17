@@ -1,0 +1,15 @@
+PENDING: training still active.
+
+Use the baseline protocol after completion:
+- preset: greedy
+- split: GSM8K test
+- NUM_TEST_BATCHES=64
+- TRAIN_MICRO_BATCH_SIZE=1
+- evaluate base / zero-init LoRA wrapper
+- evaluate restored final checkpoint
+- report correct=N/64, acc, partial, format
+
+Expected raw logs:
+- base_eval.log
+- lora_eval.log
+

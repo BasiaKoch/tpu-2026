@@ -1,0 +1,8 @@
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/keh7f5es
+
+Local W&B directory:
+/home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260617_162508-keh7f5es
+
+Checkpoint artifact:
+PENDING: upload after completion.
+
