@@ -48,7 +48,7 @@ See [scripts/README.md](scripts/README.md) for a full tour of the algorithm and 
 ├── runs/                   # Per-run metadata, logs, config snapshots, and notes
 ├── evaluation/             # Per-question eval dumps (.jsonl) and bootstrap CI summaries
 ├── docs/                   # Experiment tracking, run records, setup notes, patch history
-├── tests/                  # Smoke tests (tests/smoke-tests/run_smoke_tests.py)
+├── tests/                  # Smoke tests 
 ├── bootstrap.sh            # venv / environment setup
 ├── create_tpu_env.sh       # TPU VM environment setup
 ├── requirements.txt        # Python dependencies
