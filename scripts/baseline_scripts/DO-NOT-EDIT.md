@@ -1,1 +1,0 @@
-STRICT: Do not edit any of the files in this directory.

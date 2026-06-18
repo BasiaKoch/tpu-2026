@@ -8,27 +8,7 @@ Record any changes needed to make the as-shipped baseline run. Keep this file fo
 |---|---|---|---|---|---|
 | 2026-06-08 | 7e696c4 | `requirements.txt` | Official baseline failed before training with TFDS `FieldDescriptor.label` error from `./data/train`, including after cache cleanup. | Downgraded/pinned `protobuf==6.31.1`; tiny TFDS load now passes with default `tfds` source. | Dependency plumbing only; no model/data/reward/training config behaviour changed. |
 
-## Rules
-
-- Do not mix baseline patches with experimental changes.
-- Explain whether the patch changes model behaviour, training data, reward calculation, or only environment/runtime plumbing.
-- If the patch affects behaviour, the baseline must be treated as the patched baseline and documented clearly in `docs/RUNS.md`.
-
 ## Template
-
-### `<date> - <patch-name>`
-
-**Commit:** 
-
-**Problem:** 
-
-**Files changed:** 
-
-**Patch summary:** 
-
-**Behavioural impact:** 
-
-**Verification:**
 
 ### 2026-06-08 - baseline-tfds-cache-failure
 

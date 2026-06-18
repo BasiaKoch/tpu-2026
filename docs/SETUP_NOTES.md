@@ -51,16 +51,6 @@ Record environment setup, deviations from the course instructions, and fixes dis
 
 ## Issues And Fixes
 
-### `<date> - <short issue>`
-
-**Symptom:** What failed?
-
-**Cause:** What caused it, if known?
-
-**Fix:** Exact command, config change, or code patch.
-
-**Impact:** Does this affect reproducibility or reported results?
-
 ### 2026-06-08 - Hugging Face token not visible during smoke test
 
 **Symptom:** Model-load smoke test failed in `scripts/model.py::download_weights()` with `huggingface_hub.errors.GatedRepoError: 401 Client Error` for `google/gemma-3-1b-it`.

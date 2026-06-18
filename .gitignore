@@ -34,4 +34,3 @@ scripts/*.log
 .idea/
 *.swp
 .DS_Store
-BOOTSTRAP.md

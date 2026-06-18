@@ -78,22 +78,3 @@ Baseline reference (G=2, `jgs4c6kl`): peak eval reward mean **1.711** at step **
 
 **Interpretation:** _Pending._
 
-## Template
-
-### `<experiment-name>`
-
-**Question:** What does this experiment test?
-
-**Main change:** One controlled code/config change.
-
-**Hypothesis:** What should happen, and why?
-
-**Config:** Branch, commit, seed, data split, total steps, changed parameters.
-
-**Comparison:** Which baseline/run is this compared against?
-
-**Metrics:** Accuracy, reward, KL, response length, format accuracy, or other diagnostics.
-
-**Result:** Fill in after evaluation.
-
-**Interpretation:** Did the outcome match the hypothesis?

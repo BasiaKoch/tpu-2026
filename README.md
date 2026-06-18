@@ -1,5 +1,4 @@
-# A8 Multi-Agent Systems and Agentic AI
-## Part I: GRPO Finetuning 
+# A8 Multi-Agent Systems and Agentic AI - GRPO Finetuning 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -20,18 +19,38 @@ See [scripts/README.md](scripts/README.md) for a full tour of the algorithm and 
  
 ## Repository Structure
 
-| Path | Purpose |
-|---|---|
-| `scripts/` | Training, evaluation, reward, model, data, config, and chat scripts. |
-| `runs/` | Per-run metadata, logs, config snapshots, and run notes. |
-| `analysis/` | Scripts for exporting metrics, plotting, and uncertainty estimates. |
-| `report_assets/` | Final plots, tables, and small artefacts used in the report. |
-| `docs/` | Shared planning, experiment tracking, setup notes, and patch history. |
-| `tests/` | Smoke tests (`tests/smoke-tests/run_smoke_tests.py`). |
-| `wandb_scripts/` | Utilities for checking and exporting W&B run data. |
-| `bootstrap.sh` / `create_tpu_env.sh` | Scripts to set up the venv and TPU VM environment. |
-| `tpu-setup.md` | TPU environment and setup instructions. |
-| `tunix.ipynb` | Original notebook reference. |
+```
+.
+├── scripts/                # GRPO training, eval, rewards, model, data, config, chat
+│   ├── baseline_scripts/   # Frozen copy of the upstream baseline scripts
+│   ├── train.py            # GRPO training loop
+│   ├── evaluate.py         # GSM8K evaluation
+│   ├── bootstrap.py        # Bootstrap confidence intervals
+│   ├── rewards.py          # Programmatic reward functions
+│   ├── model.py            # Model / LoRA setup
+│   ├── data.py             # GSM8K data loading
+│   ├── config.py           # Hyperparameters and defaults
+│   ├── chat.py             # Interactive chat with a checkpoint
+│   ├── run_bootstrap.sh    # End-to-end bootstrap eval driver
+│   ├── run_tmux.sh         # Launch training in tmux
+│   └── README.md           # Algorithm and codebase tour
+├── runs/                   # Per-run metadata, logs, config snapshots, and notes
+├── evaluation/             # Per-question eval dumps (.jsonl) and bootstrap CI summaries
+├── docs/                   # Experiment tracking, run records, setup notes, patch history
+├── tests/                  # Smoke tests (tests/smoke-tests/run_smoke_tests.py)
+├── bootstrap.sh            # venv / environment setup
+├── create_tpu_env.sh       # TPU VM environment setup
+├── requirements.txt        # Python dependencies
+├── tpu-setup.md            # TPU environment and setup instructions
+├── tunix.ipynb             # Original notebook reference
+├── LICENSE
+└── README.md
+```
+
+
+## Weights and Biases
+
+Summary report of all experiments are found on Weights & Biases: [https://wandb.ai/felsomoye-university-of-cambridge/tunix/reports/GRPO-Experiments](https://api.wandb.ai/links/felsomoye-university-of-cambridge/c2r3q1wi)
 
 All training runs are logged to Weights & Biases: [wandb.ai/felsomoye-university-of-cambridge/tunix](https://wandb.ai/felsomoye-university-of-cambridge/tunix).
 
@@ -80,7 +99,7 @@ Retained-checkpoint evals show progressive degradation rather than a one-off bad
 | step 3000 | 6.25% |
 | step 3364 (final) | 3.12% |
 
-See [docs/I1_BASELINE_RESULTS.md](docs/I1_BASELINE_RESULTS.md) for the full record (run metadata, eval logs, training curves, and the one accepted baseline patch).
+See [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md) for the full record (run metadata, eval logs, training curves, and the one accepted baseline patch).
 
 ## Access the TPU
 
@@ -97,53 +116,29 @@ cd tpu-2026
 
 ## Run Bootstrapping
 
-Compute 95% bootstrap confidence intervals for the GSM8K metrics (accuracy, partial
-accuracy, format accuracy) for both the **base** `gemma-3-1b-it` and a **fine-tuned LoRA**
-checkpoint, over the full 1319-question test split. Method: empirical percentile bootstrap,
-10,000 iterations, seeded for reproducibility (see [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md)).
-
-The eval step needs the TPU `tunix` venv and `wandb login`; the bootstrap step itself is
-plain numpy. Run from the repo root:
+Compute 95% bootstrap confidence intervals (accuracy, partial accuracy, format accuracy)
+for the base `gemma-3-1b-it` and a fine-tuned LoRA checkpoint over the full 1319-question
+GSM8K test split (10,000 iterations, seeded). The eval step needs the TPU `tunix` venv and
+`wandb login`; the bootstrap itself is plain numpy. Run from the repo root:
 
 ```bash
-# Interactive — prompts for a run label and the W&B checkpoint URL:
+# Interactive — prompts for a run label and W&B checkpoint URL:
 ./scripts/run_bootstrap.sh
 
-# Or pass them as arguments to skip the prompts:
-./scripts/run_bootstrap.sh k8 https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/8k-baseline-6516-steps-rd-actor-ckpt
+# Pass them as arguments to skip the prompts:
+./scripts/run_bootstrap.sh k8 <wandb-checkpoint-url>
 
-# Restore from a local checkpoint dir instead of a W&B artifact (no URL needed):
-CHECKPOINT_PATH=~/checkpoints/k-8-new-reward/actor/5864 ./scripts/run_bootstrap.sh k8-new-reward
+# Or restore from a local checkpoint dir (no URL needed):
+CHECKPOINT_PATH=~/checkpoints/k8/actor/5864 ./scripts/run_bootstrap.sh k8
 ```
 
-`CHECKPOINT_PATH` accepts either an orbax step dir (`.../actor/5864`) or its
-`CheckpointManager` root (`.../actor`), and takes precedence over the W&B URL when set.
+The script is idempotent: it only re-evaluates a model if its per-question `.jsonl` is
+missing (set `FORCE_EVAL=1` to force). Other overrides: `N_ITER`, `SEED`,
+`NUM_TEST_BATCHES`, `VENV`.
 
-The script is **idempotent**: it evaluates the base model and the fine-tuned LoRA only if
-their per-question `.jsonl` files are missing, then bootstraps both. Delete a `.jsonl` (or set
-`FORCE_EVAL=1`) to force a fresh eval. Other env overrides: `N_ITER` (default 10000),
-`SEED` (default 42), `NUM_TEST_BATCHES` (default 1319), `VENV`,
-`CHECKPOINT_PATH` (local checkpoint dir; skips the W&B download).
-
-### Where results are stored
-
-Everything lands in `analysis/` (for a run labelled `k8`):
-
-| File | Contents |
-|---|---|
-| `analysis/base_no_ft.jsonl` | Per-question results for the base model (1319 lines; reused across runs). |
-| `analysis/k8_lora.jsonl` | Per-question results for the fine-tuned LoRA checkpoint (1319 lines). |
-| `analysis/bootstrap_results_k8.txt` | Human-readable summary: one table per model (base first, fine-tuned second) with point value, 95% CI, bootstrap mean, and std error for accuracy / partial / format. |
-
-The summary `.txt` is also printed to the terminal at the end of the run.
-
-To re-bootstrap from existing `.jsonl` files without touching the TPU (e.g. to change `N_ITER`),
-call the bootstrap step directly:
-
-```bash
-python scripts/bootstrap.py ci analysis/k8_lora.jsonl --label "fine-tuned LoRA (k8)" \
-  --n-iter 10000 --seed 42 --output analysis/bootstrap_results_k8.txt
-```
+Results land in `evaluation/` (for a run labelled `k8`): `base_no_ft.jsonl` and
+`k8_lora.jsonl` hold the per-question results, and `bootstrap_results_k8.txt` is the
+human-readable CI summary (also printed to the terminal).
 
 ## Team Members
 Barbara Koch, Funmi Looi-Somoye, Rowan d’Auria
@@ -152,6 +147,8 @@ Barbara Koch, Funmi Looi-Somoye, Rowan d’Auria
 
 ## Acknowledgements
 
-The original code was forked from [Boris Bolliet](https://github.com/borisbolliet)'s
+We thank Dr Boris Bolliet for setting up the team's Google Cloud TPU and for providing the
+starter code for this assignment. The original code was forked from
+[Dr Boris Bolliet](https://github.com/borisbolliet)'s
 [tpu-2026](https://github.com/borisbolliet/tpu-2026) repository, at commit
-[`324abbe`](https://github.com/borisbolliet/tpu-2026/commit/324abbe4b4e229ea812223856393547db4fbb53e)
+[`324abbe`](https://github.com/borisbolliet/tpu-2026/commit/324abbe4b4e229ea812223856393547db4fbb53e).
