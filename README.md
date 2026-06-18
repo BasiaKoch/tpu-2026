@@ -1,22 +1,33 @@
-# A8 Multi-Agent Systems and Agentic AI - GRPO Finetuning 
+# A8 — Multi-Agent Systems and Agentic AI (GRPO Finetuning)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Project Overview
-This repository contains the shared code and experiment records for the GRPO finetuning assignment on
-`google/gemma-3-1b-it` with GSM8K for team **Dakolo**.
+Shared code and experiment records for team **DAKOLO**: finetuning `google/gemma-3-1b-it`
+on GSM8K maths word problems with **GRPO** (Group Relative Policy Optimisation).
 
-**Method:** We finetune `gemma-3-1b-it` with LoRA adapters using **GRPO** (Group Relative
-Policy Optimisation) on GSM8K maths word problems. Rewards are fully programmatic (checks
-on output format and the final numeric answer), with no human labels or learned reward model.
-For each prompt, a group of `G` completions is sampled and each completion's advantage is its
-reward z-scored within the group, with a KL penalty anchoring the policy to the base model.
-Baseline defaults (`scripts/config.py`): group size `NUM_GENERATIONS = 2`, KL coefficient
-`BETA = 0.08`, clip range `EPSILON = 0.2`, LoRA rank 64 / alpha 64, learning rate 3e-6, and
-3,364 training steps on a TPU v6e-1. Each experiment branch varies one of these axes
-(group size, KL budget, learning rate, LoRA capacity, or reward shaping) against this baseline.
+## Project Overview
+
+We finetune `gemma-3-1b-it` with LoRA adapters using GRPO. Rewards are fully programmatic
+— checks on output format and the final numeric answer, with no human labels or learned
+reward model. For each prompt we sample a group of `G` completions; each completion's
+advantage is its reward z-scored within the group, with a KL penalty anchoring the policy
+to the base model.
+
+Every experiment branch varies **one** axis — group size, KL budget, learning rate, LoRA
+capacity, or reward shaping — against the shared baseline below
+(`scripts/config.py`):
+
+| Parameter | Baseline Default |
+|---|---|
+| `NUM_GENERATIONS` (group size) | 2 |
+| LoRA rank / alpha | 64 / 64 |
+| `BETA` (KL coefficient) | 0.08 |
+| Learning rate | 3e-6 |
+| `EPSILON` (clip range) | 0.2 |
+| Training steps | 3,364 (TPU v6e-1) |
+
 See [scripts/README.md](scripts/README.md) for a full tour of the algorithm and codebase.
- 
+
 ## Repository Structure
 
 ```
@@ -48,15 +59,14 @@ See [scripts/README.md](scripts/README.md) for a full tour of the algorithm and 
 ```
 
 
-## Weights and Biases
+## Weights & Biases
 
-Summary report of all experiments are found on Weights & Biases: [https://wandb.ai/felsomoye-university-of-cambridge/tunix/reports/GRPO-Experiments](https://api.wandb.ai/links/felsomoye-university-of-cambridge/c2r3q1wi)
-
-All training runs are logged to Weights & Biases: [wandb.ai/felsomoye-university-of-cambridge/tunix](https://wandb.ai/felsomoye-university-of-cambridge/tunix).
+- **Summary report** of all experiments: [GRPO Experiments report](https://api.wandb.ai/links/felsomoye-university-of-cambridge/c2r3q1wi)
+- **All training runs** are logged to the [`tunix` project](https://wandb.ai/felsomoye-university-of-cambridge/tunix).
 
 ## Branches and Experiments
 
-Each experiment lives on its own branch. 
+Each experiment lives on its own branch.
 
 | Branch | Experiment / purpose |
 |---|---|
@@ -80,9 +90,14 @@ Each experiment lives on its own branch.
 
 ## Baseline Results
 
-The baseline GRPO run (`baseline_seed42`, W&B run [`jgs4c6kl`](https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl), 3,364 steps in ~4.7 h on a v6e-1) learned early and then collapsed: eval reward mean peaked at **1.711 at step 448** before falling to **−0.240** by the final eval, with a KL spike to ~41 and completions degenerating to zero length.
+The baseline GRPO run (`baseline_seed42`, W&B run
+[`jgs4c6kl`](https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/jgs4c6kl),
+3,364 steps in ~4.7 h on a v6e-1) **learned early and then collapsed**: eval reward mean
+peaked at **1.711 (step 448)** before falling to **−0.240** by the final eval, with a KL
+spike to ~41 and completions degenerating to zero length.
 
-On the 64-example greedy GSM8K eval, the final LoRA checkpoint was substantially worse than the base model:
+On the 64-example greedy GSM8K eval, the final LoRA checkpoint was substantially worse than
+the base model:
 
 | Model | Checkpoint | Correct | Accuracy | Partial accuracy | Format accuracy |
 |---|---|---:|---:|---:|---:|
@@ -141,9 +156,8 @@ Results land in `evaluation/` (for a run labelled `k8`): `base_no_ft.jsonl` and
 human-readable CI summary (also printed to the terminal).
 
 ## Team Members
-Barbara Koch, Funmi Looi-Somoye, Rowan d’Auria
 
-**University of Cambridge**
+Barbara Koch · Funmi Looi-Somoye · Rowan d’Auria — **University of Cambridge**
 
 ## Acknowledgements
 
