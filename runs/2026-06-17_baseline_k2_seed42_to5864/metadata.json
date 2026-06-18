@@ -59,6 +59,36 @@
     "printed_max_steps": 5864,
     "printed_ckpt_dir": "/tmp/content/ckpts/"
   },
+  "completion": {
+    "status": "completed",
+    "ended_at_utc": "2026-06-17T23:56:42Z",
+    "wall_clock_seconds": 27104,
+    "exit_code": 0,
+    "final_step": 5864,
+    "target_step": 5864,
+    "final_checkpoint": "/tmp/content/ckpts/actor/5864",
+    "final_checkpoint_observed_size": "199M",
+    "checkpoint_artifact": "felsomoye-university-of-cambridge/tunix/baseline_k2_seed42_to5864_checkpoint:v0",
+    "checkpoint_artifact_url": "https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/baseline_k2_seed42_to5864_checkpoint/v0",
+    "tensorboard_artifact": "felsomoye-university-of-cambridge/tunix/baseline_k2_seed42_to5864_tensorboard:v0",
+    "tensorboard_artifact_url": "https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/tensorboard/baseline_k2_seed42_to5864_tensorboard/v0",
+    "wandb_runtime_seconds": 27091.144717781,
+    "wandb_synced": true
+  },
+  "final_wandb_summary": {
+    "rewards/eval/score/mean": -2.2352377300613497,
+    "rewards/eval/mean": -0.5588094325153374,
+    "rewards/eval/check_answer": -0.013611963190184049,
+    "rewards/eval/check_numbers": 0.006901840490797546,
+    "rewards/eval/match_format_exactly": 0.08742331288343558,
+    "rewards/eval/match_format_approximately": -2.315950920245399,
+    "actor/eval/kl": 0,
+    "actor/eval/loss": 0,
+    "completions/eval/mean_length": 37.9670245398773
+  },
+  "pending": [
+    "standalone baseline evaluation"
+  ],
   "intentional_diff_from_active_baseline": {
     "scripts/config.py": {
       "NUM_BATCHES": {

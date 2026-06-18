@@ -1,2 +1,2 @@
-PENDING: training still active. Run restored-checkpoint eval after completion.
-
+PENDING: training completed successfully. Run restored-checkpoint eval using
+/tmp/content/ckpts/actor/5864.

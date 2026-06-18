@@ -4,5 +4,18 @@ Expected training curve key checks:
   loss: actor/eval/loss, actor/train/loss
 
 Status:
-PENDING: inspect W&B after run has logged enough steps.
+COMPLETED: W&B finalized at step 5864 with exit code 0.
 
+Final values:
+  rewards/eval/score/mean: -2.2352377300613497
+  rewards/eval/mean: -0.5588094325153374
+  rewards/eval/check_answer: -0.013611963190184049
+  rewards/eval/check_numbers: 0.006901840490797546
+  rewards/eval/match_format_exactly: 0.08742331288343558
+  rewards/eval/match_format_approximately: -2.315950920245399
+  actor/eval/kl: 0
+  actor/eval/loss: 0
+  completions/eval/mean_length: 37.9670245398773
+
+Note:
+These are final W&B summary values, not an analysis of the full curve history.

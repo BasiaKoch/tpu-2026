@@ -2,6 +2,8 @@
 
 Launched: 2026-06-17 16:24:58 UTC
 
+Completed: 2026-06-17 23:56:42 UTC (exit code 0, step 5864/5864)
+
 This run reruns the baseline hyperparameters on branch `baseline-k=2`, extending
 training from the prior derived `MAX_STEPS=3364` to `MAX_STEPS=5864`.
 
@@ -59,3 +61,8 @@ python -u train.py
 The only intentional hyperparameter change from the active baseline defaults is
 `NUM_BATCHES: 3738 -> 6516`, which makes the existing derived formula evaluate
 to `MAX_STEPS=5864`.
+
+The final checkpoint is `/tmp/content/ckpts/actor/5864` and was uploaded to
+W&B as `baseline_k2_seed42_to5864_checkpoint:v0`. TensorBoard logs were
+uploaded as `baseline_k2_seed42_to5864_tensorboard:v0`. Standalone baseline
+evaluation remains pending.

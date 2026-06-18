@@ -4,3 +4,7 @@ TensorBoard log directory:
 Configured flush interval:
 20 steps
 
+W&B artifact:
+felsomoye-university-of-cambridge/tunix/baseline_k2_seed42_to5864_tensorboard:v0
+Aliases: latest, final, seed-42
+URL: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/tensorboard/baseline_k2_seed42_to5864_tensorboard/v0

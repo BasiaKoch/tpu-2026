@@ -1,4 +1,5 @@
-PENDING: training still active.
+PENDING: training completed successfully; standalone baseline evaluation has not
+yet been run.
 
 Use the baseline protocol after completion:
 - preset: greedy
@@ -12,4 +13,3 @@ Use the baseline protocol after completion:
 Expected raw logs:
 - base_eval.log
 - lora_eval.log
-

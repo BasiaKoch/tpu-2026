@@ -8,8 +8,13 @@ The reward function maps to baseline: `scripts/rewards.py` is byte-for-byte iden
 
 ## Startup
 
-- Status: running.
+- Status: completed successfully.
 - Start time: 2026-06-17T16:24:58Z.
+- End time: 2026-06-17T23:56:42Z.
+- Wall-clock time: 7h 31m 44s.
+- Final step: 5864/5864.
+- Exit code: 0.
+- Final checkpoint: `/tmp/content/ckpts/actor/5864`.
 - W&B run: https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/keh7f5es.
 - Local W&B dir: `/home/funmilooi-somoye/tpu-2026/scripts/wandb/run-20260617_162508-keh7f5es`.
 - Trainer printed: `Datasets: train=5864 val=652`.
@@ -19,9 +24,14 @@ The reward function maps to baseline: `scripts/rewards.py` is byte-for-byte iden
 
 - `~/.env` was loaded by the launch command. Observed relevant effective defaults: `SEED=42`, `BETA=0.08`, `DATA_SOURCE=tfds`, `TPU_CONTENT_DIR=/tmp/content`, `WANDB_PROJECT=tunix`, `WANDB_ENTITY=felsomoye-university-of-cambridge`.
 - Current `train.py` does not set W&B group/job_type/tags, so those fields are not available from the run metadata.
-- Completion, checkpoint artifact upload, and eval are still pending.
+- The local final checkpoint exists and was approximately 199M when checked.
+- The final checkpoint was uploaded to W&B as
+  `baseline_k2_seed42_to5864_checkpoint:v0`.
+- TensorBoard logs were uploaded to W&B as
+  `baseline_k2_seed42_to5864_tensorboard:v0`.
+- Standalone baseline evaluation is still pending.
 
 ## Next Required Action
 
-After the process exits, update `end_time.txt`, `status.txt`, `completion_summary.txt`, `git_status_after.txt`, and `checkpoint_dir.txt`. Then run the baseline eval protocol and populate `eval_summary.txt`, `base_eval.log`, and `lora_eval.log`.
-
+Run the baseline eval protocol and populate `eval_summary.txt`,
+`base_eval.log`, and `lora_eval.log`.

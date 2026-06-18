@@ -1,8 +1,8 @@
-RUNNING: fill at completion.
+Captured after run completion metadata update.
 
-Status observed during metadata update:
-## baseline-k=2
- M scripts/config.py
+Current branch: baseline-k=2
+Current HEAD: 78ce0d08c4ded1055d66139c4b29b54a1239524f
+Launch commit: 3a22268d1762f628cc7f17761dc0a30dc55b05db
+
+Untracked at capture time:
 ?? artifacts/
-?? runs/2026-06-17_baseline_k2_seed42_to5864/
-

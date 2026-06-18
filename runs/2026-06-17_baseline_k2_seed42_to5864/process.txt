@@ -13,3 +13,7 @@ Observed start time:
 Observed alive as of:
 2026-06-17T16:51:09Z
 
+Completion:
+- process exited normally
+- exit code: 0
+- W&B finalized: 2026-06-17T23:56:42Z

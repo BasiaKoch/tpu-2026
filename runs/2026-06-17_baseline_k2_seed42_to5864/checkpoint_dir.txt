@@ -11,11 +11,15 @@ Max checkpoints to keep:
 1000
 
 Final checkpoint:
-PENDING: run still active.
+/tmp/content/ckpts/actor/5864
+
+Observed size:
+199M
 
 Preserved local copy:
 PENDING: copy final checkpoint after completion if needed.
 
 W&B artifact:
-PENDING: upload final checkpoint artifact after completion.
-
+felsomoye-university-of-cambridge/tunix/baseline_k2_seed42_to5864_checkpoint:v0
+Aliases: latest, final, step-5864, seed-42
+URL: https://wandb.ai/felsomoye-university-of-cambridge/tunix/artifacts/model/baseline_k2_seed42_to5864_checkpoint/v0
