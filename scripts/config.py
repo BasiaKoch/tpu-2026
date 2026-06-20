@@ -57,7 +57,7 @@ TOTAL_GENERATION_STEPS = 768
 TEMPERATURE = 0.9          # high enough that the G samples actually differ
 TOP_P = 1.0
 TOP_K = 50
-NUM_GENERATIONS = 8        # G in the GRPO paper — group size for advantage norm
+NUM_GENERATIONS = int(os.environ.get("NUM_GENERATIONS", "8"))  # G in the GRPO paper — group size for advantage norm; override per run, e.g. NUM_GENERATIONS=2
 
 # ====== GRPO loss ======
 NUM_ITERATIONS = 1         # mu — PPO-style inner optimisation passes per batch
@@ -66,9 +66,13 @@ EPSILON = 0.2              # PPO-style clip range
 
 # ====== Training ======
 TRAIN_MICRO_BATCH_SIZE = 1
-NUM_BATCHES = 6516
+# Override per run, e.g. NUM_BATCHES=6516 for the full run or a small value for a
+# smoke test. MAX_STEPS below is derived from it (NUM_BATCHES * TRAIN_FRACTION).
+NUM_BATCHES = int(os.environ.get("NUM_BATCHES", "6516"))
 NUM_TEST_BATCHES = 64
-EVAL_EVERY_N_STEPS = 64
+# How often eval runs (in steps). Lower it via env for a smoke test, e.g.
+# EVAL_EVERY_N_STEPS=16, so an eval cycle fires within a short job.
+EVAL_EVERY_N_STEPS = int(os.environ.get("EVAL_EVERY_N_STEPS", "64"))
 NUM_EPOCHS = 1
 MAX_STEPS = int(NUM_BATCHES * NUM_ITERATIONS * TRAIN_FRACTION * NUM_EPOCHS)
 

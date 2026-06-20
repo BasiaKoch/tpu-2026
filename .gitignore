@@ -28,6 +28,8 @@ ckpts_backup/
 wandb/
 scripts/wandb/
 scripts/*.log
+logs/
+*.log
 
 # editor
 .vscode/

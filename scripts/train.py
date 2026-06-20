@@ -26,6 +26,7 @@ from dotenv import load_dotenv
 load_dotenv(os.path.expanduser("~/.env"))
 
 import nest_asyncio
+import numpy as np
 import optax
 import wandb
 from orbax import checkpoint as ocp
@@ -66,6 +67,7 @@ from config import (
     WEIGHT_DECAY,
 )
 from data import build_train_val_test
+from metrics import METRIC_FNS
 from model import build_mesh, download_weights, load_base_model, get_lora_model, load_tokenizer
 from rewards import REWARD_FNS
 
@@ -247,7 +249,23 @@ def main():
     rl_cluster = rl_cluster_lib.RLCluster(
         actor=lora, reference=base, tokenizer=tokenizer, cluster_config=cluster_cfg,
     )
-    trainer = GRPOLearner(rl_cluster=rl_cluster, reward_fns=REWARD_FNS, algo_config=grpo_cfg)
+    trainer = GRPOLearner(
+        rl_cluster=rl_cluster,
+        reward_fns=REWARD_FNS,
+        algo_config=grpo_cfg,
+        metric_fns=METRIC_FNS,  # diagnostics/{accuracy, degenerate_group_frac}, train+eval
+    )
+
+    # Diagnostic: log policy ENTROPY. The GRPO policy loss already computes
+    # aux["entropy"] every step (tunix algo_core), but the stock GRPOLearner only
+    # registers {"kl", "pg_clipfrac"} for logging. Re-register that set plus
+    # "entropy" so it surfaces (verified in W&B) as actor/{train,eval}/entropy at
+    # no extra compute — the actor trainer's metrics_prefix is "actor".
+    trainer.rl_cluster.actor_trainer.with_rl_metrics_to_log({
+        "kl": np.mean,
+        "pg_clipfrac": np.mean,
+        "entropy": np.mean,
+    })
 
     print(f"Starting GRPO training. CKPT_DIR={ckpt_dir}  MAX_STEPS={MAX_STEPS}")
 
