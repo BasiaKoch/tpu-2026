@@ -36,7 +36,7 @@ See [scripts/README.md](scripts/README.md) for a full tour of the algorithm and 
 │   ├── baseline_scripts/   # Frozen copy of the upstream baseline scripts
 │   ├── train.py            # GRPO training loop
 │   ├── evaluate.py         # GSM8K evaluation
-│   ├── bootstrap.py        # Bootstrap confidence intervals
+│   ├── bootstrap.py        # Bootstrap CIs + paired model comparison
 │   ├── rewards.py          # Programmatic reward functions
 │   ├── model.py            # Model / LoRA setup
 │   ├── data.py             # GSM8K data loading
@@ -153,7 +153,28 @@ missing (set `FORCE_EVAL=1` to force). Other overrides: `N_ITER`, `SEED`,
 
 Results land in `evaluation/` (for a run labelled `k8`): `base_no_ft.jsonl` and
 `k8_lora.jsonl` hold the per-question results, and `bootstrap_results_k8.txt` is the
-human-readable CI summary (also printed to the terminal).
+human-readable CI summary (also printed to the terminal). The summary ends with a
+**paired** base-vs-fine-tuned comparison (see below).
+
+### Comparing models (paired bootstrap)
+
+Greedy decoding on the same questions makes the per-question outcomes *paired*, so test
+differences with a paired bootstrap, not by checking whether per-model CIs overlap (which
+ignores cross-model covariance and overstates the difference's uncertainty). The `compare`
+subcommand resamples all models off **one** shared set of question indices and reports each
+pairwise accuracy difference with a 95% CI and two-sided p-value, cross-checked against the
+exact McNemar test and Holm-corrected across comparisons:
+
+```bash
+# Any number of aligned per-question .jsonls (same questions, same order):
+python scripts/bootstrap.py compare \
+  evaluation/base_no_ft.jsonl evaluation/k2_baseline_lora.jsonl \
+  evaluation/k8_lora.jsonl evaluation/k8_reweight_lora.jsonl \
+  --labels "base,k2,k8,k8+reweight" --output evaluation/compare_all.txt
+```
+
+A difference is significant when its 95% CI excludes 0 (per comparison) and its
+Holm-adjusted p stays below 0.05 (family-wise across all pairs).
 
 ## Team Members
 

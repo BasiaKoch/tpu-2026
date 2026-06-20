@@ -17,17 +17,30 @@ untouched. It has two subcommands:
         the metrics are mutually coherent. Pure numpy — runs anywhere. Seeded
         (default 42) for reproducibility. The CI captures sampling uncertainty
         over the test set, not generation randomness (eval uses deterministic
-        greedy decoding). See docs/BOOTSTRAP.md.
+        greedy decoding). These are per-model (marginal) CIs — to compare two
+        models use `compare`, not whether these CIs overlap (overlap ignores the
+        cross-model covariance and overstates a difference's uncertainty).
+
+  compare  Paired bootstrap across two or more per-question .jsonls covering the
+        same split: reports each pairwise accuracy difference with a 95% CI and a
+        two-sided bootstrap p-value, all off ONE shared set of resample indices so
+        the difference carries the cross-model covariance the per-model `ci` CIs
+        throw away. Cross-checked with the exact McNemar test and Holm-corrected
+        across the comparisons. Guards that the files are row-for-row aligned (same
+        questions, same order) before pairing. Pure numpy.
 
 Usage:
   python bootstrap.py eval --no-restore --dump-jsonl analysis/base_no_ft.jsonl
   python bootstrap.py eval --wandb-artifact <URL> --dump-jsonl analysis/k8_lora.jsonl
   python bootstrap.py ci analysis/k8_lora.jsonl --label "fine-tuned LoRA (k8)" \
       --n-iter 10000 --seed 42 --output analysis/bootstrap_results_k8.txt
+  python bootstrap.py compare analysis/base_no_ft.jsonl analysis/k8_lora.jsonl \
+      --labels "base,fine-tuned (k8)" --output analysis/compare_k8.txt
 """
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import os
 import re
@@ -48,21 +61,29 @@ METRIC_LABELS = {"correct": "accuracy", "partial": "partial", "format": "format"
 
 
 def load_metrics(path):
-    """Read the 0/1 metric columns from a per-question .jsonl into a dict of arrays."""
+    """Read a per-question .jsonl into 0/1 metric arrays plus the question list.
+
+    The questions are returned alongside the metrics so a paired comparison can
+    verify that two files cover the same questions in the same order before it
+    pairs their per-question outcomes (see `load_aligned`). Callers that only need
+    the metrics can ignore the question list.
+    """
     import numpy as np
     cols = {m: [] for m in METRICS}
+    questions = []
     with open(path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
             rec = json.loads(line)
+            questions.append(rec["question"])
             for m in METRICS:
                 cols[m].append(int(rec[m]))
     n = len(cols["correct"])
     if n == 0:
         raise ValueError(f"No records found in {path!r}.")
-    return {m: np.asarray(v, dtype=np.float64) for m, v in cols.items()}, n
+    return {m: np.asarray(v, dtype=np.float64) for m, v in cols.items()}, questions, n
 
 
 def bootstrap_metrics(cols, n, n_iter, seed):
@@ -112,7 +133,7 @@ def format_block(label, path, n, n_iter, seed, results):
 
 
 def cmd_ci(args):
-    cols, n = load_metrics(args.input)
+    cols, _, n = load_metrics(args.input)
     results = bootstrap_metrics(cols, n, args.n_iter, args.seed)
     label = args.label or args.input
     block = format_block(label, args.input, n, args.n_iter, args.seed, results)
@@ -122,6 +143,186 @@ def cmd_ci(args):
         if not (lo <= point <= hi):
             print(f"WARNING: point {METRIC_LABELS[m]} falls outside its bootstrap CI.",
                   file=sys.stderr)
+    if args.output:
+        with open(args.output, "a" if args.append else "w", encoding="utf-8") as f:
+            f.write(block + "\n")
+    return 0
+
+
+# ======================================================================
+# compare subcommand — paired bootstrap of pairwise accuracy differences
+# ======================================================================
+
+def load_aligned(paths, labels=None):
+    """Load several per-question .jsonls and verify they are row-for-row paired.
+
+    Pairing the per-question outcomes is only valid when row i is the SAME
+    question in every file — greedy decoding gives each model exactly one outcome
+    per question on the same split, so the outcomes are paired and a difference
+    inherits the cross-model covariance. The eval pipeline writes the files in a
+    fixed test-set order, but nothing downstream enforces it, so this guards it
+    explicitly: every file must have the same length and the same question text at
+    every position, otherwise the comparison would silently pair unrelated
+    questions. Returns (labels, cols_list, n).
+    """
+    if len(paths) < 2:
+        raise ValueError("compare needs at least two .jsonl files.")
+    if labels is None:
+        labels = [os.path.splitext(os.path.basename(p))[0] for p in paths]
+    if len(labels) != len(paths):
+        raise ValueError(f"got {len(labels)} labels for {len(paths)} inputs.")
+    cols_list, ref_q, n = [], None, None
+    for path in paths:
+        cols, questions, count = load_metrics(path)
+        if ref_q is None:
+            ref_q, n = questions, count
+        elif count != n:
+            raise ValueError(
+                f"{path!r} has {count} questions but {paths[0]!r} has {n}; the "
+                f"files must cover the same test split to be paired.")
+        elif questions != ref_q:
+            bad = next(i for i in range(n) if questions[i] != ref_q[i])
+            raise ValueError(
+                f"{path!r} disagrees with {paths[0]!r} at row {bad} "
+                f"({questions[bad]!r} vs {ref_q[bad]!r}); the files are not "
+                f"row-for-row aligned and cannot be paired.")
+        cols_list.append(cols)
+    return labels, cols_list, n
+
+
+def holm_adjust(pvals):
+    """Holm step-down adjusted p-values, returned in the input order.
+
+    Controls the family-wise error rate across the pairwise comparisons: sort the
+    m raw p-values ascending, scale the k-th smallest by (m - k), and enforce
+    monotonicity. Compare the adjusted values against a single alpha (e.g. 0.05).
+    Pure python — no scipy.
+    """
+    m = len(pvals)
+    order = sorted(range(m), key=lambda i: pvals[i])
+    adj = [0.0] * m
+    running = 0.0
+    for rank, i in enumerate(order):
+        running = max(running, (m - rank) * pvals[i])
+        adj[i] = min(running, 1.0)
+    return adj
+
+
+def mcnemar_exact_p(a, b):
+    """Two-sided exact McNemar p-value for two 0/1 outcome arrays on the same items.
+
+    The classic test for paired binary outcomes: it conditions on the discordant
+    pairs (questions where exactly one model is correct) and asks whether they
+    split evenly. Under H0 the count favouring either model is Binomial(d, 0.5),
+    so the exact two-sided p doubles the smaller tail. Serves as a closed-form
+    cross-check on the paired bootstrap. Pure python (math.comb) — works on numpy
+    arrays or plain lists.
+    """
+    from math import comb
+    n01 = sum(1 for x, y in zip(a, b) if x == 0 and y == 1)
+    n10 = sum(1 for x, y in zip(a, b) if x == 1 and y == 0)
+    d = n01 + n10
+    if d == 0:
+        return 1.0
+    k = min(n01, n10)
+    tail = sum(comb(d, i) for i in range(k + 1)) / (2 ** d)
+    return min(2.0 * tail, 1.0)
+
+
+def bootstrap_compare(cols_list, n, n_iter, seed, metric="correct"):
+    """Paired bootstrap of every pairwise accuracy difference.
+
+    All models are scored on ONE shared (n_iter, n) set of resample indices, so
+    each replicate scores the same resampled questions under every model and the
+    per-replicate difference carries the cross-model covariance. Because per-
+    question correctness is positively correlated across these models, that makes
+    a difference's CI tighter than bootstrapping each model on its own indices
+    (the independent-CI-overlap method, which overstates the difference's
+    uncertainty). Returns (points, pairs) where points[i] is model i's accuracy
+    and pairs is a list of dicts: {i, j, diff, lo, hi, p_boot, p_mcnemar}.
+    """
+    import numpy as np
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, n, size=(n_iter, n))          # shared across ALL models
+    vals = [c[metric] for c in cols_list]
+    points = [float(v.mean()) for v in vals]
+    accs = [v[idx].mean(axis=1) for v in vals]           # (n_iter,) per model
+    pairs = []
+    for i, j in itertools.combinations(range(len(cols_list)), 2):
+        d = accs[j] - accs[i]                             # paired per-replicate diff
+        lo, hi = (float(x) for x in np.percentile(d, [2.5, 97.5]))
+        # Two-sided bootstrap p: twice the smaller mass on one side of zero.
+        p_boot = min(1.0, 2.0 * min(float((d <= 0).mean()), float((d >= 0).mean())))
+        pairs.append({
+            "i": i, "j": j, "diff": points[j] - points[i], "lo": lo, "hi": hi,
+            "p_boot": p_boot, "p_mcnemar": mcnemar_exact_p(vals[i], vals[j]),
+        })
+    return points, pairs
+
+
+def _fmt_p(p):
+    """Compact p-value: '<1e-4' below the bootstrap resolution, else 4 dp."""
+    return "<1e-4" if p < 1e-4 else f"{p:.4f}"
+
+
+def _stars(p):
+    """Significance marker for a (Holm-adjusted) p-value."""
+    return "***" if p < 1e-3 else "**" if p < 1e-2 else "*" if p < 0.05 else "ns"
+
+
+def format_compare_block(labels, paths, n, n_iter, seed, metric, points, pairs):
+    metric_label = METRIC_LABELS.get(metric, metric)
+    holm = holm_adjust([pr["p_mcnemar"] for pr in pairs])
+    comps = [f"{labels[pr['j']]} - {labels[pr['i']]}" for pr in pairs]
+    wlbl = max(len(s) for s in labels)
+    wcomp = max(len(c) for c in comps)
+    lines = [
+        "=" * 72,
+        f"Paired bootstrap comparison — {metric_label}",
+        "=" * 72,
+        f"  n_samples       : {n}",
+        f"  n_iter          : {n_iter}",
+        f"  seed            : {seed}",
+        f"  comparisons     : {len(pairs)} (Holm-corrected, family-wise alpha = 0.05)",
+        "",
+        "  sources:",
+    ]
+    for lbl, path in zip(labels, paths):
+        lines.append(f"    {lbl:<{wlbl}}  {path}")
+    lines += ["", "  per-model accuracy (point):"]
+    for lbl, pt in zip(labels, points):
+        lines.append(f"    {lbl:<{wlbl}}  {pt * 100:6.2f}%")
+    lines += [
+        "",
+        "  pairwise differences (paired bootstrap; 95% CI per comparison):",
+        f"    {'comparison':<{wcomp}}  {'diff':>8}  {'95% CI':<22}"
+        f"  {'boot p':>8}  {'McNemar p':>10}  {'Holm p':>8}  sig",
+        f"    {'-' * wcomp}  {'-' * 8}  {'-' * 22}  {'-' * 8}  {'-' * 10}  {'-' * 8}  ---",
+    ]
+    for comp, pr, hp in zip(comps, pairs, holm):
+        ci = f"[{pr['lo'] * 100:+.2f}%, {pr['hi'] * 100:+.2f}%]"
+        lines.append(
+            f"    {comp:<{wcomp}}  {pr['diff'] * 100:+7.2f}%  {ci:<22}"
+            f"  {_fmt_p(pr['p_boot']):>8}  {_fmt_p(pr['p_mcnemar']):>10}"
+            f"  {_fmt_p(hp):>8}  {_stars(hp)}"
+        )
+    lines += [
+        "",
+        "  diff = acc(B) − acc(A) for 'B - A'; a 95% CI excluding 0 means the pair",
+        "  differs at ~5% for that single comparison. 'Holm p' / sig control the",
+        "  family-wise error across all pairwise tests via Holm on the exact McNemar",
+        "  p; *** <.001  ** <.01  * <.05.",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def cmd_compare(args):
+    labels = [s.strip() for s in args.labels.split(",")] if args.labels else None
+    labels, cols_list, n = load_aligned(args.inputs, labels)
+    points, pairs = bootstrap_compare(cols_list, n, args.n_iter, args.seed, args.metric)
+    block = format_compare_block(
+        labels, args.inputs, n, args.n_iter, args.seed, args.metric, points, pairs)
+    print(block)
     if args.output:
         with open(args.output, "a" if args.append else "w", encoding="utf-8") as f:
             f.write(block + "\n")
@@ -370,6 +571,20 @@ def main():
     pc.add_argument("--output", default=None, help="Write the summary block to this .txt.")
     pc.add_argument("--append", action="store_true", help="Append to --output instead of overwriting.")
     pc.set_defaults(func=cmd_ci)
+
+    px = sub.add_parser("compare",
+                        help="Paired bootstrap of pairwise accuracy differences across models.")
+    px.add_argument("inputs", nargs="+",
+                    help="Two or more per-question .jsonls covering the same test split.")
+    px.add_argument("--labels", default=None,
+                    help="Comma-separated model labels, one per input (default: file stems).")
+    px.add_argument("--metric", default="correct", choices=list(METRICS),
+                    help="Which 0/1 metric to compare (default correct = accuracy).")
+    px.add_argument("--n-iter", type=int, default=10000, help="Bootstrap iterations (default 10000).")
+    px.add_argument("--seed", type=int, default=42, help="RNG seed for reproducibility (default 42).")
+    px.add_argument("--output", default=None, help="Write the summary block to this .txt.")
+    px.add_argument("--append", action="store_true", help="Append to --output instead of overwriting.")
+    px.set_defaults(func=cmd_compare)
 
     args = ap.parse_args()
     return args.func(args)

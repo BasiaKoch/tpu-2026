@@ -9,7 +9,16 @@
 #   2. downloads the W&B checkpoint and evaluates the fine-tuned LoRA model
 #      over the same split -> analysis/<label>_lora.jsonl
 #   3. runs the percentile bootstrap (10k iters, seed 42) on both
-#   4. aggregates both into analysis/bootstrap_results_<label>.txt
+#   4. runs the PAIRED bootstrap (base vs fine-tuned) for the accuracy difference
+#      — the per-model CIs in step 3 are marginal; significance of the difference
+#      comes from this block's CI (excludes 0?) / Holm-corrected McNemar p, not
+#      from whether the two per-model CIs overlap
+#   5. aggregates all of it into analysis/bootstrap_results_<label>.txt
+#
+# To compare more than two models at once (e.g. base vs k2 vs k8 vs k8+reweight),
+# call the paired bootstrap directly on all their .jsonls:
+#   scripts/bootstrap.py compare analysis/base_no_ft.jsonl analysis/k2_lora.jsonl \
+#     analysis/k8_lora.jsonl analysis/k8_reweight_lora.jsonl --labels "base,k2,k8,k8+rw"
 #
 # Idempotent: the expensive eval step is SKIPPED if the .jsonl already exists, so
 # re-runs (or a machine without a TPU) just redo the cheap bootstrap. Delete the
@@ -117,7 +126,7 @@ else
   echo "==> Reusing existing $LORA_JSONL (skip eval; set FORCE_EVAL=1 to redo)"
 fi
 
-# --- 3 + 4. bootstrap both and aggregate --------------------------------------
+# --- 3 + 4 + 5. bootstrap both, pair them, and aggregate ----------------------
 
 # Prefer the venv python (has numpy); fall back to whatever python3 is on PATH.
 PY=python3
@@ -129,6 +138,11 @@ echo "==> Bootstrapping ($N_ITER iters, seed $SEED) -> $RESULTS"
   --n-iter "$N_ITER" --seed "$SEED" --output "$RESULTS"
 "$PY" "$REPO/scripts/bootstrap.py" ci "$LORA_JSONL" \
   --label "fine-tuned LoRA — run ${RUN_LABEL}" \
+  --n-iter "$N_ITER" --seed "$SEED" --output "$RESULTS" --append
+
+echo "==> Paired comparison (base vs ${RUN_LABEL}) -> appended to $RESULTS"
+"$PY" "$REPO/scripts/bootstrap.py" compare "$BASE_JSONL" "$LORA_JSONL" \
+  --labels "base gemma-3-1b-it (no fine-tuning),fine-tuned LoRA — run ${RUN_LABEL}" \
   --n-iter "$N_ITER" --seed "$SEED" --output "$RESULTS" --append
 
 echo
