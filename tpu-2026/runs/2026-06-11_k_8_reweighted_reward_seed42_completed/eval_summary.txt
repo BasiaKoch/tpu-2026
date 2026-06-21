@@ -1,0 +1,5 @@
+CANNOT_RETRIEVE: evaluate.py does not log to W&B.
+Add metrics manually via wandb.run.summary.update() per CHECKLIST.md §3,
+then re-run this script to pick them up.
+Expected keys: eval/base_acc, eval/base_partial, eval/base_format, eval/base_correct,
+               eval/lora_acc, eval/lora_partial, eval/lora_format, eval/lora_correct

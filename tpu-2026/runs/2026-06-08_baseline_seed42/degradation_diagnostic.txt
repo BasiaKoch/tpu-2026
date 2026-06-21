@@ -1,0 +1,28 @@
+Baseline LoRA degradation diagnostic
+
+Question: why did the restored LoRA checkpoint score much worse than the base model?
+
+Evidence checked:
+- Checkpoint restore path uses Tunix CheckpointManager.maybe_restore(..., restore_only_lora_params=True), which restores nnx.LoRAParam state into the model and reported step 3364 successfully.
+- Final W&B/TensorBoard metrics show train reward improved on the last training batch, but eval reward was poor by the end.
+- Final eval metrics at step 3328: rewards/eval/mean=-0.2401, rewards/eval/check_numbers=0.1223, rewards/eval/check_answer=0.0979, rewards/eval/match_format_approximately=-1.5695, actor/eval/kl=0.6724.
+- Eval reward peaked much earlier: rewards/eval/mean best at step 448 with 1.7113; format exact best at step 704 with 2.7553. The best early checkpoints were not retained because save_interval=500 and max_to_keep=4.
+- Late train.log samples show many eval responses are empty, markdown fences, or malformed text, with occasional extracted numbers.
+- Retained checkpoint greedy evals degrade over time:
+  - base / no restore: correct=33/64, acc=51.56%, partial=53.12%, format=6.25%
+  - step 2000: correct=18/64, acc=28.12%, partial=29.69%, format=35.94%
+  - step 2500: correct=13/64, acc=20.31%, partial=23.44%, format=31.25%
+  - step 3000: correct=4/64, acc=6.25%, partial=7.81%, format=12.50%
+  - step 3364: correct=2/64, acc=3.12%, partial=6.25%, format=12.50%
+
+Conclusion:
+The low final LoRA score is most likely a real training/selection failure, not a missing checkpoint restore. The run appears to improve early, then overtrain or collapse on the eval distribution: numeric correctness and approximate format rewards deteriorate while KL drifts upward. The final saved checkpoint is a poor checkpoint for reporting accuracy.
+
+Likely contributing factors:
+- Final-checkpoint selection instead of best-eval checkpoint selection.
+- Small train micro-batch and group size (1 prompt, 2 generations) gives noisy GRPO updates.
+- Reward shaping and sparse correctness can encourage brittle formatting/answer behavior.
+- The best eval window happened early, before retained checkpoints.
+
+Recommended next action:
+For the next baseline/variant run, save more checkpoints or keep best-by-eval, and consider early stopping around the eval-reward peak. For this run, report final checkpoint honestly or rerun with better checkpoint retention if time allows.

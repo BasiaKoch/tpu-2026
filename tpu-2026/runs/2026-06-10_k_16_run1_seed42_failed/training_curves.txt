@@ -1,0 +1,4 @@
+Training curve key checks:
+  reward: rewards/eval/check_answer, rewards/eval/check_numbers, rewards/eval/match_format_approximately, rewards/eval/match_format_exactly, rewards/eval/max, rewards/eval/mean, rewards/eval/min, rewards/eval/score/max, rewards/eval/score/mean, rewards/eval/score/min, rewards/eval/sum, rewards/train/check_answer, rewards/train/check_numbers, rewards/train/match_format_approximately, rewards/train/match_format_exactly, rewards/train/max, rewards/train/mean, rewards/train/min, rewards/train/score/max, rewards/train/score/mean, rewards/train/score/min, rewards/train/sum
+  KL: actor/eval/kl, actor/train/kl
+  loss: actor/eval/loss, actor/train/loss

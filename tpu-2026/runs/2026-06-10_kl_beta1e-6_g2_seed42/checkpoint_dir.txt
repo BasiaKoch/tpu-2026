@@ -1,0 +1,1 @@
+final + sweep ckpts: ~/preserved/kl_beta1e6_content/ckpts/actor/{2000,2500,3000,3364}; train log: ~/preserved/kl_beta1e6_train.log

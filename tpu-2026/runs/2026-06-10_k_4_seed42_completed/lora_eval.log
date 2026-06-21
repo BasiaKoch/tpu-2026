@@ -1,0 +1,2 @@
+CANNOT_RETRIEVE: lora_eval.log not found in W&B files or artifacts.
+Copy from the training VM, or upload as an artifact per CHECKLIST.md §3.

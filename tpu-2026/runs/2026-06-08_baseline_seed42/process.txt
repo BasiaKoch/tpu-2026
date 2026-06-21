@@ -1,0 +1,13 @@
+tmux session: tunix
+tmux pid: 49236
+shell pid: 49238
+training pid: 49244
+log tee pid: 49245
+wandb-core pid: 49672
+wandb-xpu pid: 49694
+
+Observed command:
+python -u train.py
+
+Observed start time:
+2026-06-08 18:17 UTC

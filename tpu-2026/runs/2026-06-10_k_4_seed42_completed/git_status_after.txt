@@ -1,0 +1,3 @@
+CANNOT_RETRIEVE: W&B captures git state only at launch, not after training.
+Fill in from the training VM, or note it was not captured
+(see baseline_seed42 for precedent).

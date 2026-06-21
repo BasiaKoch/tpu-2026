@@ -1,0 +1,23 @@
+/home/ext_felsomoye_gmail_com/venvs/tunix/lib/python3.12/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.28.3 is exactly one major version older than the runtime version 6.31.1 at grain/proto/execution_summary.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
+  warnings.warn(
+Downloading google/gemma-3-1b-it from Hugging Face...
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files: 100%|██████████| 10/10 [00:00<00:00, 159479.24it/s]
+/home/ext_felsomoye_gmail_com/venvs/tunix/lib/python3.12/site-packages/qwix/_src/providers/lora.py:44: UserWarning: rngs must be provided for NNX models to initialize LoRA weights. Please specify rngs=nnx.Rngs(...) in apply_lora_to_model.
+  warnings.warn(
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780996412.378771  165424 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1780996412.380122  165424 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780996413.557757  165424 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1780996413.558528  165424 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Model downloaded to: /home/ext_felsomoye_gmail_com/.cache/huggingface/hub/models--google--gemma-3-1b-it/snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752
+Restored LoRA params from step 3000
+  0%|          | 0/64 [00:00<?, ?it/s]  2%|▏         | 1/64 [00:13<14:07, 13.45s/it]  6%|▋         | 4/64 [00:28<06:44,  6.73s/it] 11%|█         | 7/64 [00:29<03:01,  3.19s/it] 17%|█▋        | 11/64 [00:29<01:27,  1.65s/it] 23%|██▎       | 15/64 [00:30<00:47,  1.03it/s] 27%|██▋       | 17/64 [00:31<00:41,  1.14it/s] 33%|███▎      | 21/64 [00:31<00:23,  1.85it/s] 39%|███▉      | 25/64 [00:31<00:13,  2.81it/s] 44%|████▍     | 28/64 [00:32<00:11,  3.03it/s] 50%|█████     | 32/64 [00:33<00:09,  3.44it/s] 53%|█████▎    | 34/64 [00:33<00:09,  3.17it/s] 56%|█████▋    | 36/64 [00:34<00:08,  3.30it/s] 62%|██████▎   | 40/64 [00:34<00:04,  5.06it/s] 66%|██████▌   | 42/64 [00:36<00:07,  2.93it/s] 70%|███████   | 45/64 [00:37<00:06,  3.08it/s] 72%|███████▏  | 46/64 [00:37<00:06,  2.92it/s] 78%|███████▊  | 50/64 [00:37<00:02,  4.80it/s] 84%|████████▍ | 54/64 [00:37<00:01,  7.10it/s] 91%|█████████ | 58/64 [00:37<00:00,  9.82it/s] 95%|█████████▌| 61/64 [00:38<00:00,  8.42it/s]100%|██████████| 64/64 [00:38<00:00,  1.66it/s]
+===> corr=0 total=10 acc=0.00% partial=0.00% fmt=10.00%
+===> corr=1 total=20 acc=5.00% partial=5.00% fmt=15.00%
+===> corr=1 total=30 acc=3.33% partial=3.33% fmt=10.00%
+===> corr=4 total=40 acc=10.00% partial=10.00% fmt=12.50%
+===> corr=4 total=50 acc=8.00% partial=10.00% fmt=16.00%
+===> corr=4 total=60 acc=6.67% partial=8.33% fmt=13.33%
+
+FINAL: correct=4/64  acc=6.25%  partial=7.81%  format=12.50%

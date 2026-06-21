@@ -1,0 +1,14 @@
+Baseline relaunch after deleting scripts/data/train and scripts/data/test failed before training steps began.
+
+Command:
+./scripts/run_tmux.sh
+
+W&B run:
+https://wandb.ai/felsomoye-university-of-cambridge/tunix/runs/kcwsje77
+
+Failure:
+RuntimeError from tensorflow_datasets while constructing GSM8K at ./data/train:
+AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+
+Context:
+A tiny dataset load after cache cleanup succeeded, but the full train.py launch still failed when TFDS constructed/reopened the configured GSM8K data source. This suggests a persistent TFDS/protobuf/cache compatibility issue, not just stale generated files. No GRPO training steps completed and no checkpoint from this run should be treated as valid.

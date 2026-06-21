@@ -1,0 +1,16 @@
+Checkpoint directory (on training VM):
+CANNOT_RETRIEVE: fill from CKPT_DIR in config_snapshot.py
+
+Intermediate checkpoint directory:
+CANNOT_RETRIEVE: fill from INTERMEDIATE_CKPT_DIR
+
+Save interval: CANNOT_RETRIEVE steps
+Max to keep: CANNOT_RETRIEVE
+
+Preserved local copy: CANNOT_RETRIEVE: filesystem path on training VM — fill in manually
+
+W&B model artifacts:
+  CANNOT_RETRIEVE: no model artifact found — upload per CHECKLIST.md §3
+
+Sweep checkpoint coverage:
+  CANNOT_RETRIEVE: verify final plus eval-sweep steps are uploaded as artifact versions.

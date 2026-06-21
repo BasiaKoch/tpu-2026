@@ -1,0 +1,18 @@
+k=16 (NUM_GENERATIONS=16) run1 evaluation summary
+
+Preset: greedy
+Split/sample: configured GSM8K test eval, NUM_TEST_BATCHES=64, TRAIN_MICRO_BATCH_SIZE=1
+
+Base model / zero-init LoRA wrapper:
+- CANNOT_RETRIEVE: base/zero-init eval not provided. Run evaluate.py on the base
+  wrapper with the same protocol per CHECKLIST.md §5 and record correct/64, acc,
+  partial, format here.
+
+Restored LoRA checkpoint:
+- Command: /home/ext_rowandauria1_gmail_com/venvs/tunix/bin/python -u scripts/evaluate.py --ckpt-dir /tmp/tunix-n-gen-16_10-06/ckpts/actor --step 2500 --preset greedy
+- Checkpoint restored: /tmp/tunix-n-gen-16_10-06/ckpts/actor/2500
+- Step: 2500 (intermediate; SAVE_INTERVAL_STEPS=500)
+- FINAL: correct=36/64  acc=56.25%  partial=59.38%  format=92.19%
+
+Note: the training run is marked failed (see status.txt / failure_summary.txt),
+but the step-2500 intermediate checkpoint evaluated successfully.

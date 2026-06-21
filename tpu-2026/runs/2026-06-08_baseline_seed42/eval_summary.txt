@@ -1,0 +1,25 @@
+Baseline evaluation summary
+
+Preset: greedy
+Source: tfds
+Split/sample: configured GSM8K test eval, NUM_TEST_BATCHES=64, TRAIN_MICRO_BATCH_SIZE=1
+
+Base model / zero-init LoRA wrapper:
+- Log: runs/2026-06-08_baseline_seed42/base_eval.log
+- FINAL: correct=33/64  acc=51.56%  partial=53.12%  format=6.25%
+
+Restored LoRA checkpoint:
+- Checkpoint root: /home/ext_felsomoye_gmail_com/tpu-2026/checkpoints/baseline_seed42/actor
+- Step: 3364
+- Log: runs/2026-06-08_baseline_seed42/lora_eval.log
+- FINAL: correct=2/64  acc=3.12%  partial=6.25%  format=12.50%
+
+Observation:
+- The trained LoRA checkpoint substantially underperforms the base model on this eval setting. Treat this as the official recorded result unless a restore/evaluation bug is found and documented.
+
+Retained checkpoint sweep:
+- step 2000: correct=18/64  acc=28.12%  partial=29.69%  format=35.94%
+- step 2500: correct=13/64  acc=20.31%  partial=23.44%  format=31.25%
+- step 3000: correct=4/64   acc=6.25%   partial=7.81%   format=12.50%
+
+Diagnostic note: runs/2026-06-08_baseline_seed42/degradation_diagnostic.txt

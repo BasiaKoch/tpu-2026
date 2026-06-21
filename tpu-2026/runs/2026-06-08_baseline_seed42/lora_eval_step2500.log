@@ -1,0 +1,23 @@
+/home/ext_felsomoye_gmail_com/venvs/tunix/lib/python3.12/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.28.3 is exactly one major version older than the runtime version 6.31.1 at grain/proto/execution_summary.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
+  warnings.warn(
+Downloading google/gemma-3-1b-it from Hugging Face...
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files: 100%|██████████| 10/10 [00:00<00:00, 167103.75it/s]
+/home/ext_felsomoye_gmail_com/venvs/tunix/lib/python3.12/site-packages/qwix/_src/providers/lora.py:44: UserWarning: rngs must be provided for NNX models to initialize LoRA weights. Please specify rngs=nnx.Rngs(...) in apply_lora_to_model.
+  warnings.warn(
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780996335.177918  163834 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1780996335.179360  163834 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780996336.350074  163834 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1780996336.350920  163834 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Model downloaded to: /home/ext_felsomoye_gmail_com/.cache/huggingface/hub/models--google--gemma-3-1b-it/snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752
+Restored LoRA params from step 2500
+  0%|          | 0/64 [00:00<?, ?it/s]  2%|▏         | 1/64 [00:13<13:59, 13.33s/it]  3%|▎         | 2/64 [00:14<06:23,  6.19s/it]  6%|▋         | 4/64 [00:29<07:08,  7.15s/it]  8%|▊         | 5/64 [00:30<05:05,  5.17s/it]  9%|▉         | 6/64 [00:31<03:35,  3.72s/it] 11%|█         | 7/64 [00:31<02:33,  2.69s/it] 14%|█▍        | 9/64 [00:31<01:24,  1.53s/it] 16%|█▌        | 10/64 [00:32<01:11,  1.32s/it] 17%|█▋        | 11/64 [00:33<00:57,  1.09s/it] 23%|██▎       | 15/64 [00:34<00:30,  1.63it/s] 25%|██▌       | 16/64 [00:35<00:36,  1.32it/s] 27%|██▋       | 17/64 [00:36<00:32,  1.45it/s] 28%|██▊       | 18/64 [00:36<00:29,  1.55it/s] 30%|██▉       | 19/64 [00:37<00:32,  1.39it/s] 36%|███▌      | 23/64 [00:37<00:13,  3.12it/s] 39%|███▉      | 25/64 [00:38<00:11,  3.43it/s] 44%|████▍     | 28/64 [00:39<00:12,  2.92it/s] 45%|████▌     | 29/64 [00:40<00:14,  2.36it/s] 47%|████▋     | 30/64 [00:40<00:14,  2.28it/s] 48%|████▊     | 31/64 [00:41<00:14,  2.29it/s] 50%|█████     | 32/64 [00:41<00:15,  2.11it/s] 53%|█████▎    | 34/64 [00:43<00:18,  1.65it/s] 55%|█████▍    | 35/64 [00:43<00:16,  1.74it/s] 56%|█████▋    | 36/64 [00:44<00:17,  1.61it/s] 58%|█████▊    | 37/64 [00:45<00:18,  1.47it/s] 61%|██████    | 39/64 [00:47<00:18,  1.36it/s] 62%|██████▎   | 40/64 [00:47<00:15,  1.54it/s] 64%|██████▍   | 41/64 [00:48<00:16,  1.37it/s] 66%|██████▌   | 42/64 [00:49<00:20,  1.05it/s] 70%|███████   | 45/64 [00:51<00:11,  1.59it/s] 72%|███████▏  | 46/64 [00:51<00:11,  1.62it/s] 75%|███████▌  | 48/64 [00:52<00:08,  1.93it/s] 77%|███████▋  | 49/64 [00:52<00:07,  1.94it/s] 80%|███████▉  | 51/64 [00:53<00:05,  2.44it/s] 84%|████████▍ | 54/64 [00:54<00:03,  2.82it/s] 86%|████████▌ | 55/64 [00:54<00:03,  2.36it/s] 88%|████████▊ | 56/64 [00:55<00:03,  2.18it/s] 89%|████████▉ | 57/64 [00:56<00:04,  1.61it/s] 91%|█████████ | 58/64 [00:58<00:05,  1.17it/s] 92%|█████████▏| 59/64 [00:58<00:03,  1.26it/s] 95%|█████████▌| 61/64 [01:00<00:02,  1.38it/s]100%|██████████| 64/64 [01:00<00:00,  1.06it/s]
+===> corr=1 total=10 acc=10.00% partial=20.00% fmt=40.00%
+===> corr=5 total=20 acc=25.00% partial=30.00% fmt=40.00%
+===> corr=5 total=30 acc=16.67% partial=20.00% fmt=26.67%
+===> corr=7 total=40 acc=17.50% partial=20.00% fmt=30.00%
+===> corr=10 total=50 acc=20.00% partial=24.00% fmt=32.00%
+===> corr=13 total=60 acc=21.67% partial=25.00% fmt=33.33%
+
+FINAL: correct=13/64  acc=20.31%  partial=23.44%  format=31.25%

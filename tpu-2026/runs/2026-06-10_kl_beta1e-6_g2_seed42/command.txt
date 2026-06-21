@@ -1,0 +1,1 @@
+BETA=1e-6 WANDB_NAME=kl_beta1e-6_g2_seed42 python -u train.py (via ~/launch_kl1.sh -> ~/run_arm.sh, tmux)
