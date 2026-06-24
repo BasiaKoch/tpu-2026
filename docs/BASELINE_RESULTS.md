@@ -43,16 +43,17 @@ Detailed diagnostic note: `runs/2026-06-08_baseline_seed42/degradation_diagnosti
 
 ## Training Curves
 
-Generated with `analysis/plot_baseline_curves.py` from TensorBoard event file `/tmp/content/tmp/tensorboard/grpo/events.out.tfevents.1780942641.t1v-n-f769470f-w-0`.
+Generated from the TensorBoard event file
+`/tmp/content/tmp/tensorboard/grpo/events.out.tfevents.1780942641.t1v-n-f769470f-w-0`.
+The plotting script and source curve assets are retained on the pushed
+[`analysis-bk`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/analysis-bk)
+branch.
 
 | Asset | File |
 |---|---|
-| Mean reward curve PNG | `report_assets/baseline_mean_reward_curve.png` |
-| Mean reward curve PDF | `report_assets/baseline_mean_reward_curve.pdf` |
-| Mean reward raw CSV | `report_assets/baseline_mean_reward_curve.csv` |
-| KL curve PNG | `report_assets/baseline_kl_curve.png` |
-| KL curve PDF | `report_assets/baseline_kl_curve.pdf` |
-| KL raw CSV | `report_assets/baseline_kl_curve.csv` |
+| Plotting script | [`analysis/plot_baseline_curves.py`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/blob/analysis-bk/analysis/plot_baseline_curves.py) |
+| Mean reward curve | [PNG](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/blob/analysis-bk/report_assets/baseline_mean_reward_curve.png) · [PDF](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/blob/analysis-bk/report_assets/baseline_mean_reward_curve.pdf) · [CSV](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/blob/analysis-bk/report_assets/baseline_mean_reward_curve.csv) |
+| KL curve | [PNG](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/blob/analysis-bk/report_assets/baseline_kl_curve.png) · [PDF](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/blob/analysis-bk/report_assets/baseline_kl_curve.pdf) · [CSV](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/blob/analysis-bk/report_assets/baseline_kl_curve.csv) |
 
 ## Baseline Patch
 
