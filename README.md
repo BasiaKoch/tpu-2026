@@ -112,7 +112,7 @@ report's headline runs come from three of them. Branch names link to the branch 
 | Branch | Produced (report) |
 |---|---|
 | [`main`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/main) | Shared code and merged experiment records (this submission). |
-| [`n-generations-8`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/n-generations-8) | **K=8 baseline** (`m3xp6k97`, 59.38% 64-ex) — the K=8 LoRA row of Table 1 and the K=8 row of the sweep; reference point for every K=8 single-change run. |
+| [`n-generations-8`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/n-generations-8) | **K=8 baseline** (`m3xp6k97`, 59.38% 64-ex) — the K=8 row of the sweep (Table 2); reference point for every K=8 single-change run. |
 | [`reward-reweight`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/reward-reweight) | **K=8 new reward** (`k-8-new-reward`, 58.53% full-test / 71.88% 64-ex) — the best result, "K=8 new reward" in Table 1. |
 | [`baseline-fls`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/baseline-fls) | K=2 baseline (`jgs4c6kl`) and the base-model eval (§I.1). |
 | [`n-generations-4`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/n-generations-4) / [`n-generations-16`](https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/a8_coursework/rd761/-/tree/n-generations-16) | K-sweep points (`x4j7yhdp`, `xqbl406c`). |
